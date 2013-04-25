@@ -53,15 +53,15 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 	backgroundTexture = new BitmapTextureAtlas(new TextureManager(), 800,
 		1280, TextureOptions.DEFAULT);
-	titleTexture = new BitmapTextureAtlas(new TextureManager(), 542, 273,
+	titleTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
 		TextureOptions.DEFAULT);
-	playTexture = new BitmapTextureAtlas(new TextureManager(), 542, 273,
+	playTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
 		TextureOptions.DEFAULT);
-	scoresTexture = new BitmapTextureAtlas(new TextureManager(), 542, 273,
+	scoresTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
 		TextureOptions.DEFAULT);
-	creditsTexture = new BitmapTextureAtlas(new TextureManager(), 542, 273,
+	creditsTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
 		TextureOptions.DEFAULT);
-	exitTexture = new BitmapTextureAtlas(new TextureManager(), 542, 273,
+	exitTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
 		TextureOptions.DEFAULT);
 
 	textureBackground = BitmapTextureAtlasTextureRegionFactory
@@ -99,8 +99,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 		new VertexBufferObjectManager());
 
 	Sprite ButtonPlay = new Sprite(CAMERA_WIDTH / 4,
-		CAMERA_HEIGHT * 47 / 128, CAMERA_WIDTH * 2 / 4,
-		CAMERA_HEIGHT * 15 / 128, texturePlay,
+		CAMERA_HEIGHT * 52 / 128, CAMERA_WIDTH * 2 / 4,
+		CAMERA_HEIGHT * 12 / 128, texturePlay,
 		this.getVertexBufferObjectManager()) {
 	    @Override
 	    public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -115,8 +115,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    }
 	};
 	Sprite ButtonScores = new Sprite(CAMERA_WIDTH / 4,
-		CAMERA_HEIGHT * 64 / 128, CAMERA_WIDTH * 2 / 4,
-		CAMERA_HEIGHT * 15 / 128, textureScores,
+		CAMERA_HEIGHT * 69 / 128, CAMERA_WIDTH * 2 / 4,
+		CAMERA_HEIGHT * 12 / 128, textureScores,
 		this.getVertexBufferObjectManager()) {
 	    @Override
 	    public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -132,8 +132,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	};
 
 	Sprite ButtonCredits = new Sprite(CAMERA_WIDTH / 4,
-		CAMERA_HEIGHT * 81 / 128, CAMERA_WIDTH * 2 / 4,
-		CAMERA_HEIGHT * 15 / 128, textureCredits,
+		CAMERA_HEIGHT * 86 / 128, CAMERA_WIDTH * 2 / 4,
+		CAMERA_HEIGHT * 12 / 128, textureCredits,
 		this.getVertexBufferObjectManager()) {
 	    @Override
 	    public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -149,8 +149,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	};
 
 	Sprite ButtonExit = new Sprite(CAMERA_WIDTH / 4,
-		CAMERA_HEIGHT * 98 / 128, CAMERA_WIDTH * 2 / 4,
-		CAMERA_HEIGHT * 15 / 128, textureExit,
+		CAMERA_HEIGHT * 103 / 128, CAMERA_WIDTH * 2 / 4,
+		CAMERA_HEIGHT * 12 / 128, textureExit,
 		this.getVertexBufferObjectManager()) {
 	    @Override
 	    public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
