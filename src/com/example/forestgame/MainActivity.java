@@ -24,6 +24,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 
     private static int CAMERA_WIDTH = 800;
     private static int CAMERA_HEIGHT = 1280;
+    private int whichButton = 0;
     private static Camera camera;
     private static Scene mainScene;
     private TextureRegion textureBackground;
@@ -38,6 +39,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     private BitmapTextureAtlas scoresTexture;
     private BitmapTextureAtlas creditsTexture;
     private BitmapTextureAtlas exitTexture;
+    private boolean mToggleBox = true;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -57,17 +59,17 @@ public class MainActivity extends SimpleBaseGameActivity {
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("main_menu/");
 
 	backgroundTexture = new BitmapTextureAtlas(new TextureManager(), 1024,
-		2048, TextureOptions.DEFAULT);
+		2048, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	titleTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
-		TextureOptions.DEFAULT);
+		TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	playTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
-		TextureOptions.DEFAULT);
+		TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	scoresTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
-		TextureOptions.DEFAULT);
+		TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	creditsTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
-		TextureOptions.DEFAULT);
+		TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	exitTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
-		TextureOptions.DEFAULT);
+		TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 	textureBackground = BitmapTextureAtlasTextureRegionFactory
 		.createFromAsset(this.backgroundTexture, this,
@@ -114,13 +116,17 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonPlay", "touch");
+		    whichButton = 1;
+		    MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()+0.1));
 		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonPlay", "no touch");
+		    whichButton = 1;
+		    MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()-0.1));
 		    this.setScaleY((float) (this.getScaleY()-0.1));
-		}
+		} 
 		return true;
 	    }
 	};
@@ -134,10 +140,14 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonScores", "touch");
+		    whichButton = 2;
+		    MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()+0.1));
 		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonScores", "no touch");
+		    whichButton = 2;
+		    MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()-0.1));
 		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
@@ -155,10 +165,14 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonCredits", "touch");
+		    whichButton = 3;
+		    MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()+0.1));
 		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonCredits", "no touch");
+		    whichButton = 3;
+		    MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()-0.1));
 		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
@@ -176,10 +190,14 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonExit", "touch");
+		    whichButton = 4;
+		    MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()+0.1));
 		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonExit", "no touch");
+		    whichButton = 4;
+		    MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()-0.1));
 		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
@@ -199,5 +217,27 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 	return mainScene;
     }
+    
+    private void toggle() {
+	switch (whichButton) {
+	case 1: this.playTexture.clearTextureAtlasSources();
+	this.mToggleBox = !this.mToggleBox;
+	BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.playTexture, this, this.mToggleBox ? "menu_play.png" : "menu_play_light.png", 0, 0);
+	break;
+	case 2: this.scoresTexture.clearTextureAtlasSources();
+	this.mToggleBox = !this.mToggleBox;
+	BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.scoresTexture, this, this.mToggleBox ? "menu_scores.png" : "menu_scores_light.png", 0, 0);
+	break;
+	case 3: this.creditsTexture.clearTextureAtlasSources();
+	this.mToggleBox = !this.mToggleBox;
+	BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.creditsTexture, this, this.mToggleBox ? "menu_credits.png" : "menu_credits_light.png", 0, 0);
+	break;
+	case 4: this.exitTexture.clearTextureAtlasSources();
+	this.mToggleBox = !this.mToggleBox;
+	BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.exitTexture, this, this.mToggleBox ? "menu_exit.png" : "menu_exit_light.png", 0, 0);
+	break;
+	}
+	
+}
 
 }
