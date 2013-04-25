@@ -7,6 +7,7 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.util.FPSLogger;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
@@ -93,6 +94,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 
     @Override
     protected Scene onCreateScene() {
+	this.mEngine.registerUpdateHandler(new FPSLogger());
 	mainScene = new Scene();
 	Sprite sprite = new Sprite(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT,
 		textureBackground, new VertexBufferObjectManager());
@@ -112,8 +114,12 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonPlay", "touch");
+		    this.setScaleX((float) (this.getScaleX()+0.1));
+		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonPlay", "no touch");
+		    this.setScaleX((float) (this.getScaleX()-0.1));
+		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
 		return true;
 	    }
@@ -128,8 +134,12 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonScores", "touch");
+		    this.setScaleX((float) (this.getScaleX()+0.1));
+		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonScores", "no touch");
+		    this.setScaleX((float) (this.getScaleX()-0.1));
+		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
 		return true;
 	    }
@@ -145,8 +155,12 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonCredits", "touch");
+		    this.setScaleX((float) (this.getScaleX()+0.1));
+		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonCredits", "no touch");
+		    this.setScaleX((float) (this.getScaleX()-0.1));
+		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
 		return true;
 	    }
@@ -162,8 +176,12 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonExit", "touch");
+		    this.setScaleX((float) (this.getScaleX()+0.1));
+		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonExit", "no touch");
+		    this.setScaleX((float) (this.getScaleX()-0.1));
+		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
 		return true;
 	    }
