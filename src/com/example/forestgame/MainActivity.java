@@ -15,13 +15,14 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 
 public class MainActivity extends SimpleBaseGameActivity {
 
-    private static int CAMERA_WIDTH;
-    private static int CAMERA_HEIGHT;
+    private static int CAMERA_WIDTH = 800;
+    private static int CAMERA_HEIGHT = 1280;
     private static Camera camera;
     private static Scene mainScene;
     private TextureRegion textureBackground;
@@ -39,11 +40,14 @@ public class MainActivity extends SimpleBaseGameActivity {
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-	setScreenResolutionRatio();
+	
+	DisplayMetrics dm = new DisplayMetrics();
+	getWindowManager().getDefaultDisplay().getMetrics(dm);
+	
 	camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
+	
 	final EngineOptions options = new EngineOptions(true,
-		ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(
-			CAMERA_WIDTH, CAMERA_HEIGHT), camera);
+		ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), camera);
 	return options;
     }
 
@@ -51,8 +55,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     protected void onCreateResources() {
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("main_menu/");
 
-	backgroundTexture = new BitmapTextureAtlas(new TextureManager(), 800,
-		1280, TextureOptions.DEFAULT);
+	backgroundTexture = new BitmapTextureAtlas(new TextureManager(), 1024,
+		2048, TextureOptions.DEFAULT);
 	titleTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
 		TextureOptions.DEFAULT);
 	playTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
@@ -178,11 +182,4 @@ public class MainActivity extends SimpleBaseGameActivity {
 	return mainScene;
     }
 
-    private void setScreenResolutionRatio() {
-	DisplayMetrics dm = new DisplayMetrics();
-	getWindowManager().getDefaultDisplay().getMetrics(dm);
-	CAMERA_HEIGHT = dm.heightPixels;
-	CAMERA_WIDTH = dm.widthPixels;
-
-    }
 }
