@@ -126,7 +126,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 		    MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()-0.1));
 		    this.setScaleY((float) (this.getScaleY()-0.1));
-		} 
+		}
 		return true;
 	    }
 	};
@@ -214,6 +214,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	MainActivity.mainScene.registerTouchArea(ButtonScores);
 	MainActivity.mainScene.registerTouchArea(ButtonCredits);
 	MainActivity.mainScene.registerTouchArea(ButtonExit);
+	MainActivity.mainScene.setTouchAreaBindingOnActionDownEnabled(true);
+	MainActivity.mainScene.setTouchAreaBindingOnActionMoveEnabled(true);
 
 	return mainScene;
     }
