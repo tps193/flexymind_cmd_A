@@ -20,6 +20,8 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.example.forestgame.altasstorage.AtlasStorage;
+
 public class MainActivity extends SimpleBaseGameActivity {
 
     private static int CAMERA_WIDTH = 800;
@@ -40,6 +42,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     private BitmapTextureAtlas creditsTexture;
     private BitmapTextureAtlas exitTexture;
     private boolean mToggleBox = true;
+    AtlasStorage storage, background_storage;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -57,47 +60,33 @@ public class MainActivity extends SimpleBaseGameActivity {
     @Override
     protected void onCreateResources() {
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("main_menu/");
+	
+	storage = new AtlasStorage();
+	background_storage = new AtlasStorage();
+	storage.init(this.getTextureManager(), this, "main_menu/", "main_menu_title.png", "menu_play.png", "menu_play_light.png", "menu_scores.png", "menu_scores_light.png", "menu_credits.png", "menu_credits_light.png", "menu_exit.png", "menu_exit_light.png");
+	background_storage.init(this.getTextureManager(), this, "main_menu/", "background.jpg");
+	
+	textureTitle = storage.getTexture("main_menu_title.png");
+	texturePlay = storage.getTexture("menu_play.png");
+	textureScores = storage.getTexture("menu_scores.png");
+	textureCredits = storage.getTexture("menu_credits.png");
+	textureExit = storage.getTexture("menu_exit.png");
+	textureBackground = background_storage.getTexture("background.jpg");
 
-	backgroundTexture = new BitmapTextureAtlas(new TextureManager(), 1024,
+	/*backgroundTexture = new BitmapTextureAtlas(new TextureManager(), 1024,
 		2048, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	titleTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
-		TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	playTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
-		TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	scoresTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
-		TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	creditsTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
-		TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	exitTexture = new BitmapTextureAtlas(new TextureManager(), 1024, 512,
-		TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 	textureBackground = BitmapTextureAtlasTextureRegionFactory
 		.createFromAsset(this.backgroundTexture, this,
 			"background.jpg", 0, 0);
-	textureTitle = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-		this.titleTexture, this, "main_menu_title.png", 0, 0);
-	texturePlay = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-		this.playTexture, this, "menu_play.png", 0, 0);
-	textureScores = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-		this.scoresTexture, this, "menu_scores.png", 0, 0);
-	textureCredits = BitmapTextureAtlasTextureRegionFactory
-		.createFromAsset(this.creditsTexture, this, "menu_credits.png",
-			0, 0);
-	textureExit = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-		this.exitTexture, this, "menu_exit.png", 0, 0);
-
-	this.mEngine.getTextureManager().loadTexture(this.backgroundTexture);
-	this.mEngine.getTextureManager().loadTexture(this.titleTexture);
-	this.mEngine.getTextureManager().loadTexture(this.playTexture);
-	this.mEngine.getTextureManager().loadTexture(this.scoresTexture);
-	this.mEngine.getTextureManager().loadTexture(this.creditsTexture);
-	this.mEngine.getTextureManager().loadTexture(this.exitTexture);
+	this.mEngine.getTextureManager().loadTexture(this.backgroundTexture);*/
     }
 
     @Override
     protected Scene onCreateScene() {
 	this.mEngine.registerUpdateHandler(new FPSLogger());
 	mainScene = new Scene();
+	
 	Sprite sprite = new Sprite(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT,
 		textureBackground, new VertexBufferObjectManager());
 	SpriteBackground spriteBackground = new SpriteBackground(sprite);
@@ -117,13 +106,11 @@ public class MainActivity extends SimpleBaseGameActivity {
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonPlay", "touch");
 		    whichButton = 1;
-		    MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()+0.1));
 		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonPlay", "no touch");
 		    whichButton = 1;
-		    MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()-0.1));
 		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
@@ -141,13 +128,13 @@ public class MainActivity extends SimpleBaseGameActivity {
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonScores", "touch");
 		    whichButton = 2;
-		    MainActivity.this.toggle();
+		    //MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()+0.1));
 		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonScores", "no touch");
 		    whichButton = 2;
-		    MainActivity.this.toggle();
+		    //MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()-0.1));
 		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
@@ -166,13 +153,13 @@ public class MainActivity extends SimpleBaseGameActivity {
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonCredits", "touch");
 		    whichButton = 3;
-		    MainActivity.this.toggle();
+		    //MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()+0.1));
 		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonCredits", "no touch");
 		    whichButton = 3;
-		    MainActivity.this.toggle();
+		    //MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()-0.1));
 		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
@@ -191,13 +178,13 @@ public class MainActivity extends SimpleBaseGameActivity {
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonExit", "touch");
 		    whichButton = 4;
-		    MainActivity.this.toggle();
+		    //MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()+0.1));
 		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonExit", "no touch");
 		    whichButton = 4;
-		    MainActivity.this.toggle();
+		    //MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()-0.1));
 		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
