@@ -9,8 +9,6 @@ import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.TextureManager;
-import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -35,14 +33,12 @@ public class MainActivity extends SimpleBaseGameActivity {
     private TextureRegion textureScores;
     private TextureRegion textureCredits;
     private TextureRegion textureExit;
-    private BitmapTextureAtlas backgroundTexture;
-    private BitmapTextureAtlas titleTexture;
     private BitmapTextureAtlas playTexture;
     private BitmapTextureAtlas scoresTexture;
     private BitmapTextureAtlas creditsTexture;
     private BitmapTextureAtlas exitTexture;
     private boolean mToggleBox = true;
-    AtlasStorage storage, background_storage;
+    AtlasStorage storage;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -62,24 +58,16 @@ public class MainActivity extends SimpleBaseGameActivity {
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("main_menu/");
 	
 	storage = new AtlasStorage();
-	background_storage = new AtlasStorage();
 	storage.init(this.getTextureManager(), this, "main_menu/", "main_menu_title.png", "menu_play.png", "menu_play_light.png", "menu_scores.png", "menu_scores_light.png", "menu_credits.png", "menu_credits_light.png", "menu_exit.png", "menu_exit_light.png");
-	background_storage.init(this.getTextureManager(), this, "main_menu/", "background.jpg");
+	
 	
 	textureTitle = storage.getTexture("main_menu_title.png");
 	texturePlay = storage.getTexture("menu_play.png");
 	textureScores = storage.getTexture("menu_scores.png");
 	textureCredits = storage.getTexture("menu_credits.png");
 	textureExit = storage.getTexture("menu_exit.png");
-	textureBackground = background_storage.getTexture("background.jpg");
-
-	/*backgroundTexture = new BitmapTextureAtlas(new TextureManager(), 1024,
-		2048, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-
-	textureBackground = BitmapTextureAtlasTextureRegionFactory
-		.createFromAsset(this.backgroundTexture, this,
-			"background.jpg", 0, 0);
-	this.mEngine.getTextureManager().loadTexture(this.backgroundTexture);*/
+	storage.init(this.getTextureManager(), this, "main_menu/", "background.jpg");
+	textureBackground = storage.getTexture("background.jpg");
     }
 
     @Override
