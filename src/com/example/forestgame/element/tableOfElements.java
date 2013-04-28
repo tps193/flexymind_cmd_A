@@ -2,11 +2,14 @@ package com.example.forestgame.element;
 
 public class tableOfElements {
 
-	//Список констант - названий элементов
+	//Constants - names of elements
 	public final static int ELEMENT_NUT = 0;
 	public final static int ELEMENT_MEGA_NUT = 1;
 	
-	//Таблица, содержащая информацию об элементах(0 колонка - название, 1 - элемент следующего уровня, 3 - количество очков
+	//Table includes info about elements:
+	//column 0 - name of current element
+	//column 1 - name of next level element
+	//scores
 	private static final int[][] TABLE_OF_ELEMENTS = {
 		{ELEMENT_NUT, ELEMENT_MEGA_NUT, 100}
 	};
