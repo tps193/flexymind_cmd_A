@@ -38,7 +38,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     private BitmapTextureAtlas creditsTexture;
     private BitmapTextureAtlas exitTexture;
     private boolean mToggleBox = true;
-    AtlasStorage storage;
+    private AtlasStorage storage;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -58,7 +58,9 @@ public class MainActivity extends SimpleBaseGameActivity {
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("main_menu/");
 	
 	storage = new AtlasStorage();
-	storage.init(this.getTextureManager(), this, "main_menu/", "main_menu_title.png", "menu_play.png", "menu_play_light.png", "menu_scores.png", "menu_scores_light.png", "menu_credits.png", "menu_credits_light.png", "menu_exit.png", "menu_exit_light.png");
+	storage.init(this.getTextureManager(), this, "main_menu/", "main_menu_title.png", "menu_play.png"
+		, "menu_play_light.png", "menu_scores.png", "menu_scores_light.png", "menu_credits.png"
+		, "menu_credits_light.png", "menu_exit.png", "menu_exit_light.png");
 	
 	
 	textureTitle = storage.getTexture("main_menu_title.png");
@@ -116,13 +118,13 @@ public class MainActivity extends SimpleBaseGameActivity {
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonScores", "touch");
 		    whichButton = 2;
-		    //MainActivity.this.toggle();
+		    // XXX: MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()+0.1));
 		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonScores", "no touch");
 		    whichButton = 2;
-		    //MainActivity.this.toggle();
+		    // XXX: MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()-0.1));
 		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
@@ -141,13 +143,13 @@ public class MainActivity extends SimpleBaseGameActivity {
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonCredits", "touch");
 		    whichButton = 3;
-		    //MainActivity.this.toggle();
+		    // XXX: MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()+0.1));
 		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonCredits", "no touch");
 		    whichButton = 3;
-		    //MainActivity.this.toggle();
+		    // XXX: MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()-0.1));
 		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
@@ -166,13 +168,13 @@ public class MainActivity extends SimpleBaseGameActivity {
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonExit", "touch");
 		    whichButton = 4;
-		    //MainActivity.this.toggle();
+		    // XXX: MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()+0.1));
 		    this.setScaleY((float) (this.getScaleY()+0.1));
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    Log.d("ButtonExit", "no touch");
 		    whichButton = 4;
-		    //MainActivity.this.toggle();
+		    // XXX: MainActivity.this.toggle();
 		    this.setScaleX((float) (this.getScaleX()-0.1));
 		    this.setScaleY((float) (this.getScaleY()-0.1));
 		}
@@ -195,25 +197,34 @@ public class MainActivity extends SimpleBaseGameActivity {
 	return mainScene;
     }
     
+    
+    /*
+    // XXX: toggle butons layout on pressed
+    // XXX: maybe uneccessry, will see
     private void toggle() {
 	switch (whichButton) {
-	case 1: this.playTexture.clearTextureAtlasSources();
-	this.mToggleBox = !this.mToggleBox;
-	BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.playTexture, this, this.mToggleBox ? "menu_play.png" : "menu_play_light.png", 0, 0);
-	break;
-	case 2: this.scoresTexture.clearTextureAtlasSources();
-	this.mToggleBox = !this.mToggleBox;
-	BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.scoresTexture, this, this.mToggleBox ? "menu_scores.png" : "menu_scores_light.png", 0, 0);
-	break;
-	case 3: this.creditsTexture.clearTextureAtlasSources();
-	this.mToggleBox = !this.mToggleBox;
-	BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.creditsTexture, this, this.mToggleBox ? "menu_credits.png" : "menu_credits_light.png", 0, 0);
-	break;
-	case 4: this.exitTexture.clearTextureAtlasSources();
-	this.mToggleBox = !this.mToggleBox;
-	BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.exitTexture, this, this.mToggleBox ? "menu_exit.png" : "menu_exit_light.png", 0, 0);
-	break;
+	    case 1: 
+	        this.playTexture.clearTextureAtlasSources();
+	        this.mToggleBox = !this.mToggleBox;
+	        BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.playTexture, this, this.mToggleBox ? "menu_play.png" : "menu_play_light.png", 0, 0);
+	        break;
+	    case 2: 
+	    	this.scoresTexture.clearTextureAtlasSources();
+	        this.mToggleBox = !this.mToggleBox;
+		BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.scoresTexture, this, this.mToggleBox ? "menu_scores.png" : "menu_scores_light.png", 0, 0);
+	        break;
+	    case 3: 
+	    	this.creditsTexture.clearTextureAtlasSources();
+		this.mToggleBox = !this.mToggleBox;
+		BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.creditsTexture, this, this.mToggleBox ? "menu_credits.png" : "menu_credits_light.png", 0, 0);
+		break;
+	    case 4: 
+	    	this.exitTexture.clearTextureAtlasSources();
+		this.mToggleBox = !this.mToggleBox;
+		BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.exitTexture, this, this.mToggleBox ? "menu_exit.png" : "menu_exit_light.png", 0, 0);
+		break;
 	}
+	*/
 	
 }
 
