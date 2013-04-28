@@ -1,6 +1,6 @@
 package com.example.forestgame.element;
 
-public class tableOfElements {
+public class TableOfElements {
 
 	//Constants - names of elements
 	public final static int ELEMENT_NUT = 0;
@@ -9,7 +9,7 @@ public class tableOfElements {
 	//Table includes info about elements:
 	//column 0 - name of current element
 	//column 1 - name of next level element
-	//scores
+	//column 2 - scores
 	private static final int[][] TABLE_OF_ELEMENTS = {
 		{ELEMENT_NUT, ELEMENT_MEGA_NUT, 100}
 	};
