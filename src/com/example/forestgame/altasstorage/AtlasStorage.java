@@ -20,7 +20,7 @@ public class AtlasStorage {
 	
 	private Map<String, TextureRegion> textureMap = new HashMap<String, TextureRegion>();
 	
-	public void init(TextureManager textureManager, Context context, String assetBasePath, String ... textureNames) {
+	public void createAtlas(TextureManager textureManager, Context context, String assetBasePath, String ... textureNames) {
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(assetBasePath);
 		

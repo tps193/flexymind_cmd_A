@@ -54,7 +54,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("main_menu/");
 	
 	storage = new AtlasStorage();
-	storage.init(this.getTextureManager(), this, "main_menu/", "main_menu_title.png", "menu_play.png"
+	storage.createAtlas(this.getTextureManager(), this, "main_menu/", "main_menu_title.png", "menu_play.png"
 		, "menu_play_light.png", "menu_scores.png", "menu_scores_light.png", "menu_credits.png"
 		, "menu_credits_light.png", "menu_exit.png", "menu_exit_light.png");
 	
@@ -64,7 +64,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	textureScores = storage.getTexture("menu_scores.png");
 	textureCredits = storage.getTexture("menu_credits.png");
 	textureExit = storage.getTexture("menu_exit.png");
-	storage.init(this.getTextureManager(), this, "main_menu/", "background.jpg");
+	storage.createAtlas(this.getTextureManager(), this, "main_menu/", "background.jpg");
 	textureBackground = storage.getTexture("background.jpg");
     }
 
