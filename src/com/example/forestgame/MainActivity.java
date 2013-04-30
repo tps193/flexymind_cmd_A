@@ -19,6 +19,7 @@ import org.andengine.util.color.Color;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import com.example.forestgame.altasstorage.AtlasStorage;
 
@@ -26,7 +27,16 @@ public class MainActivity extends SimpleBaseGameActivity {
 
     private static int CAMERA_WIDTH = 800;
     private static int CAMERA_HEIGHT = 1280;
-    private static Camera camera;
+    
+    public static Camera camera;  //made public modifier camera so that it can be accessed from GameScene
+    private static GameScene gameScene = new GameScene(); // init of gameScene
+    private static int gameState; // constant to hold the game states
+    // the actual states of the game
+    private static final int mainMenuState = 0; 
+    private static final int gameRunningState = 1;
+    
+    private boolean gameLoaded = false; // flag of game loading state
+    
     private static Scene mainScene;
     private TextureRegion textureBackground;
     private TextureRegion textureTitle;
@@ -68,10 +78,65 @@ public class MainActivity extends SimpleBaseGameActivity {
 	textureBackground = storage.getTexture("background.jpg");
     }
 
+   
+    // showing gameScene and hiding mainScene
+    public static void showGameScene() {
+	gameScene.show();
+	mainScene.setVisible(false);
+	mainScene.setIgnoreUpdate(true);
+	gameState = gameRunningState;
+    }
+    // showing mainScene and hiding gameScene
+    public static void showMainScene() 
+    {
+	gameScene.hide();
+	mainScene.setVisible(true);
+	mainScene.setIgnoreUpdate(false);
+	gameState = mainMenuState;
+    }
+    
+    // check boot scene
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) 
+    {
+	
+	if(keyCode == KeyEvent.KEYCODE_BACK) 
+	{
+	  if(!gameLoaded) return true;
+	  if(mainScene != null && gameLoaded) 
+	  {
+	      keyPressed(keyCode, event);
+	      return true;
+	  }
+	  return true;
+	}
+	return super.onKeyDown(keyCode, event);
+    }
+    
+    private void keyPressed(int keyCode, KeyEvent event) {
+	switch(gameState) 
+	{
+	case mainMenuState:
+	  this.onDestroy();
+	  break;
+	case gameRunningState:
+	    showMainScene();
+	    break;
+	}
+    }
+    
+    @Override
+    protected void onDestroy() 
+    {
+	super.onDestroy();
+	android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
     @Override
     protected Scene onCreateScene() {
 	this.mEngine.registerUpdateHandler(new FPSLogger());
 	mainScene = new Scene();
+	gameLoaded = true; //changing flag when scene is loaded
 	
 	Sprite sprite = new Sprite(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT,
 		textureBackground, new VertexBufferObjectManager());
@@ -96,9 +161,11 @@ public class MainActivity extends SimpleBaseGameActivity {
 		    Log.d("ButtonPlay", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
+		    showGameScene();
 		}
 		return true;
 	    }
+	    
 	};
 	
 	Sprite ButtonScores = new Sprite(CAMERA_WIDTH / 4,
@@ -164,9 +231,15 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    }
 	};
 	
+	
+	
 	mainScene.setBackgroundEnabled(true);
 	mainScene.setBackground(new Background(Color.WHITE));
 	MainActivity.mainScene.attachChild(sprite);
+	
+	MainActivity.mainScene.attachChild(gameScene); //adding of GameScene
+	showMainScene(); // hiding the newly created gameScene
+	
 	sprite.attachChild(Title);
 	sprite.attachChild(ButtonPlay);
 	sprite.attachChild(ButtonScores);
