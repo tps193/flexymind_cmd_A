@@ -2,25 +2,25 @@ package com.example.forestgame;
 
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.ScaleModifier;
-import org.andengine.entity.scene.CameraScene;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.util.Log;
 
-public class MainMenuScene extends CameraScene {
+public class MainMenuScene extends Scene {
     
-    Sprite sprite = new Sprite(0, 0, MainActivity.CAMERA_WIDTH, MainActivity.CAMERA_HEIGHT,
+    Sprite sprite = new Sprite(0, 0, MainActivity.TEXTURE_WIDTH, MainActivity.TEXTURE_HEIGHT,
 	    MainActivity.mainActivity.textureBackground, new VertexBufferObjectManager());
 
-	Sprite Title = new Sprite(MainActivity.CAMERA_WIDTH / 8, MainActivity.CAMERA_HEIGHT / 16,
-		MainActivity.CAMERA_WIDTH * 6 / 8, MainActivity.CAMERA_HEIGHT / 4, MainActivity.mainActivity.textureTitle,
+	Sprite Title = new Sprite(MainActivity.TEXTURE_WIDTH / 8, MainActivity.TEXTURE_HEIGHT / 16,
+		MainActivity.TEXTURE_WIDTH * 6 / 8, MainActivity.TEXTURE_HEIGHT / 4, MainActivity.mainActivity.textureTitle,
 		new VertexBufferObjectManager());
 
-	Sprite ButtonPlay = new Sprite(MainActivity.CAMERA_WIDTH / 4,
-		MainActivity.CAMERA_HEIGHT * 52 / 128, MainActivity.CAMERA_WIDTH * 2 / 4,
-		MainActivity.CAMERA_HEIGHT * 12 / 128, MainActivity.mainActivity.texturePlay,
+	Sprite ButtonPlay = new Sprite(MainActivity.TEXTURE_WIDTH / 4,
+		MainActivity.TEXTURE_HEIGHT * 52 / 128, MainActivity.TEXTURE_WIDTH * 2 / 4,
+		MainActivity.TEXTURE_HEIGHT * 12 / 128, MainActivity.mainActivity.texturePlay,
 		MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	    @Override
 	    public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -41,9 +41,9 @@ public class MainMenuScene extends CameraScene {
 	    
 	};
 	
-	Sprite ButtonScores = new Sprite(MainActivity.CAMERA_WIDTH / 4,
-		MainActivity.CAMERA_HEIGHT * 69 / 128, MainActivity.CAMERA_WIDTH * 2 / 4,
-		MainActivity.CAMERA_HEIGHT * 12 / 128, MainActivity.mainActivity.textureScores,
+	Sprite ButtonScores = new Sprite(MainActivity.TEXTURE_WIDTH / 4,
+		MainActivity.TEXTURE_HEIGHT * 69 / 128, MainActivity.TEXTURE_WIDTH * 2 / 4,
+		MainActivity.TEXTURE_HEIGHT * 12 / 128, MainActivity.mainActivity.textureScores,
 		MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	    @Override
 	    public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -62,9 +62,9 @@ public class MainMenuScene extends CameraScene {
 	    }
 	};
 
-	Sprite ButtonCredits = new Sprite(MainActivity.CAMERA_WIDTH / 4,
-		MainActivity.CAMERA_HEIGHT * 86 / 128, MainActivity.CAMERA_WIDTH * 2 / 4,
-		MainActivity.CAMERA_HEIGHT * 12 / 128, MainActivity.mainActivity.textureCredits,
+	Sprite ButtonCredits = new Sprite(MainActivity.TEXTURE_WIDTH / 4,
+		MainActivity.TEXTURE_HEIGHT * 86 / 128, MainActivity.TEXTURE_WIDTH * 2 / 4,
+		MainActivity.TEXTURE_HEIGHT * 12 / 128, MainActivity.mainActivity.textureCredits,
 		MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	    @Override
 	    public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -83,9 +83,9 @@ public class MainMenuScene extends CameraScene {
 	    }
 	};
 
-	Sprite ButtonExit = new Sprite(MainActivity.CAMERA_WIDTH / 4,
-		MainActivity.CAMERA_HEIGHT * 103 / 128, MainActivity.CAMERA_WIDTH * 2 / 4,
-		MainActivity.CAMERA_HEIGHT * 12 / 128, MainActivity.mainActivity.textureExit,
+	Sprite ButtonExit = new Sprite(MainActivity.TEXTURE_WIDTH / 4,
+		MainActivity.TEXTURE_HEIGHT * 103 / 128, MainActivity.TEXTURE_WIDTH * 2 / 4,
+		MainActivity.TEXTURE_HEIGHT * 12 / 128, MainActivity.mainActivity.textureExit,
 		MainActivity.mainActivity.getVertexBufferObjectManager()) {
 		//this.getVertexBufferObjectManager()) {
 	    @Override
@@ -106,9 +106,8 @@ public class MainMenuScene extends CameraScene {
 	};
     
     public MainMenuScene() {
-	super(MainActivity.camera);
 	setBackgroundEnabled(true);
-	
+	attachChild(sprite);
 	attachChild(Title);
 	attachChild(ButtonPlay);
 	attachChild(ButtonScores);
@@ -119,9 +118,7 @@ public class MainMenuScene extends CameraScene {
 	registerTouchArea(ButtonCredits);
 	registerTouchArea(ButtonExit);
 	setTouchAreaBindingOnActionDownEnabled(true);
-	setTouchAreaBindingOnActionMoveEnabled(true);
-	
-	
+	setTouchAreaBindingOnActionMoveEnabled(true);	
     }
     
     public void show() {
