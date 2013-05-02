@@ -9,9 +9,10 @@ import org.andengine.util.color.Color;
 
 public class GameScene extends Scene {
     
-    Sprite sprite = new Sprite(0, 0, MainActivity.TEXTURE_WIDTH, MainActivity.TEXTURE_HEIGHT,
+    private SlotMatrix slotMatrix;
+    private Sprite sprite = new Sprite(0, 0, MainActivity.TEXTURE_WIDTH, MainActivity.TEXTURE_HEIGHT,
 	    MainActivity.mainActivity.textureBackground, new VertexBufferObjectManager());
-    Sprite slots = new Sprite(0, 0, MainActivity.TEXTURE_WIDTH, MainActivity.TEXTURE_HEIGHT,
+    private Sprite slots = new Sprite(0, 0, MainActivity.TEXTURE_WIDTH, MainActivity.TEXTURE_HEIGHT,
 	    MainActivity.mainActivity.textureSlots, new VertexBufferObjectManager());
     
     
@@ -23,6 +24,7 @@ public class GameScene extends Scene {
 	slots.registerEntityModifier(new AlphaModifier(0.4f, 0.5f, 1.0f));
 	attachChild(sprite);
 	attachChild(slots);
+	slotMatrix = new SlotMatrix();
     }
     
     public void show() {
@@ -37,3 +39,5 @@ public class GameScene extends Scene {
    	slots.registerEntityModifier(new AlphaModifier(0.4f, 0.5f, 1.0f));
        }
 }
+
+
