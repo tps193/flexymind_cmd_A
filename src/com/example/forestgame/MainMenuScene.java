@@ -100,6 +100,10 @@ public class MainMenuScene extends Scene {
 		    Log.d("ButtonExit", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
+		    MainActivity.mainActivity.finish();
+		    if (MainActivity.mainActivity.isFinishing() == false) {
+			android.os.Process.killProcess(android.os.Process.myPid());
+		    }
 		}
 		return true;
 	    }
