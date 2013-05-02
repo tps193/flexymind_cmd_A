@@ -129,6 +129,6 @@ public class MainMenuScene extends Scene {
     public void hide() {
    	setVisible(false);
    	setIgnoreUpdate(true);
-    }
+       }
 
 }
