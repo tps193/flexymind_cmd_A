@@ -7,9 +7,11 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
+import com.example.forestgame.element.TableOfElements;
+
 public class GameScene extends Scene {
     
-    //private SlotMatrix slotMatrix = new SlotMatrix();
+    private SlotMatrix slotMatrix;
     private Sprite sprite = new Sprite(0, 0, MainActivity.TEXTURE_WIDTH, MainActivity.TEXTURE_HEIGHT,
 	    MainActivity.mainActivity.textureBackground, new VertexBufferObjectManager());
     private Sprite slots = new Sprite(0, 0, MainActivity.TEXTURE_WIDTH, MainActivity.TEXTURE_HEIGHT,
@@ -24,6 +26,11 @@ public class GameScene extends Scene {
 	slots.registerEntityModifier(new AlphaModifier(0.4f, 0.5f, 1.0f));
 	attachChild(sprite);
 	attachChild(slots);
+	slotMatrix = new SlotMatrix();
+	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 1, 1);
+	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 2, 2);
+	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 3);
+	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 4);
     }
     
     public void show() {

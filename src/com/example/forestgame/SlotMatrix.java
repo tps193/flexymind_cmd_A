@@ -1,5 +1,7 @@
 package com.example.forestgame;
 
+import java.util.Random;
+
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
 
@@ -12,7 +14,7 @@ public class SlotMatrix {
     private final int COLUMS = 6;
     private int lastEditedSlotRow;
     private int lastEditedSlotColum;
-    private static int NUMBER_OF_ElEMENTS_ON_START = 18;
+    private static int NUMBER_OF_ElEMENTS_ON_START = 10;
     private int score;
 
     
@@ -25,13 +27,15 @@ public class SlotMatrix {
     
     public void putToSlot(Element e, int row, int col) {
 	
-	addToSlot(e, row, col);
-	lastEditedSlotRow = row;
-	lastEditedSlotColum = col;
-	update();
+	if (isSlotEmpty(row, col)) {
+	    addToSlot(e, row, col);
+	    lastEditedSlotRow = row;
+	    lastEditedSlotColum = col;
+	    update();
+	}
     }
     
-    // has to be used always before using addToSLot(Element e)
+    // has to be used always before using addToSLot(..)
     public boolean isSlotEmpty(int row, int col) {
 	
 	return matrix[row][col].isEmpty();
@@ -50,12 +54,15 @@ public class SlotMatrix {
 		matrix[i][j] = new Slot();
 	    }
 	}
+	Random random = new Random();
 	for (int i = 0; i < NUMBER_OF_ElEMENTS_ON_START; i++) {
-	    int r = (int) Math.random()*6;
-	    int c = (int) Math.random()*6;
+	    int r = (int) (random.nextDouble()*ROWS);
+	    int c = (int) (random.nextDouble()*COLUMS);
 	    if (isSlotEmpty(r, c)) {
 		addToSlot(TableOfElements.getRandomElement(), r, c); //Not putToSlot(..) because of the update() method
-	    } else i--;
+	    } else {
+		i--;
+	    }
 	}
     }
     
@@ -77,7 +84,7 @@ public class SlotMatrix {
     // putting Element into Slot and changing flags if needed
     private void addToSlot(Element e, int r, int c) {
 	
-	matrix[r][c].addElemen(e);
+	matrix[r][c].addElement(e);
 	if (r > 0) {
 	    analyzeNeighbor(r, c, r-1, c);
 	}
@@ -97,7 +104,7 @@ public class SlotMatrix {
     private void analyzeNeighbor(int r, int c, int r1, int c1) {
 	Slot s = matrix[r][c];
 	Slot s1 = matrix[r1][c1];
-	if (s.isSimilarTo(s1)) {
+	if (s1.isSimilarTo(s.getElement())) {
 	    s.hasSimilarNeighbor = true;
 	    if (s1.hasSimilarNeighbor) {
 		s1.readyForNextLevel = true;
@@ -113,57 +120,60 @@ public class SlotMatrix {
 	
 	int r = lastEditedSlotRow;
 	int c = lastEditedSlotColum;
+	Slot s = matrix[r][c];
+	Element e = s.getElement();
+	addToSlot(s.getNextLevelElement(), r, c);
 	if (matrix[r][c].readyForNextLevel) {
 	    if (r > 0) {
-		if (matrix[r][c].isSimilarTo(matrix[r-1][c])) {
-		    collectSimilarElements(r, c, r-1, c);
+		if (matrix[r-1][c].isSimilarTo(e)) {
+		    collectSimilarElements(r, c, r-1, c, e);
 		}
 	    }
 	    if (r < ROWS-1) {
-		if (matrix[r][c].isSimilarTo(matrix[r+1][c])) {
-		    collectSimilarElements(r, c, r+1, c);
+		if (matrix[r+1][c].isSimilarTo(e)) {
+		    collectSimilarElements(r, c, r+1, c, e);
 		}
 	    }
 	    if (c > 0) {
-		if (matrix[r][c].isSimilarTo(matrix[r][c-1])) {
-		    collectSimilarElements(r, c, r, c-1);
+		if (matrix[r][c-1].isSimilarTo(e)) {
+		    collectSimilarElements(r, c, r, c-1, e);
 		}
 	    }
 	    if (c < COLUMS-1) {
-		if (matrix[r][c].isSimilarTo(matrix[r][c+1])) {
-		    collectSimilarElements(r, c, r, c+1);
+		if (matrix[r][c+1].isSimilarTo(e)) {
+		    collectSimilarElements(r, c, r, c+1, e);
 		}
 	    }
-	    putToSlot(matrix[r][c].getNextLevelElement(), r, c); // here new update() is called
+	    update();
 	}
     }
     
     //recoursively collecting the chain of similar elements, removing them from field
-    private void collectSimilarElements(int toRow, int toCol, int fromRow, int fromCol) {
-	Slot s = matrix[fromRow][fromCol];
-	if (fromRow > 0) {
-	    if (s.isSimilarTo(matrix[fromRow-1][fromCol])) {
-		collectSimilarElements(toRow, toCol, fromRow-1, fromCol);
-	    }
-	}
-	if (fromRow < ROWS-1) {
-	    if (s.isSimilarTo(matrix[fromRow+1][fromCol])) {
-		collectSimilarElements(toRow, toCol, fromRow+1, fromCol);
-	    }
-	}
-	if (fromCol > 0) {
-	    if (s.isSimilarTo(matrix[fromRow][fromCol-1])) {
-		collectSimilarElements(toRow, toCol, fromRow, fromCol-1);
-	    }
-	}
-	if (fromCol < COLUMS-1) {
-	    if (s.isSimilarTo(matrix[fromRow][fromCol+1])) {
-		collectSimilarElements(toRow, toCol, fromRow, fromCol+1);
-	    }
-	}
+    private void collectSimilarElements(int toRow, int toCol, int fromRow, int fromCol, Element e) {
+	
 	graphicalMoving(toRow, toCol, fromRow, fromCol);
 	score =+ matrix[fromRow][fromCol].getScore();
  	clearSlot(fromRow, fromCol);
+	if (fromRow > 0) {
+	    if (matrix[fromRow-1][fromCol].isSimilarTo(e)) {
+		collectSimilarElements(toRow, toCol, fromRow-1, fromCol, e);
+	    }
+	}
+	if (fromRow < ROWS-1) {
+	    if (matrix[fromRow+1][fromCol].isSimilarTo(e)) {
+		collectSimilarElements(toRow, toCol, fromRow+1, fromCol, e);
+	    }
+	}
+	if (fromCol > 0) {
+	    if (matrix[fromRow][fromCol-1].isSimilarTo(e)) {
+		collectSimilarElements(toRow, toCol, fromRow, fromCol-1, e);
+	    }
+	}
+	if (fromCol < COLUMS-1) {
+	    if (matrix[fromRow][fromCol+1].isSimilarTo(e)) {
+		collectSimilarElements(toRow, toCol, fromRow, fromCol+1, e);
+	    }
+	}
     }
     
     private void graphicalMoving(int toRow, int toCol, int fromRow, int fromCol) {
@@ -185,9 +195,10 @@ class Slot {
 	
 	isEmpty = true;
 	hasSimilarNeighbor = false;
+	readyForNextLevel = false;
     }
     
-    public void addElemen(Element e) {
+    public void addElement(Element e) {
 	
 	element = e;
 	isEmpty = false;
@@ -205,9 +216,17 @@ class Slot {
 	return isEmpty;
     }
     
-    public boolean isSimilarTo(Slot s) {
+    public boolean isSimilarTo(Element e) {
 	
-	return (this.element.getName() == s.element.getName());
+	if (this.isEmpty) {
+	    return false; 
+	} else {
+	    return (this.element.getName() == e.getName());
+	}
+    }
+    
+    public Element getElement() {
+	return element;
     }
     
     public int getScore() {
