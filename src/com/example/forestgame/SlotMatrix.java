@@ -14,7 +14,7 @@ public class SlotMatrix {
     private final int COLUMS = 6;
     private int lastEditedSlotRow;
     private int lastEditedSlotColum;
-    private static int NUMBER_OF_ElEMENTS_ON_START = 10;
+    private static int NUMBER_OF_ElEMENTS_ON_START = 18;
     private int score;
 
     
@@ -120,10 +120,10 @@ public class SlotMatrix {
 	
 	int r = lastEditedSlotRow;
 	int c = lastEditedSlotColum;
-	Slot s = matrix[r][c];
-	Element e = s.getElement();
-	addToSlot(s.getNextLevelElement(), r, c);
 	if (matrix[r][c].readyForNextLevel) {
+	    Slot s = matrix[r][c];
+	    Element e = s.getElement();
+	    clearSlot(r, c);
 	    if (r > 0) {
 		if (matrix[r-1][c].isSimilarTo(e)) {
 		    collectSimilarElements(r, c, r-1, c, e);
@@ -144,6 +144,8 @@ public class SlotMatrix {
 		    collectSimilarElements(r, c, r, c+1, e);
 		}
 	    }
+	    e.changeToNextLvl();
+	    addToSlot(e, r, c);
 	    update();
 	}
     }
