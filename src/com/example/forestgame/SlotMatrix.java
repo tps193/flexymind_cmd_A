@@ -19,7 +19,7 @@ public class SlotMatrix {
     private final int COLUMS = 6;
     private int lastEditedSlotRow;
     private int lastEditedSlotColum;
-    private static int NUMBER_OF_ElEMENTS_ON_START = 1;
+    private static int NUMBER_OF_ElEMENTS_ON_START = 18;
     private int score;
     private GameScene gameScene;
 
@@ -73,8 +73,14 @@ public class SlotMatrix {
 	}
     }
     
+    public int getScore() {
+	
+	return score;
+    }
+    
+    
     // method for visualizing textures on GameScene
-    public void viewSlots() {
+    private void viewSlots() {
 	
 	for (int i = 0; i < ROWS; i++) {
 	    for (int j = 0; j < COLUMS; j++) {
@@ -82,20 +88,13 @@ public class SlotMatrix {
 		    Slot s = matrix[i][j];
 		    TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(
 						TableOfElements.getTextureName(s.getElement().getName()));
-		    Sprite slotSprite = new Sprite(0, 0, MainActivity.TEXTURE_WIDTH, MainActivity.TEXTURE_HEIGHT,
-		    				slotTexture, new VertexBufferObjectManager());
-		    slotSprite.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 0.8f));
+		    Sprite slotSprite = new Sprite(96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24)), 218 + 
+			    		(int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26)), MainActivity.TEXTURE_WIDTH/8, 
+			    		MainActivity.TEXTURE_HEIGHT/13, slotTexture, new VertexBufferObjectManager());
 		    gameScene.attachChild(slotSprite);
-
-		    
 		}
 	    }
 	}
-    }
-    
-    public int getScore() {
-	
-	return score;
     }
     
     private void clearSlot(int row, int col) {
