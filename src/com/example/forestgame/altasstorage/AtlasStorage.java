@@ -20,24 +20,31 @@ public class AtlasStorage {
 	
 	private Map<String, TextureRegion> textureMap = new HashMap<String, TextureRegion>();
 	
-	public void createAtlas(TextureManager textureManager, Context context, String assetBasePath, String ... textureNames) {
+	public void createAtlas( TextureManager textureManager
+ 	           , Context context
+ 	           , String assetBasePath
+ 	           , String... textureNames) {
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(assetBasePath);
 		
-		BuildableBitmapTextureAtlas atlas = 
-				new BuildableBitmapTextureAtlas(textureManager, 2048, 2048, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		BuildableBitmapTextureAtlas atlas = new BuildableBitmapTextureAtlas( textureManager
+			 							   , 2048
+			 							   , 2048
+			 							   , BitmapTextureFormat.RGBA_8888
+			 							   , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		
 		for(String texture : textureNames) {
-			textureMap.put(texture, 
+			textureMap.put( texture, 
 					BitmapTextureAtlasTextureRegionFactory
-					.createFromAsset(atlas, context, texture));
+					.createFromAsset( atlas
+							, context
+							, texture));
 		}
 		
 		try {
-			atlas.build(
-					new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 1));
+			atlas.build( new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource
+				   , BitmapTextureAtlas>(0, 1, 1));
 		} catch (TextureAtlasBuilderException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
