@@ -18,6 +18,7 @@ public class GameScene extends Scene {
 	    MainActivity.mainActivity.textureSlots, new VertexBufferObjectManager());
     
     
+    
 
     public GameScene() {
 	setBackgroundEnabled(true);
@@ -26,11 +27,15 @@ public class GameScene extends Scene {
 	slots.registerEntityModifier(new AlphaModifier(0.4f, 0.5f, 1.0f));
 	attachChild(sprite);
 	attachChild(slots);
-	slotMatrix = new SlotMatrix();
+	slotMatrix = new SlotMatrix(this);
+	//Test Slots
+	/*
 	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 1, 1);
 	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 2, 2);
 	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 3);
 	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 4);
+	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 5);
+	*/
     }
     
     public void show() {

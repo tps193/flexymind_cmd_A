@@ -22,18 +22,18 @@ public class TableOfElements {
 
     //Table includes info about elements:
     //column 0 - name of current element
-    //column 1 - name of texture
+    //column 1 - name of texture in AtlasStorage
     //column 2 - scores
     //column 3 - chance
     private static final ElementInfo[] ARRAY_OF_ELEMENTS = {
 
-	new ElementInfo("GRASS", "GRASS_TEXTURE", 10, 0.35)
-	, new ElementInfo("TREE", "TREE_TEXTURE", 50, 0.25)
-	, new ElementInfo("SQUIRREL", "SQUIRREL_TEXTURE", 500, 0.2)
-	, new ElementInfo("NUT", "NUT_TEXTURE", 3000, 0.184)
-	, new ElementInfo("GOLDEN_NUT", "GOLDEN_NUT_TEXTURE", 20000, 0.01)
-	, new ElementInfo("CROWN", "CROWN_TEXTURE", 100000, 0.005)
-	, new ElementInfo("NUTS_KING", "NUTS_KING_TEXTURE", 500000, 0.001)
+	new ElementInfo("GRASS", "gfx_grass.png", 10, 0.35)
+	, new ElementInfo("TREE", "gfx_tree.png", 50, 0.25)
+	, new ElementInfo("SQUIRREL", "gfx_squirrel.png", 500, 0.2)
+	, new ElementInfo("NUT", "_gfx_nut.png", 3000, 0.184)
+	, new ElementInfo("GOLDEN_NUT", "gfx_golden_nut.png", 20000, 0.01)
+	, new ElementInfo("CROWN", "gfx_crown.png", 100000, 0.005)
+	, new ElementInfo("NUTS_KING", "gfx_nuts_king.png", 500000, 0.001)
     };
     
     public static String getTextureName(String name) {

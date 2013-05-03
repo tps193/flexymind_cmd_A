@@ -40,7 +40,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion textureScores;
     public TextureRegion textureCredits;
     public TextureRegion textureExit;
-    private AtlasStorage storage;
+    public AtlasStorage storage;
+    
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -101,6 +102,8 @@ mainActivity = this;
 	textureBackground = storage.getTexture("background.jpg");
 	storage.createAtlas(this.getTextureManager(), this, "game_scene_gfx/", "gfx_slots.png");
 	textureSlots = storage.getTexture("gfx_slots.png");
+	storage.createAtlas(this.getTextureManager(), this, "game_scene_gfx/", "gfx_crown.png", 
+		"gfx_golden_nut.png", "gfx_nut.png", "gfx_grass.png", "gfx_tree.png", "gfx_nuts_king.png", "gfx_squirrel.png");
 	
     }
 

@@ -2,6 +2,11 @@ package com.example.forestgame;
 
 import java.util.Random;
 
+import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
+
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
 
@@ -14,12 +19,14 @@ public class SlotMatrix {
     private final int COLUMS = 6;
     private int lastEditedSlotRow;
     private int lastEditedSlotColum;
-    private static int NUMBER_OF_ElEMENTS_ON_START = 18;
+    private static int NUMBER_OF_ElEMENTS_ON_START = 1;
     private int score;
+    private GameScene gameScene;
 
     
-    public SlotMatrix() {
+    public SlotMatrix(GameScene scene) {
 	
+	gameScene = scene;
 	matrix = new Slot[ROWS][COLUMS];
 	init();
 	viewSlots();
@@ -66,9 +73,24 @@ public class SlotMatrix {
 	}
     }
     
+    // method for visualizing textures on GameScene
     public void viewSlots() {
 	
-	// method for visualizing textures on GameScene
+	for (int i = 0; i < ROWS; i++) {
+	    for (int j = 0; j < COLUMS; j++) {
+		if (!isSlotEmpty(i, j)) {
+		    Slot s = matrix[i][j];
+		    TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(
+						TableOfElements.getTextureName(s.getElement().getName()));
+		    Sprite slotSprite = new Sprite(0, 0, MainActivity.TEXTURE_WIDTH, MainActivity.TEXTURE_HEIGHT,
+		    				slotTexture, new VertexBufferObjectManager());
+		    slotSprite.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 0.8f));
+		    gameScene.attachChild(slotSprite);
+
+		    
+		}
+	    }
+	}
     }
     
     public int getScore() {
