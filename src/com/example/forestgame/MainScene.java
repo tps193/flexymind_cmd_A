@@ -8,7 +8,7 @@ import android.view.KeyEvent;
 public class MainScene extends Scene {
     
     private static int gameState; // constant to hold the game states
-    // the actual states of the game
+    				  // the actual states of the game
     private static final int mainMenuState = 0; 
     private static final int gameRunningState = 1;
     
@@ -35,27 +35,25 @@ public class MainScene extends Scene {
     
     @Override
     public boolean onSceneTouchEvent(TouchEvent pSceneTouchEvent) {
-	switch(gameState)
-	{
+	switch(gameState){
 	case mainMenuState:
-	    mainMenuScene.onSceneTouchEvent(pSceneTouchEvent);
-	    break;
+	  mainMenuScene.onSceneTouchEvent(pSceneTouchEvent);
+	  break;
 	case gameRunningState:
-	    gameScene.onSceneTouchEvent(pSceneTouchEvent);
-	    break;
+	  gameScene.onSceneTouchEvent(pSceneTouchEvent);
+	  break;
 	}
 	return super.onSceneTouchEvent(pSceneTouchEvent);
     }
     
     public void keyPressed(int keyCode, KeyEvent event) {
-	switch(gameState) 
-	{
+	switch(gameState) {
 	case mainMenuState:
 	  MainActivity.mainActivity.onDestroy();
 	  break;
 	case gameRunningState:
-	    showMainMenuScene();
-	    break;
+	  showMainMenuScene();
+	  break;
 	}
     }
 }

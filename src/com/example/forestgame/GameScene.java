@@ -12,14 +12,18 @@ import com.example.forestgame.element.TableOfElements;
 public class GameScene extends Scene {
     
     private SlotMatrix slotMatrix;
-    private Sprite sprite = new Sprite(0, 0, MainActivity.TEXTURE_WIDTH, MainActivity.TEXTURE_HEIGHT,
-	    MainActivity.mainActivity.textureBackground, new VertexBufferObjectManager());
-    private Sprite slots = new Sprite(0, 0, MainActivity.TEXTURE_WIDTH, MainActivity.TEXTURE_HEIGHT,
-	    MainActivity.mainActivity.textureSlots, new VertexBufferObjectManager());
-    
-    
-    
-
+    private Sprite sprite = new Sprite( 0
+	                              , 0
+	                              , MainActivity.TEXTURE_WIDTH
+	                              , MainActivity.TEXTURE_HEIGHT
+	                              , MainActivity.mainActivity.textureBackground
+	                              , new VertexBufferObjectManager());
+    private Sprite slots = new Sprite( 0
+	    			     , 0
+	    			     , MainActivity.TEXTURE_WIDTH
+	    			     , MainActivity.TEXTURE_HEIGHT
+	    			     , MainActivity.mainActivity.textureSlots
+	    			     , new VertexBufferObjectManager());
     public GameScene() {
 	setBackgroundEnabled(true);
 	setBackground(new Background(Color.BLUE));
@@ -48,5 +52,5 @@ public class GameScene extends Scene {
    	setIgnoreUpdate(true);
    	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 0.8f));
    	slots.registerEntityModifier(new AlphaModifier(0.4f, 0.5f, 1.0f));
-       }
+    }
 }

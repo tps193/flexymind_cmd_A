@@ -11,21 +11,30 @@ import android.util.Log;
 
 public class MainMenuScene extends Scene {
     
-    Sprite sprite = new Sprite(0, 0, MainActivity.TEXTURE_WIDTH, MainActivity.TEXTURE_HEIGHT,
-	    MainActivity.mainActivity.textureBackground, new VertexBufferObjectManager());
+    	Sprite sprite = new Sprite( 0
+	    		          , 0
+	    		          , MainActivity.TEXTURE_WIDTH
+	    		          , MainActivity.TEXTURE_HEIGHT
+	    		          , MainActivity.mainActivity.textureBackground
+	    		          , new VertexBufferObjectManager());
 
-	Sprite Title = new Sprite(MainActivity.TEXTURE_WIDTH / 8, MainActivity.TEXTURE_HEIGHT / 16,
-		MainActivity.TEXTURE_WIDTH * 6 / 8, MainActivity.TEXTURE_HEIGHT / 4, MainActivity.mainActivity.textureTitle,
-		new VertexBufferObjectManager());
+    	Sprite Title = new Sprite( MainActivity.TEXTURE_WIDTH / 8
+    				 , MainActivity.TEXTURE_HEIGHT / 16
+    				 , MainActivity.TEXTURE_WIDTH * 6 / 8
+    				 , MainActivity.TEXTURE_HEIGHT / 4
+    				 , MainActivity.mainActivity.textureTitle
+    				 , new VertexBufferObjectManager());
 
-	Sprite ButtonPlay = new Sprite(MainActivity.TEXTURE_WIDTH / 4,
-		MainActivity.TEXTURE_HEIGHT * 52 / 128, MainActivity.TEXTURE_WIDTH * 2 / 4,
-		MainActivity.TEXTURE_HEIGHT * 12 / 128, MainActivity.mainActivity.texturePlay,
-		MainActivity.mainActivity.getVertexBufferObjectManager()) {
+    	Sprite ButtonPlay = new Sprite( MainActivity.TEXTURE_WIDTH / 4
+	    			      , MainActivity.TEXTURE_HEIGHT * 52 / 128
+	    			      , MainActivity.TEXTURE_WIDTH * 2 / 4
+	    			      , MainActivity.TEXTURE_HEIGHT * 12 / 128
+	    			      , MainActivity.mainActivity.texturePlay
+	    			      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	    @Override
-	    public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-		    float pTouchAreaLocalX, float pTouchAreaLocalY) {
-
+	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
+		    			, float pTouchAreaLocalX
+		    			, float pTouchAreaLocalY) {
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonPlay", "touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 1.0f, 0.95f));
@@ -38,17 +47,18 @@ public class MainMenuScene extends Scene {
 		}
 		return true;
 	    }
-	    
 	};
 	
-	Sprite ButtonScores = new Sprite(MainActivity.TEXTURE_WIDTH / 4,
-		MainActivity.TEXTURE_HEIGHT * 69 / 128, MainActivity.TEXTURE_WIDTH * 2 / 4,
-		MainActivity.TEXTURE_HEIGHT * 12 / 128, MainActivity.mainActivity.textureScores,
-		MainActivity.mainActivity.getVertexBufferObjectManager()) {
+	Sprite ButtonScores = new Sprite( MainActivity.TEXTURE_WIDTH / 4
+	    			        , MainActivity.TEXTURE_HEIGHT * 69 / 128
+	    			        , MainActivity.TEXTURE_WIDTH * 2 / 4
+	    			        , MainActivity.TEXTURE_HEIGHT * 12 / 128
+	    			        , MainActivity.mainActivity.textureScores
+	    			        , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	    @Override
-	    public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-		    float pTouchAreaLocalX, float pTouchAreaLocalY) {
-
+	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
+					, float pTouchAreaLocalX
+					, float pTouchAreaLocalY) {
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonScores", "touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 1.0f, 0.95f));
@@ -62,14 +72,16 @@ public class MainMenuScene extends Scene {
 	    }
 	};
 
-	Sprite ButtonCredits = new Sprite(MainActivity.TEXTURE_WIDTH / 4,
-		MainActivity.TEXTURE_HEIGHT * 86 / 128, MainActivity.TEXTURE_WIDTH * 2 / 4,
-		MainActivity.TEXTURE_HEIGHT * 12 / 128, MainActivity.mainActivity.textureCredits,
-		MainActivity.mainActivity.getVertexBufferObjectManager()) {
+	Sprite ButtonCredits = new Sprite( MainActivity.TEXTURE_WIDTH / 4
+				         , MainActivity.TEXTURE_HEIGHT * 86 / 128
+				         , MainActivity.TEXTURE_WIDTH * 2 / 4
+				         , MainActivity.TEXTURE_HEIGHT * 12 / 128
+				         , MainActivity.mainActivity.textureCredits
+				         , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	    @Override
-	    public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-		    float pTouchAreaLocalX, float pTouchAreaLocalY) {
-
+	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
+					, float pTouchAreaLocalX
+					, float pTouchAreaLocalY) {
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonCredits", "touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 1.0f, 0.95f));
@@ -83,15 +95,17 @@ public class MainMenuScene extends Scene {
 	    }
 	};
 
-	Sprite ButtonExit = new Sprite(MainActivity.TEXTURE_WIDTH / 4,
-		MainActivity.TEXTURE_HEIGHT * 103 / 128, MainActivity.TEXTURE_WIDTH * 2 / 4,
-		MainActivity.TEXTURE_HEIGHT * 12 / 128, MainActivity.mainActivity.textureExit,
-		MainActivity.mainActivity.getVertexBufferObjectManager()) {
-		//this.getVertexBufferObjectManager()) {
-	    @Override
-	    public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-		    float pTouchAreaLocalX, float pTouchAreaLocalY) {
+	Sprite ButtonExit = new Sprite( MainActivity.TEXTURE_WIDTH / 4
+				      , MainActivity.TEXTURE_HEIGHT * 103 / 128
+				      , MainActivity.TEXTURE_WIDTH * 2 / 4
+				      , MainActivity.TEXTURE_HEIGHT * 12 / 128
+				      , MainActivity.mainActivity.textureExit
+				      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 
+	    @Override
+	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
+					, float pTouchAreaLocalX
+					, float pTouchAreaLocalY) {
 		if (pSceneTouchEvent.isActionDown()) {
 		    Log.d("ButtonExit", "touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 1.0f, 0.95f));
@@ -133,6 +147,5 @@ public class MainMenuScene extends Scene {
     public void hide() {
    	setVisible(false);
    	setIgnoreUpdate(true);
-       }
-
+    }
 }

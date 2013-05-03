@@ -11,7 +11,10 @@ public class TableOfElements {
 	private int scores;
 	private double chance;
 
-	private ElementInfo(String name, String texture, int scores, double chance) {
+	private ElementInfo( String name
+			   , String texture
+			   , int scores
+			   , double chance) {
 
 	    this.name = name;
 	    this.texture = texture;
@@ -27,7 +30,7 @@ public class TableOfElements {
     //column 3 - chance
     private static final ElementInfo[] ARRAY_OF_ELEMENTS = {
 
-	new ElementInfo("GRASS", "gfx_grass.png", 10, 0.35)
+	  new ElementInfo("GRASS", "gfx_grass.png", 10, 0.35)
 	, new ElementInfo("TREE", "gfx_tree.png", 50, 0.25)
 	, new ElementInfo("SQUIRREL", "gfx_squirrel.png", 500, 0.2)
 	, new ElementInfo("NUT", "gfx_nut.png", 3000, 0.184)
@@ -39,8 +42,9 @@ public class TableOfElements {
     public static String getTextureName(String name) {
 
 	for (ElementInfo el : ARRAY_OF_ELEMENTS) {
-
-	    if (name == el.name) return el.texture;
+	    if (name == el.name) {
+		return el.texture;
+	    }
 	}
 	return null;
     }
@@ -48,8 +52,9 @@ public class TableOfElements {
     public static int getScores(String name) {
 
 	for (ElementInfo el : ARRAY_OF_ELEMENTS) {
-
-	    if (name == el.name) return el.scores;
+	    if (name == el.name) {
+		return el.scores;
+	    }
 	}
 	return -1;
     }
@@ -57,8 +62,9 @@ public class TableOfElements {
     public static double getChance(String name) {
 
 	for (ElementInfo el : ARRAY_OF_ELEMENTS) {
-
-	    if (name == el.name) return el.chance;
+	    if (name == el.name) {
+		return el.chance;
+	    }
 	}
 	return -1;
     }
@@ -66,11 +72,13 @@ public class TableOfElements {
     public static String getNextLvl(String name) {
 
 	for (int i = 0; i < ARRAY_OF_ELEMENTS.length; ++i) {
-
 	    if (name == ARRAY_OF_ELEMENTS[i].name) {
-
-		if (i != ARRAY_OF_ELEMENTS.length - 1) return ARRAY_OF_ELEMENTS[i+1].name;
-		else return ARRAY_OF_ELEMENTS[i].name;
+		if (i != ARRAY_OF_ELEMENTS.length - 1) {
+		    return ARRAY_OF_ELEMENTS[i+1].name;
+		}
+		else {
+		    return ARRAY_OF_ELEMENTS[i].name;
+		}
 	    }
 	}
 	return null;
@@ -81,12 +89,24 @@ public class TableOfElements {
 	Random randomGenerator = new Random();
 	double random = randomGenerator.nextDouble();
 
-	if (random < 0.35) return new Element("GRASS");
-	else if (random < 0.60) return new Element("TREE");
-	else if (random < 0.80) return new Element("SQUIRREL");
-	else if (random < 0.984) return new Element("NUT");
-	else if (random < 0.994) return new Element("GOLDEN_NUT");
-	else if (random < 0.999) return new Element("CROWN");
+	if (random < 0.35) {
+	    return new Element("GRASS");
+	}
+	else if (random < 0.60) {
+	    return new Element("TREE");
+	}
+	else if (random < 0.80) {
+	    return new Element("SQUIRREL");
+	}
+	else if (random < 0.984) {
+	    return new Element("NUT");
+	}
+	else if (random < 0.994) {
+	    return new Element("GOLDEN_NUT");
+	}
+	else if (random < 0.999) {
+	    return new Element("CROWN");
+	}
 	return new Element("NUTS_KING");
     }
 }

@@ -2,7 +2,6 @@ package com.example.forestgame;
 
 import java.util.Random;
 
-import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -32,7 +31,9 @@ public class SlotMatrix {
 	viewSlots();
     }
     
-    public void putToSlot(Element e, int row, int col) {
+    public void putToSlot( Element e
+	    		 , int row
+	    		 , int col) {
 	
 	if (isSlotEmpty(row, col)) {
 	    addToSlot(e, row, col);
@@ -43,7 +44,8 @@ public class SlotMatrix {
     }
     
     // has to be used always before using addToSLot(..)
-    public boolean isSlotEmpty(int row, int col) {
+    public boolean isSlotEmpty( int row
+	    		      , int col) {
 	
 	return matrix[row][col].isEmpty();
     }
@@ -63,10 +65,11 @@ public class SlotMatrix {
 	}
 	Random random = new Random();
 	for (int i = 0; i < NUMBER_OF_ElEMENTS_ON_START; i++) {
-	    int r = (int) (random.nextDouble()*ROWS);
-	    int c = (int) (random.nextDouble()*COLUMS);
+	    int r = (int) (random.nextDouble() * ROWS);
+	    int c = (int) (random.nextDouble() * COLUMS);
 	    if (isSlotEmpty(r, c)) {
-		addToSlot(TableOfElements.getRandomElement(), r, c); //Not putToSlot(..) because of the update() method
+		addToSlot(TableOfElements.getRandomElement(), r, c); //Not putToSlot(..) 
+								     //because of the update() method
 	    } else {
 		i--;
 	    }
@@ -81,16 +84,19 @@ public class SlotMatrix {
     
     // method for visualizing textures on GameScene
     private void viewSlots() {
-	
 	for (int i = 0; i < ROWS; i++) {
 	    for (int j = 0; j < COLUMS; j++) {
 		if (!isSlotEmpty(i, j)) {
 		    Slot s = matrix[i][j];
-		    TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(
-						TableOfElements.getTextureName(s.getElement().getName()));
-		    Sprite slotSprite = new Sprite(96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24)), 218 + 
-			    		(int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26)), MainActivity.TEXTURE_WIDTH/8, 
-			    		MainActivity.TEXTURE_HEIGHT/13, slotTexture, new VertexBufferObjectManager());
+		    TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture( TableOfElements
+			    								    . getTextureName
+			    								    ( s.getElement()
+			    							            . getName()));
+		    Sprite slotSprite = new Sprite ( 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24))
+			    			   , 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26))
+			    			   , MainActivity.TEXTURE_WIDTH/8
+			    			   , MainActivity.TEXTURE_HEIGHT/13
+			    			   , slotTexture, new VertexBufferObjectManager());
 		    gameScene.attachChild(slotSprite);
 		}
 	    }
@@ -122,7 +128,11 @@ public class SlotMatrix {
     
     // setting hasSimilarNeighbor and readyForNextLevel flags
     // flag readyForNextLevel doesn't have to be set for every Slot in chain, only for the last edited
-    private void analyzeNeighbor(int r, int c, int r1, int c1) {
+    private void analyzeNeighbor( int r
+	    			, int c
+	    			, int r1
+	    			, int c1) {
+	
 	Slot s = matrix[r][c];
 	Slot s1 = matrix[r1][c1];
 	if (s1.isSimilarTo(s.getElement())) {
@@ -172,29 +182,52 @@ public class SlotMatrix {
     }
     
     //recoursively collecting the chain of similar elements, removing them from field
-    private void collectSimilarElements(int toRow, int toCol, int fromRow, int fromCol, Element e) {
+    private void collectSimilarElements( int toRow
+	    			       , int toCol
+	    			       , int fromRow
+	    			       , int fromCol
+	    			       , Element e) {
 	
-	graphicalMoving(toRow, toCol, fromRow, fromCol);
+	graphicalMoving( toRow
+		       , toCol
+		       , fromRow
+		       , fromCol);
 	score =+ matrix[fromRow][fromCol].getScore();
  	clearSlot(fromRow, fromCol);
 	if (fromRow > 0) {
 	    if (matrix[fromRow-1][fromCol].isSimilarTo(e)) {
-		collectSimilarElements(toRow, toCol, fromRow-1, fromCol, e);
+		collectSimilarElements( toRow
+				      , toCol
+				      , fromRow-1
+				      , fromCol
+				      , e);
 	    }
 	}
 	if (fromRow < ROWS-1) {
 	    if (matrix[fromRow+1][fromCol].isSimilarTo(e)) {
-		collectSimilarElements(toRow, toCol, fromRow+1, fromCol, e);
+		collectSimilarElements( toRow
+				      , toCol
+				      , fromRow+1
+				      , fromCol
+				      , e);
 	    }
 	}
 	if (fromCol > 0) {
 	    if (matrix[fromRow][fromCol-1].isSimilarTo(e)) {
-		collectSimilarElements(toRow, toCol, fromRow, fromCol-1, e);
+		collectSimilarElements( toRow
+			              , toCol
+			              , fromRow
+			              , fromCol-1
+			              , e);
 	    }
 	}
 	if (fromCol < COLUMS-1) {
 	    if (matrix[fromRow][fromCol+1].isSimilarTo(e)) {
-		collectSimilarElements(toRow, toCol, fromRow, fromCol+1, e);
+		collectSimilarElements( toRow
+				      , toCol
+				      , fromRow
+				      , fromCol+1
+				      , e);
 	    }
 	}
     }

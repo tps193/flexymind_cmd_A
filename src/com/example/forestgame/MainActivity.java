@@ -46,7 +46,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     @Override
     public EngineOptions onCreateEngineOptions() {
 	
-mainActivity = this;
+	mainActivity = this;
 	
 	DisplayMetrics dm = new DisplayMetrics();
 	getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -64,21 +64,28 @@ mainActivity = this;
 	ratio_height = TEXTURE_HEIGHT / DISPLAY_HEIGHT;
 	
 	if (ratio_height < ratio_width) {
-	    ZM = 1/ratio_height;
+	    ZM = 1 / ratio_height;
 	} else if (ratio_height > ratio_width) {
-	    ZM = 1/ratio_width;
+	    ZM = 1 / ratio_width;
 	} else {
 	    ZM = 1;
 	}
 	
-	camera = new ZoomCamera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
+	camera = new ZoomCamera( 0
+			       , 0
+			       , CAMERA_WIDTH
+			       , CAMERA_HEIGHT);
 	//mHUD = new HUD();
 	//camera.setHUD(mHUD);
-	camera.setCenter(TEXTURE_WIDTH/2, TEXTURE_HEIGHT/2);
-	camera.setZoomFactor(ZM*1f);
+	camera.setCenter( TEXTURE_WIDTH / 2
+			, TEXTURE_HEIGHT / 2);
 	
-	final EngineOptions options = new EngineOptions(true,
-		ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), camera);
+	camera.setZoomFactor(ZM * 1f);
+	final EngineOptions options = new EngineOptions( true
+						       , ScreenOrientation.PORTRAIT_FIXED
+						       , new RatioResolutionPolicy( CAMERA_WIDTH
+							                          , CAMERA_HEIGHT)
+						       , camera);
 	return options;
     }
 
@@ -87,10 +94,17 @@ mainActivity = this;
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("main_menu/");
 	
 	storage = new AtlasStorage();
-	storage.createAtlas(this.getTextureManager(), this, "main_menu/"
-		, "main_menu_title.png", "menu_play.png"
-		, "menu_scores.png", "menu_credits.png"
-		, "menu_exit.png");
+	storage.createAtlas( this.getTextureManager()
+			   , this, "main_menu/"
+			   , "main_menu_title.png"
+			   , "menu_play.png"
+			   , "menu_play_light.png"
+			   , "menu_scores.png"
+			   , "menu_scores_light.png"
+			   , "menu_credits.png"
+			   , "menu_credits_light.png"
+			   , "menu_exit.png"
+			   , "menu_exit_light.png");
 	
 	
 	textureTitle = storage.getTexture("main_menu_title.png");
@@ -98,13 +112,29 @@ mainActivity = this;
 	textureScores = storage.getTexture("menu_scores.png");
 	textureCredits = storage.getTexture("menu_credits.png");
 	textureExit = storage.getTexture("menu_exit.png");
-	storage.createAtlas(this.getTextureManager(), this, "main_menu/", "background.jpg");
-	textureBackground = storage.getTexture("background.jpg");
-	storage.createAtlas(this.getTextureManager(), this, "game_scene_gfx/", "gfx_slots.png");
-	textureSlots = storage.getTexture("gfx_slots.png");
-	storage.createAtlas(this.getTextureManager(), this, "game_scene_gfx/", "gfx_crown.png", 
-		"gfx_golden_nut.png", "gfx_nut.png", "gfx_grass.png", "gfx_tree.png", "gfx_nuts_king.png", "gfx_squirrel.png");
 	
+	storage.createAtlas( this.getTextureManager()
+	           	   , this
+	           	   , "main_menu/"
+	           	   , "background.jpg");
+	textureBackground = storage.getTexture("background.jpg");
+	
+	storage.createAtlas( this.getTextureManager()
+		 	   , this
+		 	   , "game_scene_gfx/"
+		 	   , "gfx_slots.png");
+        textureSlots = storage.getTexture("gfx_slots.png");
+	
+	storage.createAtlas( this.getTextureManager()
+			   , this
+			   , "game_scene_gfx/"
+			   , "gfx_crown.png"
+			   , "gfx_golden_nut.png"
+			   , "gfx_nut.png"
+			   , "gfx_grass.png"
+			   , "gfx_tree.png"
+			   , "gfx_nuts_king.png"
+			   , "gfx_squirrel.png");
     }
 
     @Override
@@ -115,14 +145,14 @@ mainActivity = this;
 	}
     
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) 
-    {
-	
-	if(keyCode == KeyEvent.KEYCODE_BACK) 
-	{
-	  if(!gameLoaded) return true;
-	  if(mainScene != null && gameLoaded) 
-	  {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	if(keyCode == KeyEvent.KEYCODE_BACK) {
+	  
+	    if(!gameLoaded) {
+	      return true;
+	    }
+	  
+	  if(mainScene != null && gameLoaded) {
 	      mainScene.keyPressed(keyCode, event);
 	      return true;
 	  }
@@ -132,10 +162,8 @@ mainActivity = this;
     }
     
     @Override
-    protected void onDestroy() 
-    {
+    protected void onDestroy() {
 	super.onDestroy();
 	android.os.Process.killProcess(android.os.Process.myPid());
     }
-	
 }
