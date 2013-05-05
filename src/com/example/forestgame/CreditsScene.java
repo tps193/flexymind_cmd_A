@@ -1,11 +1,12 @@
 package com.example.forestgame;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 
@@ -16,7 +17,7 @@ public class CreditsScene extends Scene {
             , MainActivity.TEXTURE_WIDTH
             , MainActivity.TEXTURE_HEIGHT
             , MainActivity.mainActivity.textureBackground
-            , new VertexBufferObjectManager());
+            , MainActivity.mainActivity.getVertexBufferObjectManager());
     
     private Text textStroke = new Text(MainActivity.TEXTURE_WIDTH / 8
 		, MainActivity.TEXTURE_HEIGHT / 5
@@ -35,9 +36,10 @@ public class CreditsScene extends Scene {
    
     public CreditsScene() {
 	setBackgroundEnabled(true);
-	setBackground(new Background(Color.BLUE));
+	setBackground(new Background(new Color(0.10f, 0.10f, 0.0f)));
 	attachChild(sprite);
 	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 0.8f));
+	sprite.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
 	attachChild(textStroke);
 	textStroke.setHorizontalAlign(HorizontalAlign.CENTER);
     }

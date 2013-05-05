@@ -153,9 +153,9 @@ public class MainActivity extends SimpleBaseGameActivity {
 		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
 		, 100
 		, true
-		, new Color(1.0f, 0.45f, 0.0f)
+		, new Color(1.0f, 0.6f, 0.0f)
 		, 2
-		, new Color(1.0f, 0.7f, 0.0f));
+		, new Color(1.0f, 0.2f, 0.0f));
 	mStrokeFont.load();
     }
 
