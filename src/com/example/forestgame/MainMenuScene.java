@@ -18,8 +18,8 @@ public class MainMenuScene extends Scene {
 	    		          , MainActivity.mainActivity.textureBackground
 	    		          , new VertexBufferObjectManager());
 
-    	Sprite Title = new Sprite( MainActivity.TEXTURE_WIDTH / 8
-    				 , MainActivity.TEXTURE_HEIGHT / 16
+    	Sprite Title = new Sprite( MainActivity.TEXTURE_WIDTH / 14
+    				 , MainActivity.TEXTURE_HEIGHT / 20
     				 , MainActivity.TEXTURE_WIDTH * 6 / 8
     				 , MainActivity.TEXTURE_HEIGHT / 4
     				 , MainActivity.mainActivity.textureTitle
