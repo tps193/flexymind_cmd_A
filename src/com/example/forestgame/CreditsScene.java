@@ -19,17 +19,22 @@ public class CreditsScene extends Scene {
             , MainActivity.mainActivity.textureBackground
             , MainActivity.mainActivity.getVertexBufferObjectManager());
     
-    private Text textStroke = new Text(MainActivity.TEXTURE_WIDTH / 8
-		, MainActivity.TEXTURE_HEIGHT / 5
-		, MainActivity.mainActivity.mStrokeFont
-		, "Developers:\n" +
-		  "Buvaylik Sergey\n" +
+    private Text captions = new Text(MainActivity.TEXTURE_WIDTH * 1 / 6
+		, MainActivity.TEXTURE_HEIGHT / 7
+		, MainActivity.mainActivity.tCaptions
+		, "Developers:\n\n\n\n\n\n\n\n\n" +
+		  "Special thanks to:"
+		, MainActivity.mainActivity.getVertexBufferObjectManager());
+    
+    private Text devNames = new Text(MainActivity.TEXTURE_WIDTH * 119 / 1024
+		, MainActivity.TEXTURE_HEIGHT * 15 / 64
+		, MainActivity.mainActivity.tDevNames
+		, "Buvaylik Sergey\n" +
 		  "Cherkasov Alexander\n" + 
 		  "Kolesnichenko Pavel\n" +
 		  "Kuznetsov Mixail\n" +
 		  "Shadrin Sergey\n" +
-		  "Sivulskiy Sergey\n\n" +
-		  "Special thanks to:\n" +
+		  "Sivulskiy Sergey\n\n\n\n" +
 		  "Igor & Ivan"
 		, MainActivity.mainActivity.getVertexBufferObjectManager());
     
@@ -38,10 +43,14 @@ public class CreditsScene extends Scene {
 	setBackgroundEnabled(true);
 	setBackground(new Background(new Color(0.10f, 0.10f, 0.0f)));
 	attachChild(sprite);
-	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 0.8f));
+	sprite.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.5f));
 	sprite.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	attachChild(textStroke);
-	textStroke.setHorizontalAlign(HorizontalAlign.CENTER);
+	attachChild(devNames);
+	attachChild(captions);
+	devNames.setHorizontalAlign(HorizontalAlign.CENTER);
+	captions.setHorizontalAlign(HorizontalAlign.CENTER);
+	devNames.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
+	captions.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
     }
     
     public void show() {
@@ -52,6 +61,8 @@ public class CreditsScene extends Scene {
     public void hide() {
    	setVisible(false);
    	setIgnoreUpdate(true);
-   	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 0.8f));
+   	sprite.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.5f));
+   	devNames.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
+   	captions.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
     }
 }

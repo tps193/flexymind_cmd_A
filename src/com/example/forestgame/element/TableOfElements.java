@@ -30,13 +30,13 @@ public class TableOfElements {
     //column 3 - chance
     private static final ElementInfo[] ARRAY_OF_ELEMENTS = {
 
-	  new ElementInfo("GRASS", "gfx_grass.png", 10, 0.35)
-	, new ElementInfo("TREE", "gfx_tree.png", 50, 0.25)
-	, new ElementInfo("SQUIRREL", "gfx_squirrel.png", 500, 0.2)
-	, new ElementInfo("NUT", "gfx_nut.png", 3000, 0.184)
-	, new ElementInfo("GOLDEN_NUT", "gfx_golden_nut.png", 20000, 0.01)
-	, new ElementInfo("CROWN", "gfx_crown.png", 100000, 0.005)
-	, new ElementInfo("NUTS_KING", "gfx_nuts_king.png", 500000, 0.001)
+	  new ElementInfo("GRASS",      "gfx_grass.png",          10,  0.35)
+	, new ElementInfo("TREE",       "gfx_tree.png",           50,  0.25)
+	, new ElementInfo("SQUIRREL",   "gfx_squirrel.png",      500,   0.2)
+	, new ElementInfo("NUT",        "gfx_nut.png",          3000, 0.184)
+	, new ElementInfo("GOLDEN_NUT", "gfx_golden_nut.png",  20000,  0.01)
+	, new ElementInfo("CROWN",      "gfx_crown.png",      100000, 0.005)
+	, new ElementInfo("NUTS_KING",  "gfx_nuts_king.png",  500000, 0.001)
     };
     
     public static String getTextureName(String name) {

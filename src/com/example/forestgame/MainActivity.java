@@ -47,8 +47,10 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion textureCredits;
     public TextureRegion textureExit;
     public AtlasStorage storage;
-    public StrokeFont mStrokeFont;
-    private static ITexture creditsText;
+    public StrokeFont tDevNames;
+    public StrokeFont tCaptions;
+    private static ITexture creditsCaps;
+    private static ITexture creditsNames;
         
 
     @Override
@@ -144,19 +146,32 @@ public class MainActivity extends SimpleBaseGameActivity {
 			   , "gfx_nuts_king.png"
 			   , "gfx_squirrel.png");
 	
-	creditsText = new BitmapTextureAtlas(this.getTextureManager()
+	creditsCaps = new BitmapTextureAtlas(this.getTextureManager()
+		, 2048
+		, 1024
+		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	creditsNames = new BitmapTextureAtlas(this.getTextureManager()
 		, 2048
 		, 2048
-		, TextureOptions.BILINEAR);
-	mStrokeFont = new StrokeFont(this.getFontManager()
-		, creditsText
+		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	tCaptions = new StrokeFont(this.getFontManager()
+		, creditsCaps
 		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
 		, 100
 		, true
 		, new Color(1.0f, 0.6f, 0.0f)
 		, 2
 		, new Color(1.0f, 0.2f, 0.0f));
-	mStrokeFont.load();
+	tDevNames = new StrokeFont(this.getFontManager()
+		, creditsNames
+		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+		, 100
+		, true
+		, new Color(1.0f, 1.0f, 1.0f)
+		, 2
+		, new Color(1.0f, 0.2f, 0.0f));
+	tDevNames.load();
+	tCaptions.load();
     }
 
     @Override
