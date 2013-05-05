@@ -5,7 +5,6 @@ import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.util.Log;
 
@@ -16,14 +15,14 @@ public class MainMenuScene extends Scene {
 	    		          , MainActivity.TEXTURE_WIDTH
 	    		          , MainActivity.TEXTURE_HEIGHT
 	    		          , MainActivity.mainActivity.textureBackground
-	    		          , new VertexBufferObjectManager());
+	    		          , MainActivity.mainActivity.getVertexBufferObjectManager());
 
     	Sprite Title = new Sprite( MainActivity.TEXTURE_WIDTH / 14
     				 , MainActivity.TEXTURE_HEIGHT / 20
     				 , MainActivity.TEXTURE_WIDTH * 6 / 8
     				 , MainActivity.TEXTURE_HEIGHT / 4
     				 , MainActivity.mainActivity.textureTitle
-    				 , new VertexBufferObjectManager());
+    				 , MainActivity.mainActivity.getVertexBufferObjectManager());
 
     	Sprite ButtonPlay = new Sprite( MainActivity.TEXTURE_WIDTH / 4
 	    			      , MainActivity.TEXTURE_HEIGHT * 52 / 128
@@ -67,6 +66,7 @@ public class MainMenuScene extends Scene {
 		    Log.d("ButtonScores", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
+		    MainScene.showScoresScene();
 		}
 		return true;
 	    }
@@ -90,6 +90,7 @@ public class MainMenuScene extends Scene {
 		    Log.d("ButtonCredits", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
+		    MainScene.showCreditsScene();
 		}
 		return true;
 	    }

@@ -4,7 +4,6 @@ import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 import com.example.forestgame.element.TableOfElements;
@@ -17,13 +16,13 @@ public class GameScene extends Scene {
 	                              , MainActivity.TEXTURE_WIDTH
 	                              , MainActivity.TEXTURE_HEIGHT
 	                              , MainActivity.mainActivity.textureBackground
-	                              , new VertexBufferObjectManager());
+	                              , MainActivity.mainActivity.getVertexBufferObjectManager());
     private Sprite slots = new Sprite( 0
 	    			     , 0
 	    			     , MainActivity.TEXTURE_WIDTH
 	    			     , MainActivity.TEXTURE_HEIGHT
 	    			     , MainActivity.mainActivity.textureSlots
-	    			     , new VertexBufferObjectManager());
+	    			     , MainActivity.mainActivity.getVertexBufferObjectManager());
     public GameScene() {
 	setBackgroundEnabled(true);
 	setBackground(new Background(Color.BLUE));

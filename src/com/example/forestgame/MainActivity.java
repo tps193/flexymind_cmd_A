@@ -5,10 +5,16 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
+import org.andengine.opengl.font.StrokeFont;
+import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.color.Color;
 
+import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 
@@ -41,7 +47,9 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion textureCredits;
     public TextureRegion textureExit;
     public AtlasStorage storage;
-    
+    public StrokeFont mStrokeFont;
+    private static ITexture creditsText;
+        
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -135,6 +143,20 @@ public class MainActivity extends SimpleBaseGameActivity {
 			   , "gfx_tree.png"
 			   , "gfx_nuts_king.png"
 			   , "gfx_squirrel.png");
+	
+	creditsText = new BitmapTextureAtlas(this.getTextureManager()
+		, 2048
+		, 2048
+		, TextureOptions.BILINEAR);
+	mStrokeFont = new StrokeFont(this.getFontManager()
+		, creditsText
+		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+		, 100
+		, true
+		, new Color(1.0f, 0.45f, 0.0f)
+		, 2
+		, new Color(1.0f, 0.7f, 0.0f));
+	mStrokeFont.load();
     }
 
     @Override
