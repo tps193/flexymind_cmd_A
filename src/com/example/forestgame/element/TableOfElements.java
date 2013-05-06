@@ -4,6 +4,8 @@ import java.util.Random;
 
 public class TableOfElements {
     
+    private static final Random randomGenerator = new Random();
+    
     private static class ElementInfo {
 
 	private String name;
@@ -38,41 +40,41 @@ public class TableOfElements {
 	, new ElementInfo("CROWN",      "gfx_crown.png",      100000, 0.005)
 	, new ElementInfo("NUTS_KING",  "gfx_nuts_king.png",  500000, 0.001)
     };
-    
-    public static String getTextureName(String name) {
+   
+    public static String getTextureName(Element el) {
 
-	for (ElementInfo el : ARRAY_OF_ELEMENTS) {
-	    if (name == el.name) {
-		return el.texture;
+	for (ElementInfo elInfo : ARRAY_OF_ELEMENTS) {
+	    if (el.getName() == elInfo.name) {
+		return elInfo.texture;
 	    }
 	}
 	return null;
     }
     
-    public static int getScores(String name) {
+    public static int getScores(Element el) {
 
-	for (ElementInfo el : ARRAY_OF_ELEMENTS) {
-	    if (name == el.name) {
-		return el.scores;
+	for (ElementInfo elInfo : ARRAY_OF_ELEMENTS) {
+	    if (el.getName() == elInfo.name) {
+		return elInfo.scores;
 	    }
 	}
 	return -1;
     }
     
-    public static double getChance(String name) {
+    public static double getChance(Element el) {
 
-	for (ElementInfo el : ARRAY_OF_ELEMENTS) {
-	    if (name == el.name) {
-		return el.chance;
+	for (ElementInfo elInfo : ARRAY_OF_ELEMENTS) {
+	    if (el.getName() == elInfo.name) {
+		return elInfo.chance;
 	    }
 	}
 	return -1;
     }
     
-    public static String getNextLvl(String name) {
+    public static String getNextLvl(Element el) {
 
 	for (int i = 0; i < ARRAY_OF_ELEMENTS.length; ++i) {
-	    if (name == ARRAY_OF_ELEMENTS[i].name) {
+	    if (el.getName() == ARRAY_OF_ELEMENTS[i].name) {
 		if (i != ARRAY_OF_ELEMENTS.length - 1) {
 		    return ARRAY_OF_ELEMENTS[i+1].name;
 		}
@@ -86,7 +88,6 @@ public class TableOfElements {
     
     public static Element getRandomElement() {
 
-	Random randomGenerator = new Random();
 	double random = randomGenerator.nextDouble();
 
 	if (random < 0.35) {

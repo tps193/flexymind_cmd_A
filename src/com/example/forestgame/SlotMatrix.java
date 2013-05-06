@@ -89,8 +89,7 @@ public class SlotMatrix {
 		    Slot s = matrix[i][j];
 		    TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture( TableOfElements
 			    								    . getTextureName
-			    								    ( s.getElement()
-			    							            . getName()));
+			    								    ( s.getElement()));
 		    Sprite slotSprite = new Sprite ( 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24))
 			    			   , 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26))
 			    			   , MainActivity.TEXTURE_WIDTH/8
@@ -287,7 +286,7 @@ class Slot {
     
     public int getScore() {
 	
-	return TableOfElements.getScores(element.getName());
+	return TableOfElements.getScores(element);
     }
     
 }
