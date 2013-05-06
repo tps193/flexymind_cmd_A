@@ -10,7 +10,10 @@ import com.example.forestgame.element.TableOfElements;
 
 public class GameScene extends Scene {
     
+    public PauseScene pauseScene = new PauseScene();
+    
     private SlotMatrix slotMatrix;
+    
     private Sprite sprite = new Sprite( 0
 	                              , 0
 	                              , MainActivity.TEXTURE_WIDTH
@@ -30,15 +33,17 @@ public class GameScene extends Scene {
 	slots.registerEntityModifier(new AlphaModifier(0.4f, 0.5f, 1.0f));
 	attachChild(sprite);
 	attachChild(slots);
+	
 	slotMatrix = new SlotMatrix(this);
 	
-	//Test Slots
-	//slotMatrix.putToSlot(TableOfElements.getRandomElement(), 1, 1);
-	//slotMatrix.putToSlot(TableOfElements.getRandomElement(), 2, 2);
-	//slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 3);
-	//slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 4);
-	//slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 5);
+	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 1, 1);
+	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 2, 2);
+	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 3);
+	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 4);
+	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 5);
 	
+	attachChild(pauseScene);
+	pauseScene.hide();
     }
     
     public void show() {
