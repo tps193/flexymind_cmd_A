@@ -33,11 +33,11 @@ public class GameScene extends Scene {
 	slotMatrix = new SlotMatrix(this);
 	
 	//Test Slots
-	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 1, 1);
-	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 2, 2);
-	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 3);
-	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 4);
-	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 5);
+	//slotMatrix.putToSlot(TableOfElements.getRandomElement(), 1, 1);
+	//slotMatrix.putToSlot(TableOfElements.getRandomElement(), 2, 2);
+	//slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 3);
+	//slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 4);
+	//slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 5);
 	
     }
     
