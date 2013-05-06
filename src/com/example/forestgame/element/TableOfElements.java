@@ -4,6 +4,8 @@ import java.util.Random;
 
 public class TableOfElements {
     
+    private static final Random randomGenerator = new Random();
+    
     private static class ElementInfo {
 
 	private String name;
@@ -30,49 +32,49 @@ public class TableOfElements {
     //column 3 - chance
     private static final ElementInfo[] ARRAY_OF_ELEMENTS = {
 
-	  new ElementInfo("GRASS", "gfx_grass.png", 10, 0.35)
-	, new ElementInfo("TREE", "gfx_tree.png", 50, 0.25)
-	, new ElementInfo("SQUIRREL", "gfx_squirrel.png", 500, 0.2)
-	, new ElementInfo("NUT", "gfx_nut.png", 3000, 0.184)
-	, new ElementInfo("GOLDEN_NUT", "gfx_golden_nut.png", 20000, 0.01)
-	, new ElementInfo("CROWN", "gfx_crown.png", 100000, 0.005)
-	, new ElementInfo("NUTS_KING", "gfx_nuts_king.png", 500000, 0.001)
+	  new ElementInfo("GRASS"	,"gfx_grass.png"	  ,10	,0.350)
+	, new ElementInfo("TREE"	,"gfx_tree.png"		  ,50	,0.250)
+	, new ElementInfo("SQUIRREL"	,"gfx_squirrel.png"	 ,500	,0.200)
+	, new ElementInfo("NUT"		,"gfx_nut.png"		,3000	,0.184)
+	, new ElementInfo("GOLDEN_NUT"	,"gfx_golden_nut.png"  ,20000	,0.010)
+	, new ElementInfo("CROWN"	,"gfx_crown.png"      ,100000	,0.005)
+	, new ElementInfo("NUTS_KING"	,"gfx_nuts_king.png"  ,500000	,0.001)
     };
-    
-    public static String getTextureName(String name) {
+   
+    public static String getTextureName(Element el) {
 
-	for (ElementInfo el : ARRAY_OF_ELEMENTS) {
-	    if (name == el.name) {
-		return el.texture;
+	for (ElementInfo elInfo : ARRAY_OF_ELEMENTS) {
+	    if (el.getName() == elInfo.name) {
+		return elInfo.texture;
 	    }
 	}
 	return null;
     }
     
-    public static int getScores(String name) {
+    public static int getScores(Element el) {
 
-	for (ElementInfo el : ARRAY_OF_ELEMENTS) {
-	    if (name == el.name) {
-		return el.scores;
+	for (ElementInfo elInfo : ARRAY_OF_ELEMENTS) {
+	    if (el.getName() == elInfo.name) {
+		return elInfo.scores;
 	    }
 	}
 	return -1;
     }
     
-    public static double getChance(String name) {
+    public static double getChance(Element el) {
 
-	for (ElementInfo el : ARRAY_OF_ELEMENTS) {
-	    if (name == el.name) {
-		return el.chance;
+	for (ElementInfo elInfo : ARRAY_OF_ELEMENTS) {
+	    if (el.getName() == elInfo.name) {
+		return elInfo.chance;
 	    }
 	}
 	return -1;
     }
     
-    public static String getNextLvl(String name) {
+    public static String getNextLvl(Element el) {
 
 	for (int i = 0; i < ARRAY_OF_ELEMENTS.length; ++i) {
-	    if (name == ARRAY_OF_ELEMENTS[i].name) {
+	    if (el.getName() == ARRAY_OF_ELEMENTS[i].name) {
 		if (i != ARRAY_OF_ELEMENTS.length - 1) {
 		    return ARRAY_OF_ELEMENTS[i+1].name;
 		}
@@ -86,7 +88,6 @@ public class TableOfElements {
     
     public static Element getRandomElement() {
 
-	Random randomGenerator = new Random();
 	double random = randomGenerator.nextDouble();
 
 	if (random < 0.35) {
