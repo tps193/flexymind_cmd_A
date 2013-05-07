@@ -1,10 +1,15 @@
 package com.example.forestgame;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.color.Color;
 
 import android.util.Log;
 
@@ -15,14 +20,14 @@ public class MainMenuScene extends Scene {
 	    		          , MainActivity.TEXTURE_WIDTH
 	    		          , MainActivity.TEXTURE_HEIGHT
 	    		          , MainActivity.mainActivity.textureBackground
-	    		          , MainActivity.mainActivity.getVertexBufferObjectManager());
+	    		          , new VertexBufferObjectManager());
 
     	Sprite Title = new Sprite( MainActivity.TEXTURE_WIDTH / 14
-    				 , MainActivity.TEXTURE_HEIGHT / 20
-    				 , MainActivity.TEXTURE_WIDTH * 6 / 8
-    				 , MainActivity.TEXTURE_HEIGHT / 4
-    				 , MainActivity.mainActivity.textureTitle
-    				 , MainActivity.mainActivity.getVertexBufferObjectManager());
+			 , MainActivity.TEXTURE_HEIGHT / 20
+			 , MainActivity.TEXTURE_WIDTH * 6 / 8
+			 , MainActivity.TEXTURE_HEIGHT / 4
+			 , MainActivity.mainActivity.textureTitle
+			 , MainActivity.mainActivity.getVertexBufferObjectManager());
 
     	Sprite ButtonPlay = new Sprite( MainActivity.TEXTURE_WIDTH / 4
 	    			      , MainActivity.TEXTURE_HEIGHT * 52 / 128
@@ -126,6 +131,9 @@ public class MainMenuScene extends Scene {
     
     public MainMenuScene() {
 	setBackgroundEnabled(true);
+	setBackground(new Background(new Color(0.1f, 0.1f, 0.0f)));
+	sprite.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
+	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 1.0f));
 	attachChild(sprite);
 	attachChild(Title);
 	attachChild(ButtonPlay);
@@ -143,10 +151,12 @@ public class MainMenuScene extends Scene {
     public void show() {
 	setVisible(true);
 	setIgnoreUpdate(false);
+   	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 1.0f));	
     }
     
     public void hide() {
    	setVisible(false);
+   	sprite.setAlpha(0.5f);
    	setIgnoreUpdate(true);
     }
 }

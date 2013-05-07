@@ -29,11 +29,11 @@ public class MainScene extends Scene {
     }
     
     public static void showMainMenuScene() {
-	mainMenuScene.show();
 	gameScene.hide();
 	scoresScene.hide();
 	creditsScene.hide();
 	gameScene.pauseScene.hide();
+	mainMenuScene.show();
 	gameState = mainMenuState;
     }
     

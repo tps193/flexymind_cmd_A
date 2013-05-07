@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
@@ -94,8 +95,7 @@ public class SlotMatrix {
 			    			   , 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26))
 			    			   , MainActivity.TEXTURE_WIDTH/8
 			    			   , MainActivity.TEXTURE_HEIGHT/13
-			    			   , slotTexture
-			    			   , MainActivity.mainActivity.getVertexBufferObjectManager());
+			    			   , slotTexture, new VertexBufferObjectManager());
 		    gameScene.attachChild(slotSprite);
 		}
 	    }

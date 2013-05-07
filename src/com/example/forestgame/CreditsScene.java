@@ -43,7 +43,7 @@ public class CreditsScene extends Scene {
 	setBackgroundEnabled(true);
 	setBackground(new Background(new Color(0.10f, 0.10f, 0.0f)));
 	attachChild(sprite);
-	sprite.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.5f));
+	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.99f, 0.5f));
 	sprite.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
 	attachChild(devNames);
 	attachChild(captions);
@@ -56,13 +56,16 @@ public class CreditsScene extends Scene {
     public void show() {
 	setVisible(true);
 	setIgnoreUpdate(false);
+	sprite.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.5f));
+   	devNames.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
+   	captions.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
     }
     
     public void hide() {
+   	sprite.setAlpha(1.0f);
+   	devNames.setAlpha(0.0f);
+   	captions.setAlpha(0.0f);
    	setVisible(false);
    	setIgnoreUpdate(true);
-   	sprite.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.5f));
-   	devNames.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
-   	captions.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
     }
 }

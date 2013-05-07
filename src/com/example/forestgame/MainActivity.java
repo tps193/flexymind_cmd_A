@@ -51,7 +51,13 @@ public class MainActivity extends SimpleBaseGameActivity {
     public StrokeFont tCaptions;
     private static ITexture creditsCaps;
     private static ITexture creditsNames;
-        
+    public StrokeFont tQuestion;
+    public StrokeFont tChoiseYES;
+    public StrokeFont tChoiseNO;
+    private static ITexture pauseQuestion;
+    private static ITexture pauseChoiseY;
+    private static ITexture pauseChoiseN;
+    
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -170,8 +176,49 @@ public class MainActivity extends SimpleBaseGameActivity {
 		, new Color(1.0f, 1.0f, 1.0f)
 		, 2
 		, new Color(1.0f, 0.2f, 0.0f));
+	
+	pauseQuestion = new BitmapTextureAtlas(this.getTextureManager()
+		, 2048
+		, 2048
+		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	pauseChoiseY = new BitmapTextureAtlas(this.getTextureManager()
+		, 512
+		, 512
+		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	pauseChoiseN = new BitmapTextureAtlas(this.getTextureManager()
+		, 512
+		, 512
+		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	tQuestion = new StrokeFont(this.getFontManager()
+		, pauseQuestion
+		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+		, 100
+		, true
+		, new Color(1.0f, 0.6f, 0.0f)
+		, 2
+		, new Color(1.0f, 0.2f, 0.0f));
+	tChoiseYES = new StrokeFont(this.getFontManager()
+		, pauseChoiseY
+		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+		, 170
+		, true
+		, new Color(1.0f, 1.0f, 1.0f)
+		, 2
+		, new Color(1.0f, 0.2f, 0.0f));
+	tChoiseNO = new StrokeFont(this.getFontManager()
+		, pauseChoiseN
+		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+		, 170
+		, true
+		, new Color(1.0f, 1.0f, 1.0f)
+		, 2
+		, new Color(1.0f, 0.2f, 0.0f));
+	
 	tDevNames.load();
 	tCaptions.load();
+	tQuestion.load();
+	tChoiseYES.load();
+	tChoiseNO.load();
     }
 
     @Override
