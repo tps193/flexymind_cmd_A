@@ -150,7 +150,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 			   , "gfx_grass.png"
 			   , "gfx_tree.png"
 			   , "gfx_nuts_king.png"
-			   , "gfx_squirrel.png");
+			   , "gfx_squirrel.png"
+			   , "gfx_empty");
 	
 	creditsCaps = new BitmapTextureAtlas(this.getTextureManager()
 		, 2048

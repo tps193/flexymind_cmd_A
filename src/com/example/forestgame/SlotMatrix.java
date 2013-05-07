@@ -85,19 +85,27 @@ public class SlotMatrix {
     private void viewSlots() {
 	for (int i = 0; i < ROWS; i++) {
 	    for (int j = 0; j < COLUMS; j++) {
+		
+		TextureRegion slotTexture;
+		Slot s = matrix[i][j];
 		if (!isSlotEmpty(i, j)) {
-		    Slot s = matrix[i][j];
-		    TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture( TableOfElements
+		    
+		    slotTexture = MainActivity.mainActivity.storage.getTexture( TableOfElements
 			    								    . getTextureName
 			    								    ( s.getElement()));
-		    Sprite slotSprite = new Sprite ( 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24))
-			    			   , 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26))
-			    			   , MainActivity.TEXTURE_WIDTH/8
-			    			   , MainActivity.TEXTURE_HEIGHT/13
-			    			   , slotTexture
-			    			   , MainActivity.mainActivity.getVertexBufferObjectManager());
-		    gameScene.attachChild(slotSprite);
 		}
+		else {
+		    
+		    slotTexture = MainActivity.mainActivity.storage.getTexture("gfx_empty");
+		}
+		
+		Sprite slotSprite = new Sprite ( 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24))
+			    			, 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26))
+			    			, MainActivity.TEXTURE_WIDTH/8
+			    			, MainActivity.TEXTURE_HEIGHT/13
+			    			, slotTexture
+			    			, MainActivity.mainActivity.getVertexBufferObjectManager());
+		gameScene.attachChild(slotSprite);
 	    }
 	}
     }
