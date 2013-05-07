@@ -36,11 +36,11 @@ public class GameScene extends Scene {
 	
 	slotMatrix = new SlotMatrix(this);
 	
-	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 1, 1);
-	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 2, 2);
-	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 3);
-	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 4);
-	slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 5);
+	// XXX: slotMatrix.putToSlot(TableOfElements.getRandomElement(), 1, 1);
+	// XXX: slotMatrix.putToSlot(TableOfElements.getRandomElement(), 2, 2);
+	// XXX: slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 3);
+	// XXX: slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 4);
+	// XXX: slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 5);
 	
 	attachChild(pauseScene);
 	pauseScene.hide();
