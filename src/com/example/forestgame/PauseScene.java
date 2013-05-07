@@ -11,8 +11,6 @@ import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.color.Color;
 
-import android.util.Log;
-
 public class PauseScene extends Scene {
     
     private Sprite sprite = new Sprite( 0
@@ -95,4 +93,3 @@ public class PauseScene extends Scene {
    	sprite.setAlpha(0.8f);
     }
 }
-
