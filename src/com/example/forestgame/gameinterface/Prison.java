@@ -81,7 +81,7 @@ public class Prison {
 			} else if (pSceneTouchEvent.isActionUp()) {
 			    Log.d("prison", "no touch");
 			    
-			    if (row < SlotMatrix.getROWS() && colum < SlotMatrix.getCOLUMS() && gameScene.getSlotMatrix().isSlotEmpty(row, colum)){
+			    if (row < 6 && colum <6 && gameScene.getSlotMatrix().isSlotEmpty(row, colum)){
 				Log.d("prison", "new");
 				gameScene.getSlotMatrix().putToSlot(element, row, colum);
 				clear();

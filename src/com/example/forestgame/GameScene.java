@@ -79,8 +79,8 @@ public class GameScene extends Scene {
     public void moveElement(float touchX, float touchY)
     {
 	
-	 for (int i = 0; i < SlotMatrix.getROWS(); i++){
-		for (int j = 0; j < SlotMatrix.getCOLUMS(); j++){
+	 for (int i = 0; i < 6; i++){
+		for (int j = 0; j < 6; j++){
 		    float slotX1 = 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24)) - MainActivity.TEXTURE_WIDTH/8;
 		    float slotY1 = 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26)) - MainActivity.TEXTURE_HEIGHT/13;
 		    float slotX2 = 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24));

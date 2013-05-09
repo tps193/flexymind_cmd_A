@@ -104,7 +104,7 @@ public class Respawn {
 				clear();
 				generateElement();
 			    } 
-			    else if (row < SlotMatrix.getROWS() && colum < SlotMatrix.getCOLUMS() && gameScene.getSlotMatrix().isSlotEmpty(row, colum)){
+			    else if (row < 6 && colum < 6 && gameScene.getSlotMatrix().isSlotEmpty(row, colum)){
 				Log.d("resp", "newSlot");
 				gameScene.getSlotMatrix().putToSlot(element, row, colum);
 				clear();

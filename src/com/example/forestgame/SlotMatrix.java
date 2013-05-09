@@ -96,7 +96,7 @@ public class SlotMatrix {
 		}
 		else {
 		    
-		    slotTexture = MainActivity.mainActivity.storage.getTexture("gfx_empty");
+		    slotTexture = MainActivity.mainActivity.storage.getTexture("gfx_empty.png");
 		}
 		
 		Sprite slotSprite = new Sprite ( 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24))
@@ -244,6 +244,7 @@ public class SlotMatrix {
 	// need to do some graphic operations when elements are moving to the last added to change level (next Sprint)
 	
     }
+    
    
 }
 
