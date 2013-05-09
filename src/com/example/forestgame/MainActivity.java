@@ -102,6 +102,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 						       , new RatioResolutionPolicy( CAMERA_WIDTH
 							                          , CAMERA_HEIGHT)
 						       , camera);
+	int interval = 2;
+        options.getTouchOptions().setTouchEventIntervalMilliseconds(interval);
 	return options;
     }
 
