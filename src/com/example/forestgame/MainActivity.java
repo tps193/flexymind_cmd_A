@@ -188,15 +188,15 @@ public class MainActivity extends SimpleBaseGameActivity {
 	
 	pauseQuestion = new BitmapTextureAtlas(this.getTextureManager()
 		, 2048
-		, 2048
+		, 256
 		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	pauseChoiseY = new BitmapTextureAtlas(this.getTextureManager()
 		, 512
-		, 512
+		, 256
 		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	pauseChoiseN = new BitmapTextureAtlas(this.getTextureManager()
 		, 512
-		, 512
+		, 256
 		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	tQuestion = new StrokeFont(this.getFontManager()
 		, pauseQuestion
@@ -225,15 +225,15 @@ public class MainActivity extends SimpleBaseGameActivity {
 	
 	GameOver = new BitmapTextureAtlas(this.getTextureManager()
 		, 2048
-		, 512
+		, 256
 		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	MainMenu = new BitmapTextureAtlas(this.getTextureManager()
-		, 2048
-		, 512
+		, 1024
+		, 256
 		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	NewGame = new BitmapTextureAtlas(this.getTextureManager()
-		, 2048
-		, 512
+		, 1024
+		, 256
 		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	tGameOver = new StrokeFont(this.getFontManager()
 		, GameOver

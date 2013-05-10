@@ -45,10 +45,10 @@ public class GameOverScene extends Scene {
     }
     };
 
-    private Text newgame = new Text(MainActivity.TEXTURE_WIDTH * 278 / 1024
+    private Text newgame = new Text(MainActivity.TEXTURE_WIDTH * 270 / 1024
 	, MainActivity.TEXTURE_HEIGHT * 36 / 64
 	, MainActivity.mainActivity.tNewGame
-	, "NewGame"
+	, "New Game"
 	, MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	@Override
 	public boolean onAreaTouched( TouchEvent pSceneTouchEvent
