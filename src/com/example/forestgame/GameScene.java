@@ -109,11 +109,7 @@ public class GameScene extends Scene {
 			putInRow = SlotMatrix.getROWS()+1;
 			putInColum = SlotMatrix.getCOLUMNS()+1;
 			break;
-		    } else if (putInRow == 0 && putInColum == 0 ){
-			putInRow = SlotMatrix.getROWS()+2;
-			putInColum = SlotMatrix.getCOLUMNS()+2;
-			break;
-		    }
+		    } 
 		    else 
 		    {
 			flg=false;
