@@ -50,6 +50,7 @@ public class MainMenuScene extends Scene {
 		    MainScene.gameScene.prison.clear();
 		    MainScene.gameScene.respawn.clear();
 		    MainScene.gameScene.respawn.generateElement();
+		    MainActivity.mainActivity.mClick.play();
 		    MainScene.showGameScene();
 		}
 		return true;
@@ -74,6 +75,7 @@ public class MainMenuScene extends Scene {
 		    Log.d("ButtonScores", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
+		    MainActivity.mainActivity.mClick.play();
 		    MainScene.showScoresScene();
 		}
 		return true;
@@ -98,6 +100,7 @@ public class MainMenuScene extends Scene {
 		    Log.d("ButtonCredits", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
+		    MainActivity.mainActivity.mClick.play();
 		    MainScene.showCreditsScene();
 		}
 		return true;
@@ -123,6 +126,7 @@ public class MainMenuScene extends Scene {
 		    Log.d("ButtonExit", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
+		    MainActivity.mainActivity.mClick.play();
 		    MainActivity.mainActivity.finish();
 		    if (MainActivity.mainActivity.isFinishing() == false) {
 			android.os.Process.killProcess(android.os.Process.myPid());
@@ -154,6 +158,7 @@ public class MainMenuScene extends Scene {
     public void show() {
 	setVisible(true);
 	setIgnoreUpdate(false);
+	MainActivity.mainActivity.mMusic.play();
    	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 1.0f));	
     }
     

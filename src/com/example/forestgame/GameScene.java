@@ -71,6 +71,7 @@ public class GameScene extends Scene {
     public void show() {
 	setVisible(true);
 	setIgnoreUpdate(false);
+	MainActivity.mainActivity.mMusic.pause();
    	sprite.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.8f));
    	slots.registerEntityModifier(new AlphaModifier(0.4f, 0.5f, 1.0f));
     }

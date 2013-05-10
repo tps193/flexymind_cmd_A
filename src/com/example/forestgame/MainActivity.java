@@ -1,5 +1,11 @@
 package com.example.forestgame;
 
+import java.io.IOException;
+
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
+import org.andengine.audio.sound.Sound;
+import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -13,6 +19,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.color.Color;
+import org.andengine.util.debug.Debug;
 
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
@@ -64,6 +71,10 @@ public class MainActivity extends SimpleBaseGameActivity {
     private static ITexture MainMenu;
     private static ITexture NewGame;
     
+    public Music mMusic;
+    public Sound mSound;
+    public Sound mClick;
+    
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -110,6 +121,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 						       , camera);
 	int interval = 2;
         options.getTouchOptions().setTouchEventIntervalMilliseconds(interval);
+        options.getAudioOptions().setNeedsMusic(true);
+        options.getAudioOptions().setNeedsSound(true);
 	return options;
     }
 
@@ -160,6 +173,25 @@ public class MainActivity extends SimpleBaseGameActivity {
 			   , "gfx_nuts_king.png"
 			   , "gfx_squirrel.png"
 			   , "gfx_empty.png");
+	
+	
+	MusicFactory.setAssetBasePath("sounds/");
+	
+        try {
+                mMusic = MusicFactory.createMusicFromAsset(mEngine.getMusicManager(), this, "main_menu.mp3");
+                mMusic.setLooping(true);
+        } catch (final IOException e) {
+                Debug.e("Error", e);
+        }
+        
+        SoundFactory.setAssetBasePath("sounds/");
+        
+        try {
+    		mSound = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "convolution.mp3");
+    		mClick = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "click.wav");
+        } catch (final IOException e) {
+    		Debug.e("Error", e);
+        }	
 	
 	creditsCaps = new BitmapTextureAtlas(this.getTextureManager()
 		, 2048
