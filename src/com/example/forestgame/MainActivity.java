@@ -47,6 +47,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     
     private static MainScene mainScene;
     
+    public TextureRegion textureCage;
+    
     public TextureRegion textureBackground;
     public TextureRegion textureSlots;
     public TextureRegion textureTitle;
@@ -174,9 +176,10 @@ public class MainActivity extends SimpleBaseGameActivity {
 			   , "gfx_tree.png"
 			   , "gfx_nuts_king.png"
 			   , "gfx_squirrel.png"
+			   , "gfx_cage.png"
 			   , "gfx_empty.png");
 	
-	
+	textureCage = storage.getTexture("gfx_cage.png");
 	MusicFactory.setAssetBasePath("sounds/");
 	
         try {

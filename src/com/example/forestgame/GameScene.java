@@ -42,6 +42,13 @@ public class GameScene extends Scene {
 	    			     , MainActivity.mainActivity.textureSlots
 	    			     , MainActivity.mainActivity.getVertexBufferObjectManager());
     
+    private Sprite cage = new Sprite( MainActivity.TEXTURE_WIDTH * 136 / 625
+	        		    , MainActivity.TEXTURE_HEIGHT * 1381 / 2000
+	        		    , MainActivity.TEXTURE_WIDTH * 63 / 250
+	        		    , MainActivity.TEXTURE_HEIGHT * 313 / 2000
+	        		    , MainActivity.mainActivity.textureCage
+	        		    , MainActivity.mainActivity.getVertexBufferObjectManager());
+    
     public GameScene() {
 	
 	setBackgroundEnabled(true);
@@ -51,6 +58,7 @@ public class GameScene extends Scene {
 	slots.registerEntityModifier(new AlphaModifier(0.4f, 0.5f, 1.0f));
 	attachChild(sprite);
 	attachChild(slots);
+	attachChild(cage);
 	
 	prison = new Prison(this);
 	respawn = new Respawn(this);
@@ -61,6 +69,7 @@ public class GameScene extends Scene {
 	pauseScene.hide();
 	gameOverScene.hide();
 	
+	cage.setZIndex(9999);
 	pauseScene.setZIndex(10000);
 	gameOverScene.setZIndex(10000);
     }
