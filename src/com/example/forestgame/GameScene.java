@@ -17,6 +17,7 @@ import com.example.forestgame.gameinterface.Respawn;
 public class GameScene extends Scene {
     
     public PauseScene pauseScene = new PauseScene();
+    public GameOverScene gameOverScene = new GameOverScene();
     public Prison prison;
     public Respawn respawn;
     
@@ -59,9 +60,12 @@ public class GameScene extends Scene {
 	// XXX: slotMatrix.putToSlot(TableOfElements.getRandomElement(), 3, 5);
 	
 	attachChild(pauseScene);
+	attachChild(gameOverScene);
 	pauseScene.hide();
+	gameOverScene.hide();
 	
 	pauseScene.setZIndex(10000);
+	gameOverScene.setZIndex(10000);
     }
     
     public void show() {

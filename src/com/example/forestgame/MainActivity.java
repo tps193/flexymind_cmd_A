@@ -57,6 +57,12 @@ public class MainActivity extends SimpleBaseGameActivity {
     private static ITexture pauseQuestion;
     private static ITexture pauseChoiseY;
     private static ITexture pauseChoiseN;
+    public StrokeFont tGameOver;
+    public StrokeFont tMainMenu;
+    public StrokeFont tNewGame;
+    private static ITexture GameOver;
+    private static ITexture MainMenu;
+    private static ITexture NewGame;
     
 
     @Override
@@ -217,11 +223,51 @@ public class MainActivity extends SimpleBaseGameActivity {
 		, 2
 		, new Color(1.0f, 0.2f, 0.0f));
 	
+	GameOver = new BitmapTextureAtlas(this.getTextureManager()
+		, 2048
+		, 512
+		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	MainMenu = new BitmapTextureAtlas(this.getTextureManager()
+		, 2048
+		, 512
+		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	NewGame = new BitmapTextureAtlas(this.getTextureManager()
+		, 2048
+		, 512
+		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	tGameOver = new StrokeFont(this.getFontManager()
+		, GameOver
+		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+		, 165
+		, true
+		, new Color(1.0f, 0.6f, 0.0f)
+		, 2
+		, new Color(1.0f, 0.2f, 0.0f));
+	tMainMenu = new StrokeFont(this.getFontManager()
+		, MainMenu
+		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+		, 120
+		, true
+		, new Color(1.0f, 1.0f, 1.0f)
+		, 2
+		, new Color(1.0f, 0.2f, 0.0f));
+	tNewGame = new StrokeFont(this.getFontManager()
+		, NewGame
+		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+		, 120
+		, true
+		, new Color(1.0f, 1.0f, 1.0f)
+		, 2
+		, new Color(1.0f, 0.2f, 0.0f));
+	
 	tDevNames.load();
 	tCaptions.load();
 	tQuestion.load();
 	tChoiseYES.load();
 	tChoiseNO.load();
+	tGameOver.load();
+	tMainMenu.load();
+	tNewGame.load();
     }
 
     @Override

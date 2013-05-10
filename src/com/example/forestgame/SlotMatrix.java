@@ -5,6 +5,8 @@ import java.util.Random;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.TextureRegion;
 
+import android.util.Log;
+
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
 
@@ -19,6 +21,7 @@ public class SlotMatrix {
     private int lastEditedSlotColum;
     private static int NUMBER_OF_ElEMENTS_ON_START = 18;
     private int score;
+    private int n;
     private GameScene gameScene;
 
     
@@ -53,6 +56,19 @@ public class SlotMatrix {
 	
 	checkSimilarElements();
 	viewSlots();
+	
+	n = 0;
+	for (int i = 0; i < ROWS; i++) {
+	    for (int j = 0; j < COLUMNS; j++) {
+		if (!isSlotEmpty(i,j)) {
+		    n++;
+		}
+	    }
+	}
+	if (n == ROWS*COLUMNS) {
+	    Log.d("GAME", "OVER");
+	    MainScene.showGameOverScene();
+	}
     }
     
     public void init() {
