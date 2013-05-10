@@ -38,11 +38,15 @@ public class MainMenuScene extends Scene {
 	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
 		    			, float pTouchAreaLocalX
 		    			, float pTouchAreaLocalY) {
+		
 		if (pSceneTouchEvent.isActionDown()) {
+		    
 		    Log.d("ButtonPlay", "touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 1.0f, 0.95f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 1.0f, 0.5f));
+		    
 		} else if (pSceneTouchEvent.isActionUp()) {
+		    
 		    Log.d("ButtonPlay", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
@@ -67,11 +71,15 @@ public class MainMenuScene extends Scene {
 	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
 					, float pTouchAreaLocalX
 					, float pTouchAreaLocalY) {
+		
 		if (pSceneTouchEvent.isActionDown()) {
+		    
 		    Log.d("ButtonScores", "touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 1.0f, 0.95f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 1.0f, 0.5f));
+		    
 		} else if (pSceneTouchEvent.isActionUp()) {
+		    
 		    Log.d("ButtonScores", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
@@ -92,11 +100,15 @@ public class MainMenuScene extends Scene {
 	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
 					, float pTouchAreaLocalX
 					, float pTouchAreaLocalY) {
+		
 		if (pSceneTouchEvent.isActionDown()) {
+		    
 		    Log.d("ButtonCredits", "touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 1.0f, 0.95f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 1.0f, 0.5f));
+		    
 		} else if (pSceneTouchEvent.isActionUp()) {
+		    
 		    Log.d("ButtonCredits", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
@@ -118,17 +130,22 @@ public class MainMenuScene extends Scene {
 	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
 					, float pTouchAreaLocalX
 					, float pTouchAreaLocalY) {
+		
 		if (pSceneTouchEvent.isActionDown()) {
+		    
 		    Log.d("ButtonExit", "touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 1.0f, 0.95f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 1.0f, 0.5f));
+		    
 		} else if (pSceneTouchEvent.isActionUp()) {
+		    
 		    Log.d("ButtonExit", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
 		    MainActivity.mainActivity.mClick.play();
 		    MainActivity.mainActivity.finish();
 		    if (MainActivity.mainActivity.isFinishing() == false) {
+			
 			android.os.Process.killProcess(android.os.Process.myPid());
 		    }
 		}
@@ -137,6 +154,7 @@ public class MainMenuScene extends Scene {
 	};
     
     public MainMenuScene() {
+	
 	setBackgroundEnabled(true);
 	setBackground(new Background(new Color(0.1f, 0.1f, 0.0f)));
 	sprite.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
@@ -156,6 +174,7 @@ public class MainMenuScene extends Scene {
     }
     
     public void show() {
+	
 	setVisible(true);
 	setIgnoreUpdate(false);
 	MainActivity.mainActivity.mMusic.play();
@@ -163,6 +182,7 @@ public class MainMenuScene extends Scene {
     }
     
     public void hide() {
+	
    	setVisible(false);
    	sprite.setAlpha(0.5f);
    	setIgnoreUpdate(true);

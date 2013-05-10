@@ -46,6 +46,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     public static MainActivity mainActivity;
     
     private static MainScene mainScene;
+    
     public TextureRegion textureBackground;
     public TextureRegion textureSlots;
     public TextureRegion textureTitle;
@@ -128,6 +129,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 
     @Override
     protected void onCreateResources() {
+	
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("main_menu/");
 	
 	storage = new AtlasStorage();
@@ -193,104 +195,117 @@ public class MainActivity extends SimpleBaseGameActivity {
     		Debug.e("Error", e);
         }	
 	
-	creditsCaps = new BitmapTextureAtlas(this.getTextureManager()
-		, 2048
-		, 1024
-		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	creditsNames = new BitmapTextureAtlas(this.getTextureManager()
-		, 2048
-		, 2048
-		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	tCaptions = new StrokeFont(this.getFontManager()
-		, creditsCaps
-		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-		, 100
-		, true
-		, new Color(1.0f, 0.6f, 0.0f)
-		, 2
-		, new Color(1.0f, 0.2f, 0.0f));
-	tDevNames = new StrokeFont(this.getFontManager()
-		, creditsNames
-		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-		, 100
-		, true
-		, new Color(1.0f, 1.0f, 1.0f)
-		, 2
-		, new Color(1.0f, 0.2f, 0.0f));
+	creditsCaps = new BitmapTextureAtlas(	this.getTextureManager()
+						, 2048
+						, 1024
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	
-	pauseQuestion = new BitmapTextureAtlas(this.getTextureManager()
-		, 2048
-		, 256
-		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	pauseChoiseY = new BitmapTextureAtlas(this.getTextureManager()
-		, 512
-		, 256
-		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	pauseChoiseN = new BitmapTextureAtlas(this.getTextureManager()
-		, 512
-		, 256
-		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	creditsNames = new BitmapTextureAtlas(	this.getTextureManager()
+						, 2048
+						, 2048
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
+	tCaptions = new StrokeFont(this.getFontManager()
+				   , creditsCaps
+				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				   , 100
+				   , true
+				   , new Color(1.0f, 0.6f, 0.0f)
+				   , 2
+				   , new Color(1.0f, 0.2f, 0.0f));
+	
+	tDevNames = new StrokeFont(this.getFontManager()
+				   , creditsNames
+				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				   , 100
+				   , true
+				   , new Color(1.0f, 1.0f, 1.0f)
+				   , 2
+				   , new Color(1.0f, 0.2f, 0.0f));
+	
+	pauseQuestion = new BitmapTextureAtlas(	this.getTextureManager()
+						, 2048
+						, 256
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
+	pauseChoiseY = new BitmapTextureAtlas(	this.getTextureManager()
+						, 512
+						, 256
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
+	pauseChoiseN = new BitmapTextureAtlas(	this.getTextureManager()
+						, 512
+						, 256
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
 	tQuestion = new StrokeFont(this.getFontManager()
-		, pauseQuestion
-		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-		, 100
-		, true
-		, new Color(1.0f, 0.6f, 0.0f)
-		, 2
-		, new Color(1.0f, 0.2f, 0.0f));
+				   , pauseQuestion
+				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				   , 100
+				   , true
+				   , new Color(1.0f, 0.6f, 0.0f)
+				   , 2
+				   , new Color(1.0f, 0.2f, 0.0f));
+	
 	tChoiseYES = new StrokeFont(this.getFontManager()
-		, pauseChoiseY
-		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-		, 170
-		, true
-		, new Color(1.0f, 1.0f, 1.0f)
-		, 2
-		, new Color(1.0f, 0.2f, 0.0f));
+				    , pauseChoiseY
+				    , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				    , 170
+				    , true
+				    , new Color(1.0f, 1.0f, 1.0f)
+				    , 2
+				    , new Color(1.0f, 0.2f, 0.0f));
+	
 	tChoiseNO = new StrokeFont(this.getFontManager()
-		, pauseChoiseN
-		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-		, 170
-		, true
-		, new Color(1.0f, 1.0f, 1.0f)
-		, 2
-		, new Color(1.0f, 0.2f, 0.0f));
+				   , pauseChoiseN
+				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				   , 170
+				   , true
+				   , new Color(1.0f, 1.0f, 1.0f)
+				   , 2
+				   , new Color(1.0f, 0.2f, 0.0f));
 	
 	GameOver = new BitmapTextureAtlas(this.getTextureManager()
-		, 2048
-		, 256
-		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+					  , 2048
+					  , 256
+					  , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
 	MainMenu = new BitmapTextureAtlas(this.getTextureManager()
-		, 1024
-		, 256
-		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+					  , 1024
+					  , 256
+					  , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
 	NewGame = new BitmapTextureAtlas(this.getTextureManager()
-		, 1024
-		, 256
-		, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+					 , 1024
+					 , 256
+					 , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
 	tGameOver = new StrokeFont(this.getFontManager()
-		, GameOver
-		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-		, 165
-		, true
-		, new Color(1.0f, 0.6f, 0.0f)
-		, 2
-		, new Color(1.0f, 0.2f, 0.0f));
+				   , GameOver
+				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				   , 165
+				   , true
+				   , new Color(1.0f, 0.6f, 0.0f)
+				   , 2
+				   , new Color(1.0f, 0.2f, 0.0f));
+	
 	tMainMenu = new StrokeFont(this.getFontManager()
-		, MainMenu
-		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-		, 120
-		, true
-		, new Color(1.0f, 1.0f, 1.0f)
-		, 2
-		, new Color(1.0f, 0.2f, 0.0f));
+				   , MainMenu
+				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				   , 120
+				   , true
+				   , new Color(1.0f, 1.0f, 1.0f)
+				   , 2
+				   , new Color(1.0f, 0.2f, 0.0f));
+	
 	tNewGame = new StrokeFont(this.getFontManager()
-		, NewGame
-		, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-		, 120
-		, true
-		, new Color(1.0f, 1.0f, 1.0f)
-		, 2
-		, new Color(1.0f, 0.2f, 0.0f));
+				  , NewGame
+				  , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				  , 120
+				  , true
+				  , new Color(1.0f, 1.0f, 1.0f)
+				  , 2
+				  , new Color(1.0f, 0.2f, 0.0f));
 	
 	tDevNames.load();
 	tCaptions.load();
@@ -304,30 +319,35 @@ public class MainActivity extends SimpleBaseGameActivity {
 
     @Override
     protected Scene onCreateScene() {
-	    mainScene = new MainScene();
-	    gameLoaded = true;
-	    return mainScene;
-	}
+	
+	mainScene = new MainScene();
+	gameLoaded = true;
+	return mainScene;
+    }
     
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-	if(keyCode == KeyEvent.KEYCODE_BACK) {
+	
+	if (keyCode == KeyEvent.KEYCODE_BACK) {
 	  
-	    if(!gameLoaded) {
-	      return true;
+	    if (!gameLoaded) {
+		
+		return true;
 	    }
 	  
-	  if(mainScene != null && gameLoaded) {
-	      mainScene.keyPressed(keyCode, event);
-	      return true;
-	  }
-	  return true;
+	    if (mainScene != null && gameLoaded) {
+	      
+		mainScene.keyPressed(keyCode, event);
+		return true;
+	    }
+	return true;
 	}
 	return super.onKeyDown(keyCode, event);
     }
     
     @Override
     protected void onDestroy() {
+	
 	super.onDestroy();
 	android.os.Process.killProcess(android.os.Process.myPid());
     }

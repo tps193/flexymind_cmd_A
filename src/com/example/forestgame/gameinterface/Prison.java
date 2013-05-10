@@ -45,18 +45,15 @@ public class Prison {
 	return element;
     }
     
-    /* XXX: public Sprite getSprite() {
-	
-	return prisonSprite;
-    }*/
-    
     public void clear() {
 	
 	element = null;
 	isEmpty = true;
 	show();
     }
+    
     private void backToPrison(Element element) {
+	
 	prisonSprite.setPosition( MainActivity.TEXTURE_WIDTH * 136 / 625
     		                , MainActivity.TEXTURE_HEIGHT * 1381 / 2000);
 	
@@ -65,6 +62,7 @@ public class Prison {
     public void show() {
 	
 	if(!isEmpty) {
+	    
 	    prisonTexture = MainActivity.mainActivity.storage.getTexture(TableOfElements.getTextureName(element));
 	    prisonSprite = new Sprite ( MainActivity.TEXTURE_WIDTH * 136 / 625
 		    		      , MainActivity.TEXTURE_HEIGHT * 1381 / 2000
@@ -72,46 +70,53 @@ public class Prison {
 		    		      , MainActivity.TEXTURE_HEIGHT * 303 / 2000
 		    		      , prisonTexture
 		    		      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
+		
 		int row = SlotMatrix.getROWS()+1;
 		int colum = SlotMatrix.getCOLUMNS()+1;
-		    @Override
-		    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
+		@Override
+		public boolean onAreaTouched( TouchEvent pSceneTouchEvent
 			    			, float pTouchAreaLocalX
 			    			, float pTouchAreaLocalY) {
-			if (pSceneTouchEvent.isActionDown()) {
-			    Log.d("prison", "touch");
-			    row = SlotMatrix.getROWS()+1;
-			    colum = SlotMatrix.getCOLUMNS()+1;
+		    if (pSceneTouchEvent.isActionDown()) {
+			
+			Log.d("prison", "touch");
+			row = SlotMatrix.getROWS()+1;
+			colum = SlotMatrix.getCOLUMNS()+1;
+			
+		    } else if (pSceneTouchEvent.isActionUp()) {
 			    
-			} else if (pSceneTouchEvent.isActionUp()) {
-			    Log.d("prison", "no touch");
+			Log.d("prison", "no touch");
 			    
-			    if (row < SlotMatrix.getROWS() && colum <SlotMatrix.getCOLUMNS() && gameScene.getSlotMatrix().isSlotEmpty(row, colum)){
-				Log.d("prison", "new");
-				gameScene.getSlotMatrix().putToSlot(element, row, colum);
-				clear();
-			    }
-			    else {
-				Log.d("prison","nowhere");
-				backToPrison(element);
-			    }
+			if (row < SlotMatrix.getROWS() && colum <SlotMatrix.getCOLUMNS() 
+				&& gameScene.getSlotMatrix().isSlotEmpty(row, colum)) {
+				
+			    Log.d("prison", "new");
+			    gameScene.getSlotMatrix().putToSlot(element, row, colum);
+			    clear();
 			    
-			} else if (pSceneTouchEvent.isActionMove()) {
-			    Log.d("prison", "move");
-			    
-			    float touchX = pSceneTouchEvent.getX() - this.getWidth() / 2;
-			    float touchY = pSceneTouchEvent.getY() - this.getHeight() / 2;
-			    this.setPosition(touchX, touchY - (float)(this.getHeight() / 1.4));
-			      
-			    gameScene.moveElement(touchX, touchY - (float)(this.getHeight() / 1.4));
-			    colum = gameScene.getPutInColum();
-			    row = gameScene.getPutInRow(); 
-			    
+			} else {
+				
+			    Log.d("prison","nowhere");
+			    backToPrison(element);
 			}
-			return true;
+			    
+		    } else if (pSceneTouchEvent.isActionMove()) {
+			    
+			Log.d("prison", "move");
+			    
+			float touchX = pSceneTouchEvent.getX() - this.getWidth() / 2;
+			float touchY = pSceneTouchEvent.getY() - this.getHeight() / 2;
+			this.setPosition(touchX, touchY - (float)(this.getHeight() / 1.4));
+			      
+			gameScene.moveElement(touchX, touchY - (float)(this.getHeight() / 1.4));
+			colum = gameScene.getPutInColum();
+			row = gameScene.getPutInRow(); 
+			    
 		    }
-		   
-		};
+		    return true;
+		}
+	    };
+	    
 	    gameScene.attachChild(prisonSprite);
 	    gameScene.registerTouchArea(prisonSprite);
 	    gameScene.setTouchAreaBindingOnActionDownEnabled(true);
@@ -119,13 +124,12 @@ public class Prison {
 	    
 	    prisonSprite.setZIndex(401);
 	    prisonSprite.getParent().sortChildren();
-	}
-	else 
-	    {
+	    
+	} else {
+	    
 	    gameScene.detachChild(prisonSprite);
 	    gameScene.unregisterTouchArea(prisonSprite);
 	    prisonSprite=null;
-	    
-	    }
+	}
     }
 }
