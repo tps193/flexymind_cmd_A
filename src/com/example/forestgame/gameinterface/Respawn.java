@@ -141,6 +141,11 @@ public class Respawn {
 	    respawnSprite.setZIndex(400);
 	    respawnSprite.getParent().sortChildren();
 	}
-	else gameScene.detachChild(respawnSprite);
+	else 
+	    {gameScene.detachChild(respawnSprite);
+	    gameScene.unregisterTouchArea(respawnSprite);
+	    respawnSprite=null;
+	    
+	    }
     }
 }
