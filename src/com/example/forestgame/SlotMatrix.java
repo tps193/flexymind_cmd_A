@@ -14,7 +14,7 @@ public class SlotMatrix {
     
     private Slot[][] matrix;
     private final int ROWS = 6;
-    private final int COLUMS = 6;
+    private final int COLUMNS = 6;
     private int lastEditedSlotRow;
     private int lastEditedSlotColum;
     private static int NUMBER_OF_ElEMENTS_ON_START = 18;
@@ -25,7 +25,7 @@ public class SlotMatrix {
     public SlotMatrix(GameScene scene) {
 	
 	gameScene = scene;
-	matrix = new Slot[ROWS][COLUMS];
+	matrix = new Slot[ROWS][COLUMNS];
 	init();
 	viewSlots();
     }
@@ -58,14 +58,14 @@ public class SlotMatrix {
     public void init() {
 	
 	for (int i = 0; i < ROWS; i++) {
-	    for (int j = 0; j < COLUMS; j++) {
+	    for (int j = 0; j < COLUMNS; j++) {
 		matrix[i][j] = new Slot();
 	    }
 	}
 	Random random = new Random();
 	for (int i = 0; i < NUMBER_OF_ElEMENTS_ON_START; i++) {
 	    int r = (int) (random.nextDouble() * ROWS);
-	    int c = (int) (random.nextDouble() * COLUMS);
+	    int c = (int) (random.nextDouble() * COLUMNS);
 	    if (isSlotEmpty(r, c)) {
 		addToSlot(TableOfElements.getRandomElement(), r, c); //Not putToSlot(..) 
 								     //because of the update() method
@@ -80,39 +80,51 @@ public class SlotMatrix {
 	return score;
     }
     
+    public void reInit() {
+        
+	for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+        	clearSlot(i, j);
+            }
+        }
+        
+        init();
+        viewSlots();
+    }
+    
     
     // method for visualizing textures on GameScene
     private void viewSlots() {
 	for (int i = 0; i < ROWS; i++) {
-	    for (int j = 0; j < COLUMS; j++) {
-		
-		TextureRegion slotTexture;
+	    for (int j = 0; j < COLUMNS; j++) {
+
 		Slot s = matrix[i][j];
-		if (!isSlotEmpty(i, j)) {
-		    
-		    slotTexture = MainActivity.mainActivity.storage.getTexture( TableOfElements
-			    								    . getTextureName
-			    								    ( s.getElement()));
-		}
-		else {
-		    
-		    slotTexture = MainActivity.mainActivity.storage.getTexture("gfx_empty.png");
-		}
+		gameScene.detachChild(s.getSprite());
 		
-		Sprite slotSprite = new Sprite ( 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24))
-			    			, 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26))
-			    			, MainActivity.TEXTURE_WIDTH/8
-			    			, MainActivity.TEXTURE_HEIGHT/13
-			    			, slotTexture
-			    			, MainActivity.mainActivity.getVertexBufferObjectManager());
-		gameScene.attachChild(slotSprite);
+                if (!s.isEmpty()) {
+                   TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(   TableOfElements
+                                                                                                . getTextureName
+                                                                                                ( s.getElement()));
+
+                   s.setSprite(new Sprite (    96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24))
+                                                , 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26))
+                                                , MainActivity.TEXTURE_WIDTH/8
+                                                , MainActivity.TEXTURE_HEIGHT/13
+                                                , slotTexture
+                                                , MainActivity.mainActivity.getVertexBufferObjectManager()));
+
+                   gameScene.attachChild(s.getSprite());
+		   s.getSprite().setZIndex(300);
+		   s.getSprite().getParent().sortChildren();
+                }
 	    }
 	}
     }
     
     private void clearSlot(int row, int col) {
-	
-	matrix[row][col] = new Slot();
+	 Slot s = matrix[row][col];
+	 gameScene.detachChild(s.getSprite());
+	 matrix[row][col] = new Slot();
     }
     
     // putting Element into Slot and changing flags if needed
@@ -128,7 +140,7 @@ public class SlotMatrix {
 	if (c > 0) {
 	    analyzeNeighbor(r, c, r, c-1);
 	}
-	if (c < COLUMS-1) {
+	if (c < COLUMNS-1) {
 	    analyzeNeighbor(r, c, r, c+1);
 	}
     }
@@ -143,6 +155,10 @@ public class SlotMatrix {
 	Slot s = matrix[r][c];
 	Slot s1 = matrix[r1][c1];
 	if (s1.isSimilarTo(s.getElement())) {
+	    if (s.hasSimilarNeighbor) {
+		  s1.readyForNextLevel = true;
+		  s.readyForNextLevel = true;
+		     }
 	    s.hasSimilarNeighbor = true;
 	    if (s1.hasSimilarNeighbor) {
 		s1.readyForNextLevel = true;
@@ -162,6 +178,7 @@ public class SlotMatrix {
 	    Slot s = matrix[r][c];
 	    Element e = s.getElement();
 	    clearSlot(r, c);
+	    gameScene.detachChild(matrix[r][c].getSprite());
 	    if (r > 0) {
 		if (matrix[r-1][c].isSimilarTo(e)) {
 		    collectSimilarElements(r, c, r-1, c, e);
@@ -177,7 +194,7 @@ public class SlotMatrix {
 		    collectSimilarElements(r, c, r, c-1, e);
 		}
 	    }
-	    if (c < COLUMS-1) {
+	    if (c < COLUMNS-1) {
 		if (matrix[r][c+1].isSimilarTo(e)) {
 		    collectSimilarElements(r, c, r, c+1, e);
 		}
@@ -228,7 +245,7 @@ public class SlotMatrix {
 			              , e);
 	    }
 	}
-	if (fromCol < COLUMS-1) {
+	if (fromCol < COLUMNS-1) {
 	    if (matrix[fromRow][fromCol+1].isSimilarTo(e)) {
 		collectSimilarElements( toRow
 				      , toCol
@@ -254,12 +271,14 @@ class Slot {
     boolean hasSimilarNeighbor; // Not private, has only one similar neighbor
     boolean readyForNextLevel; // Not private, has more than 1 similar neighbor
     private Element element;
+    private Sprite slotSprite;
     
     public Slot() {
 	
 	isEmpty = true;
 	hasSimilarNeighbor = false;
 	readyForNextLevel = false;
+	slotSprite = null;
     }
     
     public void addElement(Element e) {
@@ -296,6 +315,16 @@ class Slot {
     public int getScore() {
 	
 	return TableOfElements.getScores(element);
+    }
+    
+    public void setSprite(Sprite sprite) {
+
+	slotSprite = sprite;
+    }
+    
+    public Sprite getSprite() {
+
+	return slotSprite;
     }
     
 }

@@ -111,6 +111,9 @@ public class Prison {
 	    gameScene.registerTouchArea(prisonSprite);
 	    gameScene.setTouchAreaBindingOnActionDownEnabled(true);
 	    gameScene.setTouchAreaBindingOnActionMoveEnabled(true);
+	    
+	    prisonSprite.setZIndex(300);
+	    prisonSprite.getParent().sortChildren();
 	}
 	else gameScene.detachChild(prisonSprite);
     }

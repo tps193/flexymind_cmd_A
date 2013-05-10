@@ -137,7 +137,9 @@ public class Respawn {
 	    gameScene.registerTouchArea(respawnSprite);
 	    gameScene.setTouchAreaBindingOnActionDownEnabled(true);
 	    gameScene.setTouchAreaBindingOnActionMoveEnabled(true);
-
+	    
+	    respawnSprite.setZIndex(300);
+	    respawnSprite.getParent().sortChildren();
 	}
 	else gameScene.detachChild(respawnSprite);
     }
