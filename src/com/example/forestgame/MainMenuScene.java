@@ -47,6 +47,9 @@ public class MainMenuScene extends Scene {
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
 		    MainScene.gameScene.slotMatrix.reInit();
+		    MainScene.gameScene.prison.clear();
+		    MainScene.gameScene.respawn.clear();
+		    MainScene.gameScene.respawn.generateElement();
 		    MainScene.showGameScene();
 		}
 		return true;

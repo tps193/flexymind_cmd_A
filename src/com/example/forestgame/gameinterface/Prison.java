@@ -45,6 +45,11 @@ public class Prison {
 	return element;
     }
     
+    /* XXX: public Sprite getSprite() {
+	
+	return prisonSprite;
+    }*/
+    
     public void clear() {
 	
 	element = null;
@@ -112,7 +117,7 @@ public class Prison {
 	    gameScene.setTouchAreaBindingOnActionDownEnabled(true);
 	    gameScene.setTouchAreaBindingOnActionMoveEnabled(true);
 	    
-	    prisonSprite.setZIndex(400);
+	    prisonSprite.setZIndex(401);
 	    prisonSprite.getParent().sortChildren();
 	}
 	else 

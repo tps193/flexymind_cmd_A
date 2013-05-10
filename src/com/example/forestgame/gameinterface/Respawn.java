@@ -52,6 +52,11 @@ public class Respawn {
 	element = e;
     }
     
+    /* XXX: public Sprite getSprite() {
+	
+	return respawnSprite;
+    }*/
+    
     public void clear() {
 	
 	element = null;
