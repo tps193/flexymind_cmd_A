@@ -101,9 +101,9 @@ public class Prison {
 			    
 			    float touchX = pSceneTouchEvent.getX() - this.getWidth() / 2;
 			    float touchY = pSceneTouchEvent.getY() - this.getHeight() / 2;
-			    this.setPosition(touchX, touchY - this.getHeight() / 2);
-			    
-			    gameScene.moveElement(touchX, touchY);
+			    this.setPosition(touchX, touchY - (float)(this.getHeight() / 1.4));
+			      
+			    gameScene.moveElement(touchX, touchY - (float)(this.getHeight() / 1.4));
 			    colum = gameScene.getPutInColum();
 			    row = gameScene.getPutInRow(); 
 			    
