@@ -78,16 +78,16 @@ public class Respawn {
 		    			      , MainActivity.TEXTURE_HEIGHT * 303 / 2000
 		    			      , respawnTexture
 		    			      , MainActivity.mainActivity.getVertexBufferObjectManager()){
-		int row = 8;
-		int colum = 8;
+		int row = SlotMatrix.getROWS()+2;
+		int colum = SlotMatrix.getCOLUMNS()+2;
 		    @Override
 		    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
 			    			, float pTouchAreaLocalX
 			    			, float pTouchAreaLocalY) {
 
 			if (pSceneTouchEvent.isActionDown()) {
-			    row = 8;
-			    colum = 8;
+			    int row = SlotMatrix.getROWS()+2;
+			    int colum = SlotMatrix.getCOLUMNS()+2;
 			    Log.d("resp", "touch");
 			    Log.d("resp", Integer.toString(row));
 			    Log.d("resp", Integer.toString(colum));
@@ -97,14 +97,14 @@ public class Respawn {
 			    Log.d("resp", "no touch");
 			    Log.d("resp", Integer.toString(row));
 			    Log.d("resp", Integer.toString(colum));
-			
-			    if (colum == 7 && row  == 7 && gameScene.prison.isEmpty()) {
+			    
+			    if (colum == SlotMatrix.getCOLUMNS()+1 && row  == SlotMatrix.getROWS()+1 && gameScene.prison.isEmpty()) {
 				Log.d("resp", "newprison");
 				gameScene.prison.addElement(element);
 				clear();
 				generateElement();
 			    } 
-			    else if (row < 6 && colum < 6 && gameScene.getSlotMatrix().isSlotEmpty(row, colum)){
+			    else if (row < SlotMatrix.getROWS() && colum < SlotMatrix.getCOLUMNS() && gameScene.getSlotMatrix().isSlotEmpty(row, colum)){
 				Log.d("resp", "newSlot");
 				gameScene.getSlotMatrix().putToSlot(element, row, colum);
 				clear();

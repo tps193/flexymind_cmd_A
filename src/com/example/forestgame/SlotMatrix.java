@@ -13,8 +13,8 @@ import com.example.forestgame.element.TableOfElements;
 public class SlotMatrix {
     
     private Slot[][] matrix;
-    private final int ROWS = 6;
-    private final int COLUMNS = 6;
+    private static final int ROWS = 6;
+    private static final int COLUMNS = 6;
     private int lastEditedSlotRow;
     private int lastEditedSlotColum;
     private static int NUMBER_OF_ElEMENTS_ON_START = 18;
@@ -260,8 +260,17 @@ public class SlotMatrix {
 	
 	// need to do some graphic operations when elements are moving to the last added to change level (next Sprint)
 	
+    }    
+    
+    public static int getROWS()
+    {
+	return ROWS;
     }
     
+    public static int getCOLUMNS()
+    {
+	return COLUMNS;
+    }
    
 }
 
@@ -325,6 +334,7 @@ class Slot {
     public Sprite getSprite() {
 
 	return slotSprite;
-    }
+    }    
+    
     
 }

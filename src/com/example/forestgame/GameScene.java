@@ -86,8 +86,9 @@ public class GameScene extends Scene {
     public void moveElement(float touchX, float touchY)
     {
 	
-	 for (int i = 0; i < 6; i++){
-		for (int j = 0; j < 6; j++){
+	 for (int i = 0; i < SlotMatrix.getROWS(); i++){
+	     boolean flg = false;
+		for (int j = 0; j < SlotMatrix.getCOLUMNS(); j++){
 		    float slotX1 = 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24)) - MainActivity.TEXTURE_WIDTH/8;
 		    float slotY1 = 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26)) - MainActivity.TEXTURE_HEIGHT/13;
 		    float slotX2 = 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24));
@@ -101,16 +102,25 @@ public class GameScene extends Scene {
 			Log.d("slot y ",Integer.toString(i));
 			putInRow = i;
 			putInColum = j;
+			break;
 		    } else if (prisonX1 < touchX && touchX < prisonX2 && prisonY1 < touchY && touchY < prisonY2) {
 			Log.d("slotPrison x ",Integer.toString(7));
 			Log.d("slotPrison y ",Integer.toString(7));
-			putInRow = 7;
-			putInColum = 7;
+			putInRow = SlotMatrix.getROWS()+1;
+			putInColum = SlotMatrix.getCOLUMNS()+1;
+			break;
 		    } else if (putInRow == 0 && putInColum == 0 ){
-			putInRow = 8;
-			putInColum = 8;
+			putInRow = SlotMatrix.getROWS()+2;
+			putInColum = SlotMatrix.getCOLUMNS()+2;
+			break;
 		    }
+		    else 
+		    {
+			flg=false;
+		    }
+		   
 		}
+		if(flg)break;
 	    }
     }
     

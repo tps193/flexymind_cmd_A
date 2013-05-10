@@ -67,21 +67,21 @@ public class Prison {
 		    		      , MainActivity.TEXTURE_HEIGHT * 303 / 2000
 		    		      , prisonTexture
 		    		      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
-		int row = 8;
-		int colum = 8;
+		int row = SlotMatrix.getROWS()+2;
+		int colum = SlotMatrix.getCOLUMNS()+2;
 		    @Override
 		    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
 			    			, float pTouchAreaLocalX
 			    			, float pTouchAreaLocalY) {
 			if (pSceneTouchEvent.isActionDown()) {
 			    Log.d("prison", "touch");
-			    row = 8;
-			    colum = 8;
+			    row = SlotMatrix.getROWS()+1;
+			    colum = SlotMatrix.getCOLUMNS()+1;
 			    
 			} else if (pSceneTouchEvent.isActionUp()) {
 			    Log.d("prison", "no touch");
 			    
-			    if (row < 6 && colum <6 && gameScene.getSlotMatrix().isSlotEmpty(row, colum)){
+			    if (row < SlotMatrix.getROWS() && colum <SlotMatrix.getCOLUMNS() && gameScene.getSlotMatrix().isSlotEmpty(row, colum)){
 				Log.d("prison", "new");
 				gameScene.getSlotMatrix().putToSlot(element, row, colum);
 				clear();
@@ -112,7 +112,7 @@ public class Prison {
 	    gameScene.setTouchAreaBindingOnActionDownEnabled(true);
 	    gameScene.setTouchAreaBindingOnActionMoveEnabled(true);
 	    
-	    prisonSprite.setZIndex(300);
+	    prisonSprite.setZIndex(400);
 	    prisonSprite.getParent().sortChildren();
 	}
 	else gameScene.detachChild(prisonSprite);
