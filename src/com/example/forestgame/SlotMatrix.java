@@ -5,27 +5,27 @@ import java.util.Random;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.TextureRegion;
 
+import android.util.Log;
+
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
-
-
 
 public class SlotMatrix {
     
     private Slot[][] matrix;
-    private final int ROWS = 6;
-    private final int COLUMS = 6;
+    private static final int ROWS = 6;
+    private static final int COLUMNS = 6;
     private int lastEditedSlotRow;
     private int lastEditedSlotColum;
     private static int NUMBER_OF_ElEMENTS_ON_START = 18;
     private int score;
+    private int n;
     private GameScene gameScene;
 
-    
     public SlotMatrix(GameScene scene) {
 	
 	gameScene = scene;
-	matrix = new Slot[ROWS][COLUMS];
+	matrix = new Slot[ROWS][COLUMNS];
 	init();
 	viewSlots();
     }
@@ -35,6 +35,7 @@ public class SlotMatrix {
 	    		 , int col) {
 	
 	if (isSlotEmpty(row, col)) {
+	    
 	    addToSlot(e, row, col);
 	    lastEditedSlotRow = row;
 	    lastEditedSlotColum = col;
@@ -53,20 +54,41 @@ public class SlotMatrix {
 	
 	checkSimilarElements();
 	viewSlots();
+	
+	n = 0;
+	for (int i = 0; i < ROWS; i++) {
+	    
+	    for (int j = 0; j < COLUMNS; j++) {
+		
+		if (!isSlotEmpty(i,j)) {
+		    
+		    n++;
+		}
+	    }
+	}
+	if (n == ROWS*COLUMNS) {
+	    
+	    Log.d("GAME", "OVER");
+	    MainScene.showGameOverScene();
+	}
     }
     
     public void init() {
 	
 	for (int i = 0; i < ROWS; i++) {
-	    for (int j = 0; j < COLUMS; j++) {
+	    
+	    for (int j = 0; j < COLUMNS; j++) {
+		
 		matrix[i][j] = new Slot();
 	    }
 	}
 	Random random = new Random();
 	for (int i = 0; i < NUMBER_OF_ElEMENTS_ON_START; i++) {
+	    
 	    int r = (int) (random.nextDouble() * ROWS);
-	    int c = (int) (random.nextDouble() * COLUMS);
+	    int c = (int) (random.nextDouble() * COLUMNS);
 	    if (isSlotEmpty(r, c)) {
+		
 		addToSlot(TableOfElements.getRandomElement(), r, c); //Not putToSlot(..) 
 								     //because of the update() method
 	    } else {
@@ -80,31 +102,55 @@ public class SlotMatrix {
 	return score;
     }
     
+    public void reInit() {
+        
+	for (int i = 0; i < ROWS; i++) {
+	    
+            for (int j = 0; j < COLUMNS; j++) {
+        	
+        	clearSlot(i, j);
+            }
+        }
+        init();
+        viewSlots();
+    }
+    
     
     // method for visualizing textures on GameScene
     private void viewSlots() {
+	
 	for (int i = 0; i < ROWS; i++) {
-	    for (int j = 0; j < COLUMS; j++) {
-		if (!isSlotEmpty(i, j)) {
-		    Slot s = matrix[i][j];
-		    TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture( TableOfElements
-			    								    . getTextureName
-			    								    ( s.getElement()));
-		    Sprite slotSprite = new Sprite ( 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24))
-			    			   , 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26))
-			    			   , MainActivity.TEXTURE_WIDTH/8
-			    			   , MainActivity.TEXTURE_HEIGHT/13
-			    			   , slotTexture
-			    			   , MainActivity.mainActivity.getVertexBufferObjectManager());
-		    gameScene.attachChild(slotSprite);
-		}
+	    
+	    for (int j = 0; j < COLUMNS; j++) {
+
+		Slot s = matrix[i][j];
+		gameScene.detachChild(s.getSprite());
+                if (!s.isEmpty()) {
+                    
+                   TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(   TableOfElements
+                                                                                                . getTextureName
+                                                                                                ( s.getElement()));
+
+                   s.setSprite(new Sprite (96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24))
+                                           , 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26))
+                                           , MainActivity.TEXTURE_WIDTH/8
+                                           , MainActivity.TEXTURE_HEIGHT/13
+                                           , slotTexture
+                                           , MainActivity.mainActivity.getVertexBufferObjectManager()));
+
+                   gameScene.attachChild(s.getSprite());
+		   s.getSprite().setZIndex(300);
+		   s.getSprite().getParent().sortChildren();
+                }
 	    }
 	}
     }
     
     private void clearSlot(int row, int col) {
 	
-	matrix[row][col] = new Slot();
+	 Slot s = matrix[row][col];
+	 gameScene.detachChild(s.getSprite());
+	 matrix[row][col] = new Slot();
     }
     
     // putting Element into Slot and changing flags if needed
@@ -112,15 +158,19 @@ public class SlotMatrix {
 	
 	matrix[r][c].addElement(e);
 	if (r > 0) {
+	    
 	    analyzeNeighbor(r, c, r-1, c);
 	}
 	if (r < ROWS-1) {
+	    
 	    analyzeNeighbor(r, c, r+1, c);
 	}
 	if (c > 0) {
+	    
 	    analyzeNeighbor(r, c, r, c-1);
 	}
-	if (c < COLUMS-1) {
+	if (c < COLUMNS-1) {
+	    
 	    analyzeNeighbor(r, c, r, c+1);
 	}
     }
@@ -135,11 +185,20 @@ public class SlotMatrix {
 	Slot s = matrix[r][c];
 	Slot s1 = matrix[r1][c1];
 	if (s1.isSimilarTo(s.getElement())) {
+	    
+	    if (s.hasSimilarNeighbor) {
+		
+		  s1.readyForNextLevel = true;
+		  s.readyForNextLevel = true;
+	    }
 	    s.hasSimilarNeighbor = true;
+	    
 	    if (s1.hasSimilarNeighbor) {
+		
 		s1.readyForNextLevel = true;
 		s.readyForNextLevel = true;
 	    } else {
+		
 		s1.hasSimilarNeighbor = true;
 	    }
 	}
@@ -150,27 +209,39 @@ public class SlotMatrix {
 	
 	int r = lastEditedSlotRow;
 	int c = lastEditedSlotColum;
+	
 	if (matrix[r][c].readyForNextLevel) {
+	    
 	    Slot s = matrix[r][c];
 	    Element e = s.getElement();
 	    clearSlot(r, c);
+	    gameScene.detachChild(matrix[r][c].getSprite());
+	    
 	    if (r > 0) {
+		
 		if (matrix[r-1][c].isSimilarTo(e)) {
+		    
 		    collectSimilarElements(r, c, r-1, c, e);
 		}
 	    }
 	    if (r < ROWS-1) {
+		
 		if (matrix[r+1][c].isSimilarTo(e)) {
+		    
 		    collectSimilarElements(r, c, r+1, c, e);
 		}
 	    }
 	    if (c > 0) {
+		
 		if (matrix[r][c-1].isSimilarTo(e)) {
+		    
 		    collectSimilarElements(r, c, r, c-1, e);
 		}
 	    }
-	    if (c < COLUMS-1) {
+	    if (c < COLUMNS-1) {
+		
 		if (matrix[r][c+1].isSimilarTo(e)) {
+		    
 		    collectSimilarElements(r, c, r, c+1, e);
 		}
 	    }
@@ -191,10 +262,14 @@ public class SlotMatrix {
 		       , toCol
 		       , fromRow
 		       , fromCol);
+	
 	score =+ matrix[fromRow][fromCol].getScore();
  	clearSlot(fromRow, fromCol);
+ 	
 	if (fromRow > 0) {
+	    
 	    if (matrix[fromRow-1][fromCol].isSimilarTo(e)) {
+		
 		collectSimilarElements( toRow
 				      , toCol
 				      , fromRow-1
@@ -203,7 +278,9 @@ public class SlotMatrix {
 	    }
 	}
 	if (fromRow < ROWS-1) {
+	    
 	    if (matrix[fromRow+1][fromCol].isSimilarTo(e)) {
+		
 		collectSimilarElements( toRow
 				      , toCol
 				      , fromRow+1
@@ -212,7 +289,9 @@ public class SlotMatrix {
 	    }
 	}
 	if (fromCol > 0) {
+	    
 	    if (matrix[fromRow][fromCol-1].isSimilarTo(e)) {
+		
 		collectSimilarElements( toRow
 			              , toCol
 			              , fromRow
@@ -220,8 +299,10 @@ public class SlotMatrix {
 			              , e);
 	    }
 	}
-	if (fromCol < COLUMS-1) {
+	if (fromCol < COLUMNS-1) {
+	    
 	    if (matrix[fromRow][fromCol+1].isSimilarTo(e)) {
+		
 		collectSimilarElements( toRow
 				      , toCol
 				      , fromRow
@@ -235,58 +316,16 @@ public class SlotMatrix {
 	
 	// need to do some graphic operations when elements are moving to the last added to change level (next Sprint)
 	
+    }    
+    
+    public static int getROWS() {
+	
+	return ROWS;
+    }
+    
+    public static int getCOLUMNS() {
+	
+	return COLUMNS;
     }
    
-}
-
-class Slot {
-    
-    private boolean isEmpty;
-    boolean hasSimilarNeighbor; // Not private, has only one similar neighbor
-    boolean readyForNextLevel; // Not private, has more than 1 similar neighbor
-    private Element element;
-    
-    public Slot() {
-	
-	isEmpty = true;
-	hasSimilarNeighbor = false;
-	readyForNextLevel = false;
-    }
-    
-    public void addElement(Element e) {
-	
-	element = e;
-	isEmpty = false;
-    }
-    
-    public Element getNextLevelElement() {
-	element.changeToNextLvl();
-	hasSimilarNeighbor = false;
-	readyForNextLevel = false;
-	return element;
-    }
-    
-    public boolean isEmpty() {
-	
-	return isEmpty;
-    }
-    
-    public boolean isSimilarTo(Element e) {
-	
-	if (this.isEmpty) {
-	    return false; 
-	} else {
-	    return (this.element.getName() == e.getName());
-	}
-    }
-    
-    public Element getElement() {
-	return element;
-    }
-    
-    public int getScore() {
-	
-	return TableOfElements.getScores(element);
-    }
-    
 }
