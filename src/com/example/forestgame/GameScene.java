@@ -100,9 +100,10 @@ public class GameScene extends Scene {
 	
 	 for (int i = 0; i < SlotMatrix.getROWS(); i++) {
 	     
-	     boolean flg = false;
+	     boolean flg=false;
 	     for (int j = 0; j < SlotMatrix.getCOLUMNS(); j++) {
-		    
+		   
+		 flg=true;
 		 float slotX1 = 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24))
 			   	- MainActivity.TEXTURE_WIDTH/8;
 		    
@@ -131,7 +132,8 @@ public class GameScene extends Scene {
 		     putInColum = SlotMatrix.getCOLUMNS()+1;
 		     break;
 		 } else {
-			
+		     putInRow = SlotMatrix.getROWS()+20;
+		     putInColum = SlotMatrix.getCOLUMNS()+20;
 		     flg=false;
 		 }
 		   
