@@ -42,10 +42,10 @@ public class GameOverScene extends Scene {
 	
 	if (pSceneTouchEvent.isActionDown()) {
 	    
-	    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER);
+	    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
 	} else if (pSceneTouchEvent.isActionUp()) {
 	    
-	    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER);
+	    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
 	    mainMenuClick();
 	}
 	return true;
@@ -68,10 +68,10 @@ public class GameOverScene extends Scene {
 	    
 	    if (pSceneTouchEvent.isActionDown()) {
 		
-		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER);
+		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
-		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER);
+		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
 		newGameClick();
 	    }
 	    return true;
@@ -92,7 +92,7 @@ public class GameOverScene extends Scene {
 	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
 	attachChild(background);
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER);
+	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER.deepCopy());
 	attachChild(gameover);
 	attachChild(mainmenu);
 	attachChild(newgame);
@@ -108,7 +108,7 @@ public class GameOverScene extends Scene {
 	
 	setVisible(true);
 	setIgnoreUpdate(false);
-   	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER);
+   	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {

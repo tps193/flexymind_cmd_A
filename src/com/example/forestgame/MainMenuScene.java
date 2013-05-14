@@ -65,14 +65,14 @@ public class MainMenuScene extends Scene {
 		if (pSceneTouchEvent.isActionDown()) {
 		    
 		    Log.d("ButtonPlay", "touch");
-		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER);
-		    this.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER);
+		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
 		    
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
 		    Log.d("ButtonPlay", "no touch");
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER);
-		    this.registerEntityModifier(MainActivity.HIDE_ALPHA_MODIFIER);
+		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
 		    buttonPlayPress();
 		}
 		return true;
@@ -102,14 +102,14 @@ public class MainMenuScene extends Scene {
 		if (pSceneTouchEvent.isActionDown()) {
 		    
 		    Log.d("ButtonScores", "touch");
-		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER);
-		    this.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER);
+		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
 		    
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
 		    Log.d("ButtonScores", "no touch");
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER);
-		    this.registerEntityModifier(MainActivity.HIDE_ALPHA_MODIFIER);
+		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
 		    buttonScoresClick();
 		}
 		return true;
@@ -136,14 +136,14 @@ public class MainMenuScene extends Scene {
 		if (pSceneTouchEvent.isActionDown()) {
 		    
 		    Log.d("ButtonCredits", "touch");
-		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER);
-		    this.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER);
+		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
 		    
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
 		    Log.d("ButtonCredits", "no touch");
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER);
-		    this.registerEntityModifier(MainActivity.HIDE_ALPHA_MODIFIER);
+		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
 		    buttonCreditsClick();
 		}
 		return true;
@@ -171,14 +171,14 @@ public class MainMenuScene extends Scene {
 		if (pSceneTouchEvent.isActionDown()) {
 		    
 		    Log.d("ButtonExit", "touch");
-		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER);
-		    this.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER);
+		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
 		    
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
 		    Log.d("ButtonExit", "no touch");
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER);
-		    this.registerEntityModifier(MainActivity.HIDE_ALPHA_MODIFIER);
+		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
 		    buttonExitCLick();
 		}
 		return true;
@@ -201,7 +201,7 @@ public class MainMenuScene extends Scene {
 	setBackgroundEnabled(true);
 	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	background.registerEntityModifier(MainActivity.HIDE_ALPHA_MODIFIER);
+	background.registerEntityModifier(MainActivity.HIDE_ALPHA_MODIFIER.deepCopy());
 	attachChild(background);
 	attachChild(title);
 	attachChild(buttonPlay);
@@ -221,7 +221,7 @@ public class MainMenuScene extends Scene {
 	setVisible(true);
 	setIgnoreUpdate(false);
 	MainActivity.mainActivity.mMusic.play();
-   	background.registerEntityModifier(MainActivity.HIDE_ALPHA_MODIFIER);	
+   	background.registerEntityModifier(MainActivity.HIDE_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {

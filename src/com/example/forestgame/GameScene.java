@@ -71,9 +71,9 @@ public class GameScene extends Scene {
 	
 	setBackgroundEnabled(true);
 	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
-	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER);
+	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER.deepCopy());
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER);
+	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER.deepCopy());
 	attachChild(background);
 	attachChild(slots);
 	attachChild(cage);
@@ -108,8 +108,8 @@ public class GameScene extends Scene {
 	setVisible(true);
 	setIgnoreUpdate(false);
 	MainActivity.mainActivity.mMusic.pause();
-   	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER);
-   	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER);
+   	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER.deepCopy());
+   	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {

@@ -52,23 +52,23 @@ public class CreditsScene extends Scene {
 	setBackgroundEnabled(true);
 	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
 	attachChild(background);
-	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER);
+	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER.deepCopy());
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
 	attachChild(devNames);
 	attachChild(captions);
 	devNames.setHorizontalAlign(HorizontalAlign.CENTER);
 	captions.setHorizontalAlign(HorizontalAlign.CENTER);
-	devNames.registerEntityModifier(CREDITS_ALPHA_MODIFIER);
-	captions.registerEntityModifier(CREDITS_ALPHA_MODIFIER);
+	devNames.registerEntityModifier(CREDITS_ALPHA_MODIFIER.deepCopy());
+	captions.registerEntityModifier(CREDITS_ALPHA_MODIFIER.deepCopy());
     }
     
     public void show() {
 	
 	setVisible(true);
 	setIgnoreUpdate(false);
-	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER);
-   	devNames.registerEntityModifier(CREDITS_ALPHA_MODIFIER);
-   	captions.registerEntityModifier(CREDITS_ALPHA_MODIFIER);
+	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER.deepCopy());
+   	devNames.registerEntityModifier(CREDITS_ALPHA_MODIFIER.deepCopy());
+   	captions.registerEntityModifier(CREDITS_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {

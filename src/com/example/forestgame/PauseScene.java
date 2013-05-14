@@ -44,11 +44,11 @@ public class PauseScene extends Scene {
 	    
 	    if (pSceneTouchEvent.isActionDown()) {
 	    
-		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER);
+		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
 		
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
-		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER);
+		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
 		MainScene.showMainMenuScene();	    
 	    }
 	return true;
@@ -68,11 +68,11 @@ public class PauseScene extends Scene {
 	    
 	    if (pSceneTouchEvent.isActionDown()) {
 		
-		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER);
+		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
 		
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
-		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER);
+		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
 		MainScene.showGameScene();
 	    }
 	    return true;
@@ -85,7 +85,7 @@ public class PauseScene extends Scene {
 	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
 	attachChild(background);
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER);
+	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER.deepCopy());
 	attachChild(question);
 	attachChild(choiseNo);
 	attachChild(choiseYes);
@@ -101,7 +101,7 @@ public class PauseScene extends Scene {
 	
 	setVisible(true);
 	setIgnoreUpdate(false);
-   	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER);
+   	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {
