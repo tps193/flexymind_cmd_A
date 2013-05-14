@@ -68,17 +68,16 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion textureScores;
     public TextureRegion textureCredits;
     public TextureRegion textureExit;
+    public TextureRegion texturePauseIcon;
     public AtlasStorage storage;
     public StrokeFont tDevNames;
     public StrokeFont tCaptions;
     private static ITexture creditsCaps;
     private static ITexture creditsNames;
-    public StrokeFont tQuestion;
-    public StrokeFont tChoiseYES;
-    public StrokeFont tChoiseNO;
-    private static ITexture pauseQuestion;
-    private static ITexture pauseChoiseY;
-    private static ITexture pauseChoiseN;
+    public StrokeFont tPause;
+    public StrokeFont tResume;
+    private static ITexture pauseLabel;
+    private static ITexture pauseResume;
     public StrokeFont tGameOver;
     public StrokeFont tMainMenu;
     public StrokeFont tNewGame;
@@ -89,6 +88,9 @@ public class MainActivity extends SimpleBaseGameActivity {
     public Music mMusic;
     public Sound mSound;
     public Sound mClick;
+    public Sound mGameOver;
+    public Sound mGameStart;
+    public Sound mStep;
     
 
     @Override
@@ -186,9 +188,11 @@ public class MainActivity extends SimpleBaseGameActivity {
 			   , "gfx_nuts_king.png"
 			   , "gfx_squirrel.png"
 			   , "gfx_cage.png"
-			   , "gfx_empty.png");
+			   , "gfx_empty.png"
+			   , "gfx_pause_icon.png");
 	
 	textureCage = storage.getTexture("gfx_cage.png");
+	texturePauseIcon = storage.getTexture("gfx_pause_icon.png");
 	MusicFactory.setAssetBasePath("sounds/");
 	
         try {
@@ -203,6 +207,9 @@ public class MainActivity extends SimpleBaseGameActivity {
         try {
     		mSound = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "convolution.mp3");
     		mClick = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "click.wav");
+    		mGameOver = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "game_over.mp3");
+    		mGameStart = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "game_start.mp3");
+    		mStep = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "general_step.wav");
         } catch (final IOException e) {
     		Debug.e("Error", e);
         }	
@@ -235,47 +242,33 @@ public class MainActivity extends SimpleBaseGameActivity {
 				   , 2
 				   , new Color(1.0f, 0.2f, 0.0f));
 	
-	pauseQuestion = new BitmapTextureAtlas(	this.getTextureManager()
+	pauseLabel = new BitmapTextureAtlas(	this.getTextureManager()
 						, 2048
 						, 256
 						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	
-	pauseChoiseY = new BitmapTextureAtlas(	this.getTextureManager()
+	pauseResume = new BitmapTextureAtlas(	this.getTextureManager()
 						, 512
 						, 256
 						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	
-	pauseChoiseN = new BitmapTextureAtlas(	this.getTextureManager()
-						, 512
-						, 256
-						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	
-	tQuestion = new StrokeFont(this.getFontManager()
-				   , pauseQuestion
+	tPause = new StrokeFont(this.getFontManager()
+				   , pauseLabel
 				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-				   , 100
+				   , 165
 				   , true
 				   , new Color(1.0f, 0.6f, 0.0f)
 				   , 2
 				   , new Color(1.0f, 0.2f, 0.0f));
 	
-	tChoiseYES = new StrokeFont(this.getFontManager()
-				    , pauseChoiseY
+	tResume = new StrokeFont(this.getFontManager()
+				    , pauseResume
 				    , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-				    , 170
+				    , 120
 				    , true
 				    , new Color(1.0f, 1.0f, 1.0f)
 				    , 2
 				    , new Color(1.0f, 0.2f, 0.0f));
-	
-	tChoiseNO = new StrokeFont(this.getFontManager()
-				   , pauseChoiseN
-				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-				   , 170
-				   , true
-				   , new Color(1.0f, 1.0f, 1.0f)
-				   , 2
-				   , new Color(1.0f, 0.2f, 0.0f));
 	
 	GameOver = new BitmapTextureAtlas(this.getTextureManager()
 					  , 2048
@@ -321,9 +314,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	
 	tDevNames.load();
 	tCaptions.load();
-	tQuestion.load();
-	tChoiseYES.load();
-	tChoiseNO.load();
+	tPause.load();
+	tResume.load();
 	tGameOver.load();
 	tMainMenu.load();
 	tNewGame.load();
@@ -335,6 +327,23 @@ public class MainActivity extends SimpleBaseGameActivity {
 	mainScene = new MainScene();
 	gameLoaded = true;
 	return mainScene;
+    }
+    
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        if (this.isGameLoaded())
+            MainActivity.mainActivity.mMusic.pause();
+    }
+
+    @Override
+    protected synchronized void onResume()
+    {
+        super.onResume();
+        System.gc();
+        if (this.isGameLoaded())
+            MainActivity.mainActivity.mMusic.play(); 
     }
     
     @Override
