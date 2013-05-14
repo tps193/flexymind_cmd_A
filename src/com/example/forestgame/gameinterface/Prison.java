@@ -2,7 +2,6 @@ package com.example.forestgame.gameinterface;
 
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.region.TextureRegion;
 
 import android.util.Log;
 
@@ -12,14 +11,7 @@ import com.example.forestgame.SlotMatrix;
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
 
-public class Prison {
-
-    private boolean isEmpty;
-    private Element element;
-    private GameScene gameScene;
-    
-    private TextureRegion prisonTexture;
-    private Sprite prisonSprite;
+public class Prison extends GameSlot {
     
     private final static float PRISON_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 136 / 625;
     private final static float PRISON_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
@@ -29,38 +21,12 @@ public class Prison {
     
     public Prison(GameScene scene) {
 	
-	gameScene = scene;
-	element = null;
-	isEmpty = true;
+	super(scene);
     }
     
-    public void addElement(Element e) {
+    public void backToGameSlot(Element element) {
 	
-	element = e;
-	isEmpty = false;
-	show();
-    }
-    
-    public boolean isEmpty() {
-	
-	return isEmpty;
-    }
-    
-    public Element getElement() {
-	
-	return element;
-    }
-    
-    public void clear() {
-	
-	element = null;
-	isEmpty = true;
-	show();
-    }
-    
-    private void backToPrison(Element element) {
-	
-	prisonSprite.setPosition( PRISON_POSITION_LEFT
+	slotSprite.setPosition( PRISON_POSITION_LEFT
     		                , PRISON_POSITION_UP);
 	
     }
@@ -69,12 +35,12 @@ public class Prison {
 	
 	if(!isEmpty) {
 	    
-	    prisonTexture = MainActivity.mainActivity.storage.getTexture(TableOfElements.getTextureName(element));
-	    prisonSprite = new Sprite ( PRISON_POSITION_LEFT
+	    slotTexture = MainActivity.mainActivity.storage.getTexture(TableOfElements.getTextureName(element));
+	    slotSprite = new Sprite ( PRISON_POSITION_LEFT
 		    		      , PRISON_POSITION_UP
 		    		      , PRISON_WIDTH
 		    		      , PRISON_HEIGHT
-		    		      , prisonTexture
+		    		      , slotTexture
 		    		      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 		
 		int row = SlotMatrix.getROWS()+1;
@@ -103,7 +69,7 @@ public class Prison {
 			} else {
 				
 			    Log.d("prison","nowhere");
-			    backToPrison(element);
+			    backToGameSlot(element);
 			}
 			    
 		    } else if (pSceneTouchEvent.isActionMove()) {
@@ -123,19 +89,19 @@ public class Prison {
 		}
 	    };
 	    
-	    gameScene.attachChild(prisonSprite);
-	    gameScene.registerTouchArea(prisonSprite);
+	    gameScene.attachChild(slotSprite);
+	    gameScene.registerTouchArea(slotSprite);
 	    gameScene.setTouchAreaBindingOnActionDownEnabled(true);
 	    gameScene.setTouchAreaBindingOnActionMoveEnabled(true);
 	    
-	    prisonSprite.setZIndex(PRISON_Z_INDEX);
-	    prisonSprite.getParent().sortChildren();
+	    slotSprite.setZIndex(PRISON_Z_INDEX);
+	    slotSprite.getParent().sortChildren();
 	    
 	} else {
 	    
-	    gameScene.detachChild(prisonSprite);
-	    gameScene.unregisterTouchArea(prisonSprite);
-	    prisonSprite = null;
+	    gameScene.detachChild(slotSprite);
+	    gameScene.unregisterTouchArea(slotSprite);
+	    slotSprite = null;
 	}
     }
 }

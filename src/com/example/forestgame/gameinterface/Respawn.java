@@ -2,7 +2,6 @@ package com.example.forestgame.gameinterface;
 
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.region.TextureRegion;
 
 import android.util.Log;
 
@@ -12,14 +11,7 @@ import com.example.forestgame.SlotMatrix;
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
 
-public class Respawn {
-
-    private boolean isEmpty;
-    private Element element;
-    private GameScene gameScene;
-    
-    private TextureRegion respawnTexture;
-    private Sprite respawnSprite;
+public class Respawn extends GameSlot {
     
     private final static float RESPAWN_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 27 / 50;
     private final static float RESPAWN_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
@@ -29,7 +21,7 @@ public class Respawn {
     
     public Respawn(GameScene scene) {
 	
-	gameScene = scene;
+	super(scene);
 	generateElement();
     }
     
@@ -40,48 +32,27 @@ public class Respawn {
 	show();
     }
     
-    public boolean isEmpty() {
-	
-	return isEmpty;
-    }
-    
-    public Element getElement() {
-	
-	return element;
-    }
-    
-    public void setElement(Element e) {
-	
-	element = e;
-    }
-    
-    public void clear() {
-	
-	element = null;
-	isEmpty = true;
-	show();
-    }
-    
     //For Animation
-    public void backToRespawn(Element e) {
+    public void backToGameSlot(Element e) {
 	
-	respawnSprite.setPosition(RESPAWN_POSITION_LEFT
+	slotSprite.setPosition(RESPAWN_POSITION_LEFT
 				  , RESPAWN_POSITION_UP);
+	
     }
     
     public void show() {
 	
 	if(!isEmpty) {
 	    
-	    respawnTexture = MainActivity.mainActivity.storage.getTexture(TableOfElements
+	    slotTexture = MainActivity.mainActivity.storage.getTexture(TableOfElements
 			    						  . getTextureName
 			    						  (element));
 	    
-	    respawnSprite = new Sprite ( RESPAWN_POSITION_LEFT
+	    slotSprite = new Sprite ( RESPAWN_POSITION_LEFT
 		    			 , RESPAWN_POSITION_UP
 		    			 , RESPAWN_WIDTH
 		    			 , RESPAWN_HEIGHT
-		    			 , respawnTexture
+		    			 , slotTexture
 		    			 , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 		
 		int row = SlotMatrix.getROWS()+2;
@@ -126,7 +97,7 @@ public class Respawn {
 			    Log.d("resp", Integer.toString(row));
 			    Log.d("resp", Integer.toString(column));
 			    Log.d("resp","nowhere");
-			    backToRespawn(element);
+			    backToGameSlot(element);
 			}
 			
 		    } else if (pSceneTouchEvent.isActionMove()) {
@@ -147,19 +118,19 @@ public class Respawn {
 		}
 	    };
 	    
-	    gameScene.attachChild(respawnSprite);
-	    gameScene.registerTouchArea(respawnSprite);
+	    gameScene.attachChild(slotSprite);
+	    gameScene.registerTouchArea(slotSprite);
 	    gameScene.setTouchAreaBindingOnActionDownEnabled(true);
 	    gameScene.setTouchAreaBindingOnActionMoveEnabled(true);
 	    
-	    respawnSprite.setZIndex(RESPAWN_Z_INDEX);
-	    respawnSprite.getParent().sortChildren();
+	    slotSprite.setZIndex(RESPAWN_Z_INDEX);
+	    slotSprite.getParent().sortChildren();
 	    
 	} else {
 	    
-	    gameScene.detachChild(respawnSprite);
-	    gameScene.unregisterTouchArea(respawnSprite);
-	    respawnSprite = null;
+	    gameScene.detachChild(slotSprite);
+	    gameScene.unregisterTouchArea(slotSprite);
+	    slotSprite = null;
 	}
     }
 }
