@@ -14,24 +14,51 @@ import android.util.Log;
 
 public class MainMenuScene extends Scene {
     
-    	Sprite sprite = new Sprite( 0
+    private static final float TITLE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH / 14;
+    private static final float TITLE_POSITION_UP = MainActivity.TEXTURE_HEIGHT / 20;
+    private static final float TITLE_WIDTH = MainActivity.TEXTURE_WIDTH * 6 / 8;
+    private static final float TITLE_HEIGHT = MainActivity.TEXTURE_HEIGHT / 4;
+    
+    private static final float BUTTON_PLAY_POSITION_LEFT = MainActivity.TEXTURE_WIDTH / 4;
+    private static final float BUTTON_PLAY_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 52 / 128;
+    private static final float BUTTON_PLAY_WIDTH = MainActivity.TEXTURE_WIDTH / 2;
+    private static final float BUTTON_PLAY_HEIGHT = MainActivity.TEXTURE_HEIGHT * 12 / 128;
+    
+    private static final float BUTTON_SCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH / 4;
+    private static final float BUTTON_SCORE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 69 / 128;
+    private static final float BUTTON_SCORES_WIDTH = MainActivity.TEXTURE_WIDTH / 2;
+    private static final float BUTTON_SCORES_HEIGHT = MainActivity.TEXTURE_HEIGHT * 12 / 128;
+    
+    private static final float BUTTON_CREDITS_POSITION_LEFT = MainActivity.TEXTURE_WIDTH / 4;
+    private static final float BUTTON_CREDITS_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 86 / 128;
+    private static final float BUTTON_CREDITS_WIDTH = MainActivity.TEXTURE_WIDTH / 2;
+    private static final float BUTTON_CREDITS_HEIGHT = MainActivity.TEXTURE_HEIGHT * 12 / 128;
+    
+    private static final float BUTTON_EXIT_POSITION_LEFT = MainActivity.TEXTURE_WIDTH / 4;
+    private static final float BUTTON_EXIT_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 103 / 128;
+    private static final float BUTTON_EXIT_WIDTH = MainActivity.TEXTURE_WIDTH / 2;
+    private static final float BUTTON_EXIT_HEIGHT = MainActivity.TEXTURE_HEIGHT * 12 / 128;
+    
+    private static final Color BACKGROUND_COLOR = new Color(0.1f, 0.1f, 0.0f);
+    
+    private Sprite background = new Sprite( 0
 	    		          , 0
 	    		          , MainActivity.TEXTURE_WIDTH
 	    		          , MainActivity.TEXTURE_HEIGHT
 	    		          , MainActivity.mainActivity.textureBackground
 	    		          , MainActivity.mainActivity.getVertexBufferObjectManager());
 
-    	Sprite Title = new Sprite( MainActivity.TEXTURE_WIDTH / 14
-    				 , MainActivity.TEXTURE_HEIGHT / 20
-    				 , MainActivity.TEXTURE_WIDTH * 6 / 8
-    				 , MainActivity.TEXTURE_HEIGHT / 4
+    private Sprite title = new Sprite( TITLE_POSITION_LEFT
+    				 , TITLE_POSITION_UP
+    				 , TITLE_WIDTH
+    				 , TITLE_HEIGHT
     				 , MainActivity.mainActivity.textureTitle
     				 , MainActivity.mainActivity.getVertexBufferObjectManager());
 
-    	Sprite ButtonPlay = new Sprite( MainActivity.TEXTURE_WIDTH / 4
-	    			      , MainActivity.TEXTURE_HEIGHT * 52 / 128
-	    			      , MainActivity.TEXTURE_WIDTH * 2 / 4
-	    			      , MainActivity.TEXTURE_HEIGHT * 12 / 128
+    private Sprite buttonPlay = new Sprite( BUTTON_PLAY_POSITION_LEFT
+	    			      , BUTTON_PLAY_POSITION_UP
+	    			      , BUTTON_PLAY_WIDTH
+	    			      , BUTTON_PLAY_HEIGHT
 	    			      , MainActivity.mainActivity.texturePlay
 	    			      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	    @Override
@@ -50,21 +77,25 @@ public class MainMenuScene extends Scene {
 		    Log.d("ButtonPlay", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
-		    MainScene.gameScene.slotMatrix.reInit();
-		    MainScene.gameScene.prison.clear();
-		    MainScene.gameScene.respawn.clear();
-		    MainScene.gameScene.respawn.generateElement();
-		    MainActivity.mainActivity.mClick.play();
-		    MainScene.showGameScene();
+		    buttonPlayPress();
 		}
 		return true;
 	    }
 	};
 	
-	Sprite ButtonScores = new Sprite( MainActivity.TEXTURE_WIDTH / 4
-	    			        , MainActivity.TEXTURE_HEIGHT * 69 / 128
-	    			        , MainActivity.TEXTURE_WIDTH * 2 / 4
-	    			        , MainActivity.TEXTURE_HEIGHT * 12 / 128
+	private void buttonPlayPress() {
+	    MainScene.getGameScene().getSlotMatrix().reInit();
+	    MainScene.getGameScene().getPrison().clear();
+	    MainScene.getGameScene().getRespawn().clear();
+	    MainScene.getGameScene().getRespawn().generateElement();
+	    MainActivity.mainActivity.mClick.play();
+	    MainScene.showGameScene();
+	}
+	
+	private Sprite buttonScores = new Sprite( BUTTON_SCORES_POSITION_LEFT
+	    			        , BUTTON_SCORE_POSITION_UP
+	    			        , BUTTON_SCORES_WIDTH
+	    			        , BUTTON_SCORES_HEIGHT
 	    			        , MainActivity.mainActivity.textureScores
 	    			        , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	    @Override
@@ -83,17 +114,22 @@ public class MainMenuScene extends Scene {
 		    Log.d("ButtonScores", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
-		    MainActivity.mainActivity.mClick.play();
-		    MainScene.showScoresScene();
+		    buttonScoresClick();
 		}
 		return true;
 	    }
 	};
 
-	Sprite ButtonCredits = new Sprite( MainActivity.TEXTURE_WIDTH / 4
-				         , MainActivity.TEXTURE_HEIGHT * 86 / 128
-				         , MainActivity.TEXTURE_WIDTH * 2 / 4
-				         , MainActivity.TEXTURE_HEIGHT * 12 / 128
+	private void buttonScoresClick() {
+	    MainActivity.mainActivity.mClick.play();
+	    MainScene.showScoresScene();
+	}
+	
+		
+	private Sprite buttonCredits = new Sprite( BUTTON_CREDITS_POSITION_LEFT
+				         , BUTTON_CREDITS_POSITION_UP
+				         , BUTTON_CREDITS_WIDTH
+				         , BUTTON_CREDITS_HEIGHT
 				         , MainActivity.mainActivity.textureCredits
 				         , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	    @Override
@@ -112,17 +148,22 @@ public class MainMenuScene extends Scene {
 		    Log.d("ButtonCredits", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
-		    MainActivity.mainActivity.mClick.play();
-		    MainScene.showCreditsScene();
+		    buttonCreditsClick();
 		}
 		return true;
 	    }
 	};
+	
+	private void buttonCreditsClick() {
+	    MainActivity.mainActivity.mClick.play();
+	    MainScene.showCreditsScene();
+	}
 
-	Sprite ButtonExit = new Sprite( MainActivity.TEXTURE_WIDTH / 4
-				      , MainActivity.TEXTURE_HEIGHT * 103 / 128
-				      , MainActivity.TEXTURE_WIDTH * 2 / 4
-				      , MainActivity.TEXTURE_HEIGHT * 12 / 128
+		    
+	private Sprite buttonExit = new Sprite( BUTTON_EXIT_POSITION_LEFT
+				      , BUTTON_EXIT_POSITION_UP
+				      , BUTTON_EXIT_WIDTH
+				      , BUTTON_EXIT_HEIGHT
 				      , MainActivity.mainActivity.textureExit
 				      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 
@@ -142,33 +183,39 @@ public class MainMenuScene extends Scene {
 		    Log.d("ButtonExit", "no touch");
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
-		    MainActivity.mainActivity.mClick.play();
-		    MainActivity.mainActivity.finish();
-		    if (MainActivity.mainActivity.isFinishing() == false) {
-			
-			android.os.Process.killProcess(android.os.Process.myPid());
-		    }
+		    buttonExitCLick();
 		}
 		return true;
 	    }
 	};
+	
+	private void buttonExitCLick() {
+	    MainActivity.mainActivity.mClick.play();
+	    MainActivity.mainActivity.finish();
+	    if (MainActivity.mainActivity.isFinishing() == false) {
+		
+		android.os.Process.killProcess(android.os.Process.myPid());
+	    }
+	}
+	
+	
     
     public MainMenuScene() {
 	
 	setBackgroundEnabled(true);
-	setBackground(new Background(new Color(0.1f, 0.1f, 0.0f)));
-	sprite.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 1.0f));
-	attachChild(sprite);
-	attachChild(Title);
-	attachChild(ButtonPlay);
-	attachChild(ButtonScores);
-	attachChild(ButtonCredits);
-	attachChild(ButtonExit);
-	registerTouchArea(ButtonPlay);
-	registerTouchArea(ButtonScores);
-	registerTouchArea(ButtonCredits);
-	registerTouchArea(ButtonExit);
+	setBackground(new Background(BACKGROUND_COLOR));
+	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
+	background.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 1.0f));
+	attachChild(background);
+	attachChild(title);
+	attachChild(buttonPlay);
+	attachChild(buttonScores);
+	attachChild(buttonCredits);
+	attachChild(buttonExit);
+	registerTouchArea(buttonPlay);
+	registerTouchArea(buttonScores);
+	registerTouchArea(buttonCredits);
+	registerTouchArea(buttonExit);
 	setTouchAreaBindingOnActionDownEnabled(true);
 	setTouchAreaBindingOnActionMoveEnabled(true);	
     }
@@ -178,13 +225,13 @@ public class MainMenuScene extends Scene {
 	setVisible(true);
 	setIgnoreUpdate(false);
 	MainActivity.mainActivity.mMusic.play();
-   	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 1.0f));	
+   	background.registerEntityModifier(new AlphaModifier(0.55f, 0.5f, 1.0f));	
     }
     
     public void hide() {
 	
    	setVisible(false);
-   	sprite.setAlpha(0.5f);
+   	background.setAlpha(0.5f);
    	setIgnoreUpdate(true);
     }
 }

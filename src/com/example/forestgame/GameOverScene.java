@@ -13,21 +13,29 @@ import org.andengine.util.color.Color;
 
 public class GameOverScene extends Scene {
     
-    private Sprite sprite = new Sprite( 0
+    private static final float GAMEOVER_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 16 / 120;
+    private static final float GAMEOVER_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 4 / 14;
+    private static final float MAINMENU_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 258 / 1024;
+    private static final float MAINMENU_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 29 / 64;
+    private static final float NEWGAME_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 270 / 1024;
+    private static final float NEWGAME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 36 / 64;
+    private static final Color BACKGROUND_COLOR = new Color(0.1f, 0.1f, 0.0f);
+    
+    private Sprite background = new Sprite( 0
             				, 0
             				, MainActivity.TEXTURE_WIDTH
             				, MainActivity.TEXTURE_HEIGHT
             				, MainActivity.mainActivity.textureBackground
             				, MainActivity.mainActivity.getVertexBufferObjectManager());
     
-    private Text gameover = new Text(	MainActivity.TEXTURE_WIDTH * 16 / 120
-					, MainActivity.TEXTURE_HEIGHT * 4 / 14
+    private Text gameover = new Text(	GAMEOVER_POSITION_LEFT
+					, GAMEOVER_POSITION_UP
 					, MainActivity.mainActivity.tGameOver
 					, "GAME OVER"
 					, MainActivity.mainActivity.getVertexBufferObjectManager());
 
-    private Text mainmenu = new Text(	MainActivity.TEXTURE_WIDTH * 258 / 1024
-					, MainActivity.TEXTURE_HEIGHT * 29 / 64
+    private Text mainmenu = new Text(	MAINMENU_POSITION_LEFT
+					, MAINMENU_POSITION_UP
 					, MainActivity.mainActivity.tMainMenu
 					, "Main Menu"
 					, MainActivity.mainActivity.getVertexBufferObjectManager()) {
@@ -42,14 +50,18 @@ public class GameOverScene extends Scene {
 	} else if (pSceneTouchEvent.isActionUp()) {
 	    
 	    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
-	    MainScene.showMainMenuScene();
+	    mainMenuClick();
 	}
 	return true;
 	}
     };
+    
+    private void mainMenuClick() {
+	MainScene.showMainMenuScene();
+    }
 
-    private Text newgame = new Text(	MainActivity.TEXTURE_WIDTH * 270 / 1024
-	    				, MainActivity.TEXTURE_HEIGHT * 36 / 64
+    private Text newgame = new Text(	NEWGAME_POSITION_LEFT
+	    				, NEWGAME_POSITION_UP
 	    				, MainActivity.mainActivity.tNewGame
 	    				, "New Game"
 	    				, MainActivity.mainActivity.getVertexBufferObjectManager()) {
@@ -64,23 +76,27 @@ public class GameOverScene extends Scene {
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
 		this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
-		MainScene.gameScene.slotMatrix.reInit();
-		MainScene.gameScene.prison.clear();
-		MainScene.gameScene.respawn.clear();
-		MainScene.gameScene.respawn.generateElement();
-		MainScene.showGameScene();
+		newGameClick();
 	    }
 	    return true;
 	}
     };
+    
+    private void newGameClick() {
+	MainScene.getGameScene().getSlotMatrix().reInit();
+	MainScene.getGameScene().getPrison().clear();
+	MainScene.getGameScene().getRespawn().clear();
+	MainScene.getGameScene().getRespawn().generateElement();
+	MainScene.showGameScene();
+    }
    
     public GameOverScene() {
 	
 	setBackgroundEnabled(true);
-	setBackground(new Background(new Color(0.1f, 0.1f, 0.0f)));
-	attachChild(sprite);
-	sprite.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.8f, 0.5f));
+	setBackground(new Background(BACKGROUND_COLOR));
+	attachChild(background);
+	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
+	background.registerEntityModifier(new AlphaModifier(0.55f, 0.8f, 0.5f));
 	attachChild(gameover);
 	attachChild(mainmenu);
 	attachChild(newgame);
@@ -96,13 +112,13 @@ public class GameOverScene extends Scene {
 	
 	setVisible(true);
 	setIgnoreUpdate(false);
-   	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.8f, 0.5f));
+   	background.registerEntityModifier(new AlphaModifier(0.55f, 0.8f, 0.5f));
     }
     
     public void hide() {
 	
    	setVisible(false);
    	setIgnoreUpdate(true);
-   	sprite.setAlpha(0.8f);
+   	background.setAlpha(0.8f);
     }
 }

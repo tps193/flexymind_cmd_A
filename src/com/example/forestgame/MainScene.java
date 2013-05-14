@@ -7,19 +7,13 @@ import android.view.KeyEvent;
 
 public class MainScene extends Scene {
     
-    private static int gameState; // constant to hold the game states
-    				  // the actual states of the game
-    private static final int mainMenuState = 0; 
-    private static final int gameRunningState = 1;
-    private static final int scoresShowState = 2;
-    private static final int creditsShowState = 3;
-    private static final int pauseState = 4;
-    private static final int gameOverState = 5;
+    private enum GameState { MAIN_MENU, GAME_RUNNING, SHOW_SCORES, SHOW_CREDITS, PAUSE, GAME_OVER };
+    private static GameState gameState;
     
-    public static MainMenuScene mainMenuScene = new MainMenuScene();
-    public static GameScene gameScene = new GameScene();
-    public static CreditsScene creditsScene = new CreditsScene();
-    public static ScoresScene scoresScene = new ScoresScene();
+    private static MainMenuScene mainMenuScene = new MainMenuScene();
+    private static GameScene gameScene = new GameScene();
+    private static CreditsScene creditsScene = new CreditsScene();
+    private static ScoresScene scoresScene = new ScoresScene();
     
     public MainScene() {
 	
@@ -30,15 +24,31 @@ public class MainScene extends Scene {
 	showMainMenuScene();
     }
     
+    public static GameScene getGameScene() {
+	return gameScene;
+    }
+    
+    public static CreditsScene getCreditsScene() {
+	return creditsScene;
+    }
+    
+    public static ScoresScene getScoresScene() {
+	return scoresScene;
+    }
+    
+    public static MainMenuScene getMainMenuScene() {
+	return mainMenuScene;
+    }
+    
     public static void showMainMenuScene() {
 	
 	mainMenuScene.show();
 	gameScene.hide();
 	scoresScene.hide();
 	creditsScene.hide();
-	gameScene.pauseScene.hide();
-	gameScene.gameOverScene.hide();
-	gameState = mainMenuState;
+	gameScene.getPauseScene().hide();
+	gameScene.getGameOverScene().hide();
+	gameState = GameState.MAIN_MENU;
     }
     
     public static void showGameScene() {
@@ -47,9 +57,9 @@ public class MainScene extends Scene {
 	gameScene.show();
 	scoresScene.hide();
 	creditsScene.hide();
-	gameScene.pauseScene.hide();
-	gameScene.gameOverScene.hide();
-	gameState = gameRunningState;
+	gameScene.getPauseScene().hide();
+	gameScene.getGameOverScene().hide();
+	gameState = GameState.GAME_RUNNING;
     }
     
     public static void showCreditsScene() {
@@ -58,9 +68,9 @@ public class MainScene extends Scene {
 	gameScene.hide();
 	scoresScene.hide();
 	creditsScene.show();
-	gameScene.pauseScene.hide();
-	gameScene.gameOverScene.hide();
-	gameState = creditsShowState;
+	gameScene.getPauseScene().hide();
+	gameScene.getGameOverScene().hide();
+	gameState = GameState.SHOW_CREDITS;
     }
     
     public static void showScoresScene() {
@@ -69,9 +79,9 @@ public class MainScene extends Scene {
 	gameScene.hide();
 	scoresScene.show();
 	creditsScene.hide();
-	gameScene.pauseScene.hide();
-	gameScene.gameOverScene.hide();
-	gameState = creditsShowState;
+	gameScene.getPauseScene().hide();
+	gameScene.getGameOverScene().hide();
+	gameState = GameState.SHOW_SCORES;
     }
     
     public static void showInGamePause() {
@@ -80,9 +90,9 @@ public class MainScene extends Scene {
 	gameScene.setIgnoreUpdate(false);
 	scoresScene.hide();
 	creditsScene.hide();
-	gameScene.pauseScene.show();
-	gameScene.gameOverScene.hide();
-	gameState = pauseState;
+	gameScene.getPauseScene().show();
+	gameScene.getGameOverScene().hide();
+	gameState = GameState.PAUSE;
     }
     
     public static void showGameOverScene() {
@@ -91,9 +101,9 @@ public class MainScene extends Scene {
 	gameScene.setIgnoreUpdate(false);
 	scoresScene.hide();
 	creditsScene.hide();
-	gameScene.gameOverScene.show();
-	gameScene.pauseScene.hide();
-	gameState = gameOverState;
+	gameScene.getGameOverScene().show();
+	gameScene.getPauseScene().hide();
+	gameState = GameState.GAME_OVER;
     }
     
     @Override
@@ -101,28 +111,28 @@ public class MainScene extends Scene {
 	
 	switch(gameState) {
 	
-	case mainMenuState:
+	case MAIN_MENU:
 	    mainMenuScene.onSceneTouchEvent(pSceneTouchEvent);
 	    break;
 	    
-	case gameRunningState:
+	case GAME_RUNNING:
 	    gameScene.onSceneTouchEvent(pSceneTouchEvent);
 	    break;
 	    
-	case creditsShowState:
+	case SHOW_CREDITS:
 	    creditsScene.onSceneTouchEvent(pSceneTouchEvent);
 	    break;
 	    
-	case scoresShowState:
+	case SHOW_SCORES:
 	    scoresScene.onSceneTouchEvent(pSceneTouchEvent);
 	    break;
 	    
-	case pauseState:
-	    gameScene.pauseScene.onSceneTouchEvent(pSceneTouchEvent);
+	case PAUSE:
+	    gameScene.getPauseScene().onSceneTouchEvent(pSceneTouchEvent);
 	    break;
 	    
-	case gameOverState:
-	    gameScene.gameOverScene.onSceneTouchEvent(pSceneTouchEvent);
+	case GAME_OVER:
+	    gameScene.getGameOverScene().onSceneTouchEvent(pSceneTouchEvent);
 	    break;
 	}
 	return super.onSceneTouchEvent(pSceneTouchEvent);
@@ -132,27 +142,27 @@ public class MainScene extends Scene {
 	
 	switch(gameState) {
 	
-	case mainMenuState:
+	case MAIN_MENU:
 	    MainActivity.mainActivity.onDestroy();
 	    break;
 	    
-	case gameRunningState:
+	case GAME_RUNNING:
 	    showInGamePause();
 	    break;
 	    
-	case creditsShowState:
+	case SHOW_CREDITS:
 	    showMainMenuScene();
 	    break;
 	    
-	case scoresShowState:
+	case SHOW_SCORES:
 	    showMainMenuScene();
 	    break;
 	    
-	case pauseState:
+	case PAUSE:
 	    showMainMenuScene();
 	    break;
 	    
-	case gameOverState:
+	case GAME_OVER:
 	    showMainMenuScene();
 	    break;
 	}

@@ -33,10 +33,10 @@ public class MainActivity extends SimpleBaseGameActivity {
     public static int CAMERA_HEIGHT;
     private static float DISPLAY_WIDTH;
     private static float DISPLAY_HEIGHT;
-    public static float TEXTURE_WIDTH = 1250;
-    public static float TEXTURE_HEIGHT = 2000;
-    private float ratio_width;
-    private float ratio_height;
+    public final static float TEXTURE_WIDTH = 1250;
+    public final static float TEXTURE_HEIGHT = 2000;
+    private float RATIO_WIDTH;
+    private float RATIO_HEIGHT;
     public float ZM;  //zoom factor
     
     public static ZoomCamera camera;  //made public modifier camera so that it can be accessed from GameScene
@@ -90,19 +90,16 @@ public class MainActivity extends SimpleBaseGameActivity {
 	DISPLAY_WIDTH = dm.widthPixels;
 	DISPLAY_HEIGHT = dm.heightPixels;
 	
-	ratio_width = TEXTURE_WIDTH / DISPLAY_WIDTH;
-	ratio_height = TEXTURE_HEIGHT / DISPLAY_HEIGHT;
-		
 	CAMERA_WIDTH = (int) (DISPLAY_WIDTH);
 	CAMERA_HEIGHT = (int) (DISPLAY_HEIGHT);
 	
-	ratio_width = TEXTURE_WIDTH / DISPLAY_WIDTH;
-	ratio_height = TEXTURE_HEIGHT / DISPLAY_HEIGHT;
+	RATIO_WIDTH = TEXTURE_WIDTH / DISPLAY_WIDTH;
+	RATIO_HEIGHT = TEXTURE_HEIGHT / DISPLAY_HEIGHT;
 	
-	if (ratio_height < ratio_width) {
-	    ZM = 1 / ratio_height;
-	} else if (ratio_height > ratio_width) {
-	    ZM = 1 / ratio_width;
+	if (RATIO_HEIGHT < RATIO_WIDTH) {
+	    ZM = 1 / RATIO_HEIGHT;
+	} else if (RATIO_HEIGHT > RATIO_WIDTH) {
+	    ZM = 1 / RATIO_WIDTH;
 	} else {
 	    ZM = 1;
 	}

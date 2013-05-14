@@ -13,24 +13,34 @@ import org.andengine.util.color.Color;
 
 public class PauseScene extends Scene {
     
-    private Sprite sprite = new Sprite( 0
-            				, 0
-            				, MainActivity.TEXTURE_WIDTH
-            				, MainActivity.TEXTURE_HEIGHT
-            				, MainActivity.mainActivity.textureBackground
-            				, MainActivity.mainActivity.getVertexBufferObjectManager());
+    private static final Color BACKGROUND_COLOR = new Color(0.1f, 0.1f, 0.0f);
     
-    private Text question = new Text(MainActivity.TEXTURE_WIDTH * 18 / 120
-				     , MainActivity.TEXTURE_HEIGHT * 5 / 14
+    private static final float QUESTION_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 18 / 120;
+    private static final float QUESTION_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 5 / 14;
+    private static final float CHOISE_YES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 148 / 1024;
+    private static final float CHOISE_YES_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 30 / 64;
+    private static final float CHOISE_NO_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 685 / 1024;
+    private static final float CHOISE_NO_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 30 / 64;
+    
+
+    private Sprite background = new Sprite( 0
+            				   , 0
+            				   , MainActivity.TEXTURE_WIDTH
+            				   , MainActivity.TEXTURE_HEIGHT
+            				   , MainActivity.mainActivity.textureBackground
+            				   , MainActivity.mainActivity.getVertexBufferObjectManager());
+    
+    private Text question = new Text( QUESTION_POSITION_LEFT
+				     , QUESTION_POSITION_UP
 				     , MainActivity.mainActivity.tQuestion
 				     , "Really want to exit?"
 				     , MainActivity.mainActivity.getVertexBufferObjectManager());
 
-    private Text choiseY = new Text(MainActivity.TEXTURE_WIDTH * 148 / 1024
-				    , MainActivity.TEXTURE_HEIGHT * 30 / 64
-				    , MainActivity.mainActivity.tChoiseYES
-				    , "YES"
-				    , MainActivity.mainActivity.getVertexBufferObjectManager()) {
+    private Text choiseYes = new Text( CHOISE_YES_POSITION_LEFT
+				      , CHOISE_YES_POSITION_UP
+				      , MainActivity.mainActivity.tChoiseYES
+				      , "YES"
+				      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	
 	@Override
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent
@@ -50,8 +60,8 @@ public class PauseScene extends Scene {
 	}
     };
 
-    private Text choiseN = new Text(MainActivity.TEXTURE_WIDTH * 685 / 1024
-	    			    , MainActivity.TEXTURE_HEIGHT * 30 / 64
+    private Text choiseNo = new Text(CHOISE_NO_POSITION_LEFT
+	    			    , CHOISE_NO_POSITION_UP
 	    			    , MainActivity.mainActivity.tChoiseNO
 	    			    , "NO"
 	    			    , MainActivity.mainActivity.getVertexBufferObjectManager()) {
@@ -77,16 +87,16 @@ public class PauseScene extends Scene {
     public PauseScene() {
 	
 	setBackgroundEnabled(true);
-	setBackground(new Background(new Color(0.1f, 0.1f, 0.0f)));
-	attachChild(sprite);
-	sprite.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.8f, 0.5f));
+	setBackground(new Background(BACKGROUND_COLOR));
+	attachChild(background);
+	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
+	background.registerEntityModifier(new AlphaModifier(0.55f, 0.8f, 0.5f));
 	attachChild(question);
-	attachChild(choiseN);
-	attachChild(choiseY);
+	attachChild(choiseNo);
+	attachChild(choiseYes);
 	registerTouchArea(question);
-	registerTouchArea(choiseN);
-	registerTouchArea(choiseY);
+	registerTouchArea(choiseNo);
+	registerTouchArea(choiseYes);
 	//setTouchAreaBindingOnActionDownEnabled(true);
 	//setTouchAreaBindingOnActionMoveEnabled(true);
 	
@@ -96,13 +106,13 @@ public class PauseScene extends Scene {
 	
 	setVisible(true);
 	setIgnoreUpdate(false);
-   	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.8f, 0.5f));
+   	background.registerEntityModifier(new AlphaModifier(0.55f, 0.8f, 0.5f));
     }
     
     public void hide() {
 	
    	setVisible(false);
    	setIgnoreUpdate(true);
-   	sprite.setAlpha(0.8f);
+   	background.setAlpha(0.8f);
     }
 }

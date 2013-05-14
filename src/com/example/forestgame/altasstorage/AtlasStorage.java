@@ -21,9 +21,9 @@ public class AtlasStorage {
 	private Map<String, TextureRegion> textureMap = new HashMap<String, TextureRegion>();
 	
 	public void createAtlas( TextureManager textureManager
- 	           , Context context
- 	           , String assetBasePath
- 	           , String... textureNames) {
+ 	           		, Context context
+ 	           		, String assetBasePath
+ 	           		, String... textureNames) {
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(assetBasePath);
 		
@@ -34,7 +34,8 @@ public class AtlasStorage {
 			 							   , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		
 		for(String texture : textureNames) {
-			textureMap.put( texture, 
+			
+		    textureMap.put( texture, 
 					BitmapTextureAtlasTextureRegionFactory
 					.createFromAsset( atlas
 							, context
@@ -52,7 +53,8 @@ public class AtlasStorage {
 	}
 	
 	public TextureRegion getTexture(String name) {
-		return textureMap.get(name);
+		
+	    return textureMap.get(name);
 	}
 	
 }

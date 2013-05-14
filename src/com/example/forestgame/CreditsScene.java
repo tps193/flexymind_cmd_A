@@ -12,27 +12,34 @@ import org.andengine.util.color.Color;
 
 public class CreditsScene extends Scene {
     
-    private Sprite sprite = new Sprite(	0
+    private static final float CAPTIONS_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 1 / 6;
+    private static final float CAPTIONS_POSITION_UP = MainActivity.TEXTURE_HEIGHT / 7;
+    private static final float DEV_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 119 / 1024;
+    private static final float DEV_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 15 / 64;
+    private static final Color BACKGROUND_COLOR = new Color(0.10f, 0.10f, 0.0f);
+    
+    
+    private Sprite background = new Sprite(	0
             				, 0
             				, MainActivity.TEXTURE_WIDTH
             				, MainActivity.TEXTURE_HEIGHT
             				, MainActivity.mainActivity.textureBackground
             				, MainActivity.mainActivity.getVertexBufferObjectManager());
     
-    private Text captions = new Text(	MainActivity.TEXTURE_WIDTH * 1 / 6
-					, MainActivity.TEXTURE_HEIGHT / 7
+    private Text captions = new Text(	CAPTIONS_POSITION_LEFT
+					, CAPTIONS_POSITION_UP
 					, MainActivity.mainActivity.tCaptions
 					, "Developers:\n\n\n\n\n\n\n\n\n"
 					+ "Special thanks to:"
 					, MainActivity.mainActivity.getVertexBufferObjectManager());
     
-    private Text devNames = new Text(	MainActivity.TEXTURE_WIDTH * 119 / 1024
-					, MainActivity.TEXTURE_HEIGHT * 15 / 64
+    private Text devNames = new Text(	DEV_POSITION_LEFT
+					, DEV_POSITION_UP
 					, MainActivity.mainActivity.tDevNames
 					, "Buvaylik Sergey\n" +
 					  "Cherkasov Alexander\n" + 
 					  "Kolesnichenko Pavel\n" +
-					  "Kuznetsov Mixail\n" +
+					  "Kuznetsov Michail\n" +
 					  "Shadrin Sergey\n" +
 					  "Sivulskiy Sergey\n\n\n\n" +
 					  "Igor & Ivan"
@@ -42,10 +49,10 @@ public class CreditsScene extends Scene {
     public CreditsScene() {
 	
 	setBackgroundEnabled(true);
-	setBackground(new Background(new Color(0.10f, 0.10f, 0.0f)));
-	attachChild(sprite);
-	sprite.registerEntityModifier(new AlphaModifier(0.55f, 0.99f, 0.5f));
-	sprite.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
+	setBackground(new Background(BACKGROUND_COLOR));
+	attachChild(background);
+	background.registerEntityModifier(new AlphaModifier(0.55f, 0.99f, 0.5f));
+	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
 	attachChild(devNames);
 	attachChild(captions);
 	devNames.setHorizontalAlign(HorizontalAlign.CENTER);
@@ -58,14 +65,14 @@ public class CreditsScene extends Scene {
 	
 	setVisible(true);
 	setIgnoreUpdate(false);
-	sprite.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.5f));
+	background.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.5f));
    	devNames.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
    	captions.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
     }
     
     public void hide() {
 	
-   	sprite.setAlpha(1.0f);
+   	background.setAlpha(1.0f);
    	devNames.setAlpha(0.0f);
    	captions.setAlpha(0.0f);
    	setVisible(false);
