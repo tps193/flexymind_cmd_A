@@ -10,6 +10,8 @@ import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.font.StrokeFont;
 import org.andengine.opengl.texture.ITexture;
@@ -21,6 +23,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -38,6 +41,13 @@ public class MainActivity extends SimpleBaseGameActivity {
     private float RATIO_WIDTH;
     private float RATIO_HEIGHT;
     public float ZM;  //zoom factor
+    public static final Color BACKGROUND_COLOR = new Color(0.1f, 0.1f, 0.0f);
+    public static final AlphaModifier SHOW_ALPHA_MODIFIER = new AlphaModifier(0.55f, 1.0f, 0.5f);
+    public static final AlphaModifier HIDE_ALPHA_MODIFIER = new AlphaModifier(0.55f, 0.5f, 1.0f);
+    public static final ScaleModifier TOUCH_SCALE_MODIFIER = new ScaleModifier(0.001f, 1.0f, 0.95f);
+    public static final ScaleModifier UNTOUCH_SCALE_MODIFIER = new ScaleModifier(0.001f, 0.95f, 1.0f);
+    public static final AlphaModifier PAUSE_ALPHA_MODIFIER = new AlphaModifier(0.55f, 0.8f, 0.5f);
+    
     
     public static ZoomCamera camera;  //made public modifier camera so that it can be accessed from GameScene
     
@@ -350,5 +360,11 @@ public class MainActivity extends SimpleBaseGameActivity {
 	
 	super.onDestroy();
 	android.os.Process.killProcess(android.os.Process.myPid());
+    }
+    
+    public boolean hasLargeScreen() {
+	boolean xlarge = ((this.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+	boolean large = ((this.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+	return (xlarge || large);
     }
 }

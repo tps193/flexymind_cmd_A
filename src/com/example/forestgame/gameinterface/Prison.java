@@ -111,7 +111,7 @@ public class Prison {
 			Log.d("prison", "move");
 			    
 			float touchPointX = pSceneTouchEvent.getX() - this.getWidth() / 2;
-			float touchPointY = pSceneTouchEvent.getY() - this.getHeight() / 2 - (float)(this.getHeight() / gameScene.getOffset());
+			float touchPointY = pSceneTouchEvent.getY() - this.getHeight() / 2 - (float)(this.getHeight() * gameScene.getOffsetCoef());
 			this.setPosition(touchPointX, touchPointY);
 			      
 			gameScene.moveElement(touchPointX, touchPointY);

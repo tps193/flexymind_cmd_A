@@ -21,9 +21,6 @@ public class Respawn {
     private TextureRegion respawnTexture;
     private Sprite respawnSprite;
     
-    private TextureRegion movingTexture;
-    private Sprite movingSprite;
-    
     private final static float RESPAWN_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 27 / 50;
     private final static float RESPAWN_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
     private final static float RESPAWN_WIDTH = MainActivity.TEXTURE_WIDTH * 61 / 250;
@@ -137,7 +134,7 @@ public class Respawn {
 			Log.d("resp", "move");
 			    
 			float touchPointX = pSceneTouchEvent.getX() - this.getWidth() / 2;
-			float touchPointY = pSceneTouchEvent.getY() - this.getHeight() / 2 - (float)(this.getHeight() / gameScene.getOffset());
+			float touchPointY = pSceneTouchEvent.getY() - this.getHeight() / 2 - (float)(this.getHeight() * gameScene.getOffsetCoef());
 			this.setPosition(touchPointX, touchPointY);
 			      
 			gameScene.moveElement(touchPointX, touchPointY);

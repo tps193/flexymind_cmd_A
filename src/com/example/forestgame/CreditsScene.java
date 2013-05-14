@@ -8,7 +8,6 @@ import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.util.HorizontalAlign;
-import org.andengine.util.color.Color;
 
 public class CreditsScene extends Scene {
     
@@ -16,7 +15,9 @@ public class CreditsScene extends Scene {
     private static final float CAPTIONS_POSITION_UP = MainActivity.TEXTURE_HEIGHT / 7;
     private static final float DEV_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 119 / 1024;
     private static final float DEV_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 15 / 64;
-    private static final Color BACKGROUND_COLOR = new Color(0.10f, 0.10f, 0.0f);
+    private static final AlphaModifier BACKGROUND_ALPHA_MODIFIER = new AlphaModifier(0.55f, 0.99f, 0.5f);
+    private static final AlphaModifier CREDITS_ALPHA_MODIFIER = new AlphaModifier(0.95f, 0.0f, 1.0f);
+    
     
     
     private Sprite background = new Sprite(	0
@@ -49,25 +50,25 @@ public class CreditsScene extends Scene {
     public CreditsScene() {
 	
 	setBackgroundEnabled(true);
-	setBackground(new Background(BACKGROUND_COLOR));
+	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
 	attachChild(background);
-	background.registerEntityModifier(new AlphaModifier(0.55f, 0.99f, 0.5f));
+	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER);
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
 	attachChild(devNames);
 	attachChild(captions);
 	devNames.setHorizontalAlign(HorizontalAlign.CENTER);
 	captions.setHorizontalAlign(HorizontalAlign.CENTER);
-	devNames.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
-	captions.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
+	devNames.registerEntityModifier(CREDITS_ALPHA_MODIFIER);
+	captions.registerEntityModifier(CREDITS_ALPHA_MODIFIER);
     }
     
     public void show() {
 	
 	setVisible(true);
 	setIgnoreUpdate(false);
-	background.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.5f));
-   	devNames.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
-   	captions.registerEntityModifier(new AlphaModifier(0.95f, 0.0f, 1.0f));
+	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER);
+   	devNames.registerEntityModifier(CREDITS_ALPHA_MODIFIER);
+   	captions.registerEntityModifier(CREDITS_ALPHA_MODIFIER);
     }
     
     public void hide() {

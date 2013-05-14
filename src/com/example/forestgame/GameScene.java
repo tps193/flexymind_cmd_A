@@ -6,7 +6,6 @@ import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.util.color.Color;
 
 import android.util.Log;
 
@@ -37,14 +36,15 @@ public class GameScene extends Scene {
     private static final int PAUSE_SCENE_Z_INDEX = 10000;
     private static final int GAME_OVER_SCENE_Z_INDEX = 10000;
     
+    private static final AlphaModifier BACKGROUND_ALPHA_MODIFIER = new AlphaModifier(0.55f, 1.0f, 0.8f);
+    private static final AlphaModifier SLOTS_ALPHA_MODIFIER = new AlphaModifier(0.4f, 0.5f, 1.0f);
+    
+    
     private static final float PRISON_POSITION_LEFT = CAGE_POSITION_LEFT;
     private static final float PRISON_POSITION_UP = CAGE_POSITION_UP;
     private static final float PRISON_POSITION_RIGHT = PRISON_POSITION_LEFT + CAGE_WIDTH;
     private static final float PRISON_POSITION_BOTTOM = PRISON_POSITION_UP + CAGE_HEIGHT;
     private static double OFFSET_ON_MOVING;
-    
-    private static final Color BACKGROUND_COLOR = new Color(0.1f, 0.1f, 0.0f);
-    
     
     private Sprite background = new Sprite( 0
 	                              , 0
@@ -70,10 +70,10 @@ public class GameScene extends Scene {
     public GameScene() {
 	
 	setBackgroundEnabled(true);
-	setBackground(new Background(BACKGROUND_COLOR));
-	background.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.8f));
+	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
+	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER);
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	slots.registerEntityModifier(new AlphaModifier(0.4f, 0.5f, 1.0f));
+	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER);
 	attachChild(background);
 	attachChild(slots);
 	attachChild(cage);
@@ -92,10 +92,14 @@ public class GameScene extends Scene {
 	gameOverScene.setZIndex(GAME_OVER_SCENE_Z_INDEX);
 	
 	//here the test for tablet/phone is needed
-	OFFSET_ON_MOVING = 1.4;
+	if (MainActivity.mainActivity.hasLargeScreen()) {
+	    OFFSET_ON_MOVING = 0.2;
+	} else {
+	    OFFSET_ON_MOVING = 0.7;
+	}
     }
     
-    public double getOffset() {
+    public double getOffsetCoef() {
 	return OFFSET_ON_MOVING;
     }
     
@@ -104,8 +108,8 @@ public class GameScene extends Scene {
 	setVisible(true);
 	setIgnoreUpdate(false);
 	MainActivity.mainActivity.mMusic.pause();
-   	background.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.8f));
-   	slots.registerEntityModifier(new AlphaModifier(0.4f, 0.5f, 1.0f));
+   	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER);
+   	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER);
     }
     
     public void hide() {
