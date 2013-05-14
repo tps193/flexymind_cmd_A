@@ -186,8 +186,8 @@ public class GameScene extends Scene {
 	     for (int j = 0; j < SlotMatrix.getCOLUMNS(); j++) {
 		   
 		 flg=true;
-		 float slotLeftBorder = SlotMatrix.getSlotPositionLeft(j) - SlotMatrix.getSlotWidth();
-		 float slotUpperBorder = SlotMatrix.getSlotPositionUp(i) - SlotMatrix.getSlotHeight();
+		 float slotLeftBorder = SlotMatrix.getSlotPositionLeft(j);
+		 float slotUpperBorder = SlotMatrix.getSlotPositionUp(i);
 		 float slotRightBorder = slotLeftBorder + SlotMatrix.getSlotWidth();
 		 float slotBottomBorder = slotUpperBorder + SlotMatrix.getSlotHeight();
 		 
