@@ -55,6 +55,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     
     private boolean gameLoaded = false; // flag of game loading state
     
+    public static boolean isMute = false;
+    
     public static MainActivity mainActivity;
     
     private static MainScene mainScene;
@@ -69,6 +71,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion textureCredits;
     public TextureRegion textureExit;
     public TextureRegion texturePauseIcon;
+    public TextureRegion textureMuteOff;
+    public TextureRegion textureMuteOn;
     public AtlasStorage storage;
     public StrokeFont tDevNames;
     public StrokeFont tCaptions;
@@ -156,7 +160,9 @@ public class MainActivity extends SimpleBaseGameActivity {
 			   , "menu_credits.png"
 			   , "menu_credits_light.png"
 			   , "menu_exit.png"
-			   , "menu_exit_light.png");
+			   , "menu_exit_light.png"
+			   , "mute_on.png"
+			   , "mute_off.png");
 	
 	
 	textureTitle = storage.getTexture("main_menu_title.png");
@@ -164,6 +170,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	textureScores = storage.getTexture("menu_scores.png");
 	textureCredits = storage.getTexture("menu_credits.png");
 	textureExit = storage.getTexture("menu_exit.png");
+	textureMuteOn = storage.getTexture("mute_on.png");
+	textureMuteOff = storage.getTexture("mute_off.png");
 	
 	storage.createAtlas( this.getTextureManager()
 	           	   , this
@@ -364,6 +372,28 @@ public class MainActivity extends SimpleBaseGameActivity {
 	return true;
 	}
 	return super.onKeyDown(keyCode, event);
+    }
+    
+    public void muteSounds() {
+	MainActivity.mainActivity.mClick.play();
+	MainActivity.mainActivity.mMusic.setVolume(0);
+	MainActivity.mainActivity.mClick.setVolume(0);
+	MainActivity.mainActivity.mGameOver.setVolume(0);
+	MainActivity.mainActivity.mGameStart.setVolume(0);
+	MainActivity.mainActivity.mSound.setVolume(0);
+	MainActivity.mainActivity.mStep.setVolume(0);
+	MainActivity.isMute = !MainActivity.isMute;
+    }
+    
+    public void unmuteSounds() {
+	MainActivity.mainActivity.mClick.play();
+	MainActivity.mainActivity.mMusic.setVolume(1);
+	MainActivity.mainActivity.mClick.setVolume(1);
+	MainActivity.mainActivity.mGameOver.setVolume(1);
+	MainActivity.mainActivity.mGameStart.setVolume(1);
+	MainActivity.mainActivity.mSound.setVolume(1);
+	MainActivity.mainActivity.mStep.setVolume(1);
+	MainActivity.isMute = !MainActivity.isMute;
     }
     
     @Override
