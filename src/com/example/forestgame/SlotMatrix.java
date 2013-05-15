@@ -48,6 +48,7 @@ public class SlotMatrix {
 	    addToSlot(element, row, col);
 	    lastEditedSlotRow = row;
 	    lastEditedSlotColumn = col;
+	    MainActivity.mainActivity.mStep.play();
 	    update();
 	}
     }

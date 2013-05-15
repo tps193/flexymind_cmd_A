@@ -10,12 +10,14 @@ import org.andengine.input.touch.TouchEvent;
 
 public class PauseScene extends Scene {
     
-    private static final float QUESTION_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 18 / 120;
-    private static final float QUESTION_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 5 / 14;
-    private static final float CHOISE_YES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 148 / 1024;
-    private static final float CHOISE_YES_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 30 / 64;
-    private static final float CHOISE_NO_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 685 / 1024;
-    private static final float CHOISE_NO_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 30 / 64;
+    private static final float PAUSE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 35 / 120;
+    private static final float PAUSE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 13 / 64;
+    private static final float RESUME_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 319 / 1024;
+    private static final float RESUME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 24 / 64;
+    private static final float NEWGAME_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 260 / 1024;
+    private static final float NEWGAME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 31 / 64;
+    private static final float MAINMENU_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 235 / 1024;
+    private static final float MAINMENU_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 38 / 64;
     
 
     private Sprite background = new Sprite( 0
@@ -25,16 +27,16 @@ public class PauseScene extends Scene {
             				   , MainActivity.mainActivity.textureBackground
             				   , MainActivity.mainActivity.getVertexBufferObjectManager());
     
-    private Text question = new Text( QUESTION_POSITION_LEFT
-				     , QUESTION_POSITION_UP
-				     , MainActivity.mainActivity.tQuestion
-				     , "Really want to exit?"
+    private Text pause = new Text( PAUSE_POSITION_LEFT
+				     , PAUSE_POSITION_UP
+				     , MainActivity.mainActivity.tPause
+				     , "PAUSE"
 				     , MainActivity.mainActivity.getVertexBufferObjectManager());
 
-    private Text choiseYes = new Text( CHOISE_YES_POSITION_LEFT
-				      , CHOISE_YES_POSITION_UP
-				      , MainActivity.mainActivity.tChoiseYES
-				      , "YES"
+    private Text resume = new Text( RESUME_POSITION_LEFT
+				      , RESUME_POSITION_UP
+				      , MainActivity.mainActivity.tResume
+				      , "RESUME"
 				      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	
 	@Override
@@ -44,21 +46,22 @@ public class PauseScene extends Scene {
 	    
 	    if (pSceneTouchEvent.isActionDown()) {
 	    
-		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER);
+		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
 		
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
-		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER);
-		MainScene.showMainMenuScene();	    
+		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		MainActivity.mainActivity.mClick.play();	    
+		MainScene.showGameScene();	    
 	    }
 	return true;
 	}
     };
 
-    private Text choiseNo = new Text(CHOISE_NO_POSITION_LEFT
-	    			    , CHOISE_NO_POSITION_UP
-	    			    , MainActivity.mainActivity.tChoiseNO
-	    			    , "NO"
+    private Text newgame = new Text(NEWGAME_POSITION_LEFT
+	    			    , NEWGAME_POSITION_UP
+	    			    , MainActivity.mainActivity.tNewGame
+	    			    , "NEW GAME"
 	    			    , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	
 	@Override
@@ -68,12 +71,43 @@ public class PauseScene extends Scene {
 	    
 	    if (pSceneTouchEvent.isActionDown()) {
 		
-		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER);
+		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
 		
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
-		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER);
+		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		MainActivity.mainActivity.mClick.play();
+		MainScene.getGameScene().getSlotMatrix().reInit();
+		MainScene.getGameScene().getPrison().clear();
+		MainScene.getGameScene().getRespawn().clear();
+		MainScene.getGameScene().getRespawn().generateElement();
+		MainActivity.mainActivity.mClick.play();
 		MainScene.showGameScene();
+	    }
+	    return true;
+	}
+    };
+    
+    private Text mainMenu = new Text(	MAINMENU_POSITION_LEFT
+	    			      , MAINMENU_POSITION_UP
+	    			      , MainActivity.mainActivity.tMainMenu
+	    			      , "MAIN MENU"
+	    			      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
+
+	@Override
+	public boolean onAreaTouched(TouchEvent pSceneTouchEvent
+				   , float pTouchAreaLocalX
+				   , float pTouchAreaLocalY) {
+
+	    if (pSceneTouchEvent.isActionDown()) {
+
+		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+
+	    } else if (pSceneTouchEvent.isActionUp()) {
+
+		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		MainActivity.mainActivity.mClick.play();
+		MainScene.showMainMenuScene();
 	    }
 	    return true;
 	}
@@ -85,13 +119,15 @@ public class PauseScene extends Scene {
 	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
 	attachChild(background);
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER);
-	attachChild(question);
-	attachChild(choiseNo);
-	attachChild(choiseYes);
-	registerTouchArea(question);
-	registerTouchArea(choiseNo);
-	registerTouchArea(choiseYes);
+	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER.deepCopy());
+	attachChild(pause);
+	attachChild(newgame);
+	attachChild(resume);
+	attachChild(mainMenu);
+	registerTouchArea(pause);
+	registerTouchArea(newgame);
+	registerTouchArea(resume);
+	registerTouchArea(mainMenu);
 	//setTouchAreaBindingOnActionDownEnabled(true);
 	//setTouchAreaBindingOnActionMoveEnabled(true);
 	
@@ -101,7 +137,7 @@ public class PauseScene extends Scene {
 	
 	setVisible(true);
 	setIgnoreUpdate(false);
-   	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER);
+   	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {

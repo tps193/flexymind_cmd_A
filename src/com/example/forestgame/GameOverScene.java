@@ -10,12 +10,12 @@ import org.andengine.input.touch.TouchEvent;
 
 public class GameOverScene extends Scene {
     
-    private static final float GAMEOVER_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 16 / 120;
-    private static final float GAMEOVER_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 4 / 14;
-    private static final float MAINMENU_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 258 / 1024;
-    private static final float MAINMENU_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 29 / 64;
-    private static final float NEWGAME_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 270 / 1024;
-    private static final float NEWGAME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 36 / 64;
+    private static final float GAMEOVER_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 17 / 120;
+    private static final float GAMEOVER_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 15 / 64;
+    private static final float MAINMENU_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 235 / 1024;
+    private static final float MAINMENU_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 26 / 64;
+    private static final float NEWGAME_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 260 / 1024;
+    private static final float NEWGAME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 33 / 64;
     
     private Sprite background = new Sprite( 0
             				, 0
@@ -33,7 +33,7 @@ public class GameOverScene extends Scene {
     private Text mainmenu = new Text(	MAINMENU_POSITION_LEFT
 					, MAINMENU_POSITION_UP
 					, MainActivity.mainActivity.tMainMenu
-					, "Main Menu"
+					, "MAIN MENU"
 					, MainActivity.mainActivity.getVertexBufferObjectManager()) {
     @Override
     public boolean onAreaTouched( TouchEvent pSceneTouchEvent
@@ -42,10 +42,11 @@ public class GameOverScene extends Scene {
 	
 	if (pSceneTouchEvent.isActionDown()) {
 	    
-	    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER);
+	    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
 	} else if (pSceneTouchEvent.isActionUp()) {
 	    
-	    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER);
+	    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+	    MainActivity.mainActivity.mClick.play();
 	    mainMenuClick();
 	}
 	return true;
@@ -59,7 +60,7 @@ public class GameOverScene extends Scene {
     private Text newgame = new Text(	NEWGAME_POSITION_LEFT
 	    				, NEWGAME_POSITION_UP
 	    				, MainActivity.mainActivity.tNewGame
-	    				, "New Game"
+	    				, "NEW GAME"
 	    				, MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	@Override
 	public boolean onAreaTouched( TouchEvent pSceneTouchEvent
@@ -68,10 +69,11 @@ public class GameOverScene extends Scene {
 	    
 	    if (pSceneTouchEvent.isActionDown()) {
 		
-		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER);
+		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
-		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER);
+		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		MainActivity.mainActivity.mClick.play();
 		newGameClick();
 	    }
 	    return true;
@@ -92,7 +94,7 @@ public class GameOverScene extends Scene {
 	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
 	attachChild(background);
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER);
+	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER.deepCopy());
 	attachChild(gameover);
 	attachChild(mainmenu);
 	attachChild(newgame);
@@ -108,7 +110,8 @@ public class GameOverScene extends Scene {
 	
 	setVisible(true);
 	setIgnoreUpdate(false);
-   	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER);
+	MainActivity.mainActivity.mGameOver.play();
+   	background.registerEntityModifier(MainActivity.PAUSE_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {

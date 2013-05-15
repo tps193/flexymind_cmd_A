@@ -104,13 +104,16 @@ public class Respawn extends GameSlot {
 			    
 			Log.d("resp", "move");
 			    
-			float touchPointX = pSceneTouchEvent.getX() - this.getWidth() / 2;
-			float touchPointY = pSceneTouchEvent.getY() - this.getHeight() / 2 - (float)(this.getHeight() * gameScene.getOffsetCoef());
-			this.setPosition(touchPointX, touchPointY);
+			float spriteLeftBorder = pSceneTouchEvent.getX() - this.getWidth() / 2;
+			float verticalOffset = (float)(this.getHeight() * gameScene.getOffsetCoef());
+			float spriteUpBorder = pSceneTouchEvent.getY() - this.getHeight() / 2 - verticalOffset;
+			
+			this.setPosition(spriteLeftBorder, spriteUpBorder);
 			      
-			gameScene.moveElement(touchPointX, touchPointY);
+			gameScene.moveElement(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() - verticalOffset);
 			column = gameScene.getPutInColum();
 			row = gameScene.getPutInRow(); 
+			
 			Log.d("resp", Integer.toString(row));
 			Log.d("resp", Integer.toString(column));
 		    }

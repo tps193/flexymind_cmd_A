@@ -6,6 +6,7 @@ import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.input.touch.TouchEvent;
 
 import android.util.Log;
 
@@ -31,6 +32,11 @@ public class GameScene extends Scene {
     private static final float CAGE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
     private static final float CAGE_WIDTH = MainActivity.TEXTURE_WIDTH * 63 / 250;
     private static final float CAGE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 313 / 2000;
+    
+    private static final float PAUSE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 516 / 625;
+    private static final float PAUSE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1820 / 2000;
+    private static final float PAUSE_WIDTH = MainActivity.TEXTURE_WIDTH * 30 / 250;
+    private static final float PAUSE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 18 / 250;
     
     private static final int CAGE_Z_INDEX = 9999;
     private static final int PAUSE_SCENE_Z_INDEX = 10000;
@@ -67,16 +73,42 @@ public class GameScene extends Scene {
 	        		    , MainActivity.mainActivity.textureCage
 	        		    , MainActivity.mainActivity.getVertexBufferObjectManager());
     
+    private Sprite pauseIcon = new Sprite( PAUSE_POSITION_LEFT
+	    				 , PAUSE_POSITION_UP
+	    				 , PAUSE_WIDTH
+	    				 , PAUSE_HEIGHT
+	    				 , MainActivity.mainActivity.texturePauseIcon
+	    				 , MainActivity.mainActivity.getVertexBufferObjectManager()) {
+    @Override
+    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
+	    			, float pTouchAreaLocalX
+	    			, float pTouchAreaLocalY) {
+	
+	if (pSceneTouchEvent.isActionDown()) {
+	    
+	    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER);
+	} else if (pSceneTouchEvent.isActionUp()) {
+	    
+	    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER);
+	    MainActivity.mainActivity.mClick.play();
+	    MainScene.showInGamePause();
+	}
+	return true;
+	}
+    };
+    
     public GameScene() {
 	
 	setBackgroundEnabled(true);
 	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
-	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER);
+	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER.deepCopy());
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER);
+	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER.deepCopy());
 	attachChild(background);
 	attachChild(slots);
 	attachChild(cage);
+	attachChild(pauseIcon);
+	registerTouchArea(pauseIcon);
 	
 	prison = new Prison(this);
 	respawn = new Respawn(this);
@@ -108,8 +140,9 @@ public class GameScene extends Scene {
 	setVisible(true);
 	setIgnoreUpdate(false);
 	MainActivity.mainActivity.mMusic.pause();
-   	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER);
-   	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER);
+	MainActivity.mainActivity.mGameStart.play();
+   	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER.deepCopy());
+   	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {
@@ -153,8 +186,8 @@ public class GameScene extends Scene {
 	     for (int j = 0; j < SlotMatrix.getCOLUMNS(); j++) {
 		   
 		 flg=true;
-		 float slotLeftBorder = SlotMatrix.getSlotPositionLeft(j) - SlotMatrix.getSlotWidth();
-		 float slotUpperBorder = SlotMatrix.getSlotPositionUp(i) - SlotMatrix.getSlotHeight();
+		 float slotLeftBorder = SlotMatrix.getSlotPositionLeft(j);
+		 float slotUpperBorder = SlotMatrix.getSlotPositionUp(i);
 		 float slotRightBorder = slotLeftBorder + SlotMatrix.getSlotWidth();
 		 float slotBottomBorder = slotUpperBorder + SlotMatrix.getSlotHeight();
 		 

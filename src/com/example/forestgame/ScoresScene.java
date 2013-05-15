@@ -20,7 +20,7 @@ public class ScoresScene extends Scene {
 	setBackgroundEnabled(true);
 	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
 	attachChild(background);
-	background.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER);
+	background.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER.deepCopy());
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
     }
     
@@ -28,7 +28,7 @@ public class ScoresScene extends Scene {
 	
 	setVisible(true);
 	setIgnoreUpdate(false);
-   	background.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER);
+   	background.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {
