@@ -48,6 +48,8 @@ public class Respawn extends GameSlot {
 			    						  . getTextureName
 			    						  (element));
 	    
+	    
+	    
 	    slotSprite = new Sprite ( RESPAWN_POSITION_LEFT
 		    			 , RESPAWN_POSITION_UP
 		    			 , RESPAWN_WIDTH
@@ -75,6 +77,11 @@ public class Respawn extends GameSlot {
 			Log.d("resp", "no touch");
 			Log.d("resp", Integer.toString(row));
 			Log.d("resp", Integer.toString(column));
+			
+			if (gameScene.isBacklightOn()){
+			    gameScene.detachChild(gameScene.getBacklight());
+			    gameScene.setBacklightOn(false);
+			}
 			    
 			if (column == SlotMatrix.getCOLUMNS()+1 && row  == SlotMatrix.getROWS()+1 
 				&& gameScene.getPrison().isEmpty()) {
@@ -101,7 +108,7 @@ public class Respawn extends GameSlot {
 			}
 			
 		    } else if (pSceneTouchEvent.isActionMove()) {
-			    
+			
 			Log.d("resp", "move");
 			    
 			float spriteLeftBorder = pSceneTouchEvent.getX() - this.getWidth() / 2;
