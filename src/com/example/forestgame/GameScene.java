@@ -23,11 +23,13 @@ public class GameScene extends Scene {
     private SlotMatrix slotMatrix;
     private Prison prison;
     private Respawn respawn;
+    private Sprite backlight;
     
     private Element movingElement;
     
     private int putInRow;
     private int putInColum;
+    private boolean backlightOn;
     
     private static final float CAGE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 136 / 625;
     private static final float CAGE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
@@ -51,6 +53,7 @@ public class GameScene extends Scene {
     private static final float PRISON_POSITION_UP = CAGE_POSITION_UP;
     private static final float PRISON_POSITION_RIGHT = PRISON_POSITION_LEFT + CAGE_WIDTH;
     private static final float PRISON_POSITION_BOTTOM = PRISON_POSITION_UP + CAGE_HEIGHT;
+    private static final float BACKLIGHT_ALPHA = 0.7f;
     private static double OFFSET_ON_MOVING;
     
     private Text scoresText;
@@ -99,7 +102,7 @@ public class GameScene extends Scene {
 	return true;
 	}
     };
-    
+
     public GameScene() {
 	
 	setBackgroundEnabled(true);
@@ -180,7 +183,7 @@ public class GameScene extends Scene {
     public Element getMovingElement() {
 	return movingElement;
     }
-    
+
     public void moveElement(float touchPointX, float touchPointY) {
 	
 	 for (int i = 0; i < SlotMatrix.getROWS(); i++) {
@@ -196,24 +199,36 @@ public class GameScene extends Scene {
 		 
 		 if (slotLeftBorder <= touchPointX && touchPointX <= slotRightBorder && 
 		     slotUpperBorder <= touchPointY && touchPointY <= slotBottomBorder) {
-			
+		
 		     Log.d("slot x ",Integer.toString(j));
 		     Log.d("slot y ",Integer.toString(i));
 		     putInRow = i;
 		     putInColum = j;
+		     slotBacklight(i,j);
 		     break;
 		 } else if (PRISON_POSITION_LEFT <= touchPointX && touchPointX <= PRISON_POSITION_RIGHT && 
 			    PRISON_POSITION_UP <= touchPointY && touchPointY <= PRISON_POSITION_BOTTOM) {
 			
 		     Log.d("slotPrison x ",Integer.toString(7));
 		     Log.d("slotPrison y ",Integer.toString(7));
+<<<<<<< HEAD
 		     putInRow = SlotMatrix.getPrisonPlaceRow();
 		     putInColum = SlotMatrix.getPrisonPlaceRow();
+=======
+		     putInRow = SlotMatrix.getROWS()+1;
+		     putInColum = SlotMatrix.getCOLUMNS()+1;
+		     if (backlightOn){
+			    detachChild(backlight);
+			}
+>>>>>>> dev_backlight
 		     break;
 		 } else {
 		     putInRow = SlotMatrix.getMilkPointRow();
 		     putInColum = SlotMatrix.getMilkPointColumn();
 		     flg=false;
+		     if (backlightOn){
+			    detachChild(backlight);
+			}
 		 }
 		   
 	     }
@@ -224,6 +239,26 @@ public class GameScene extends Scene {
 	 }
     }
     
+public void slotBacklight(int i, int j){
+	
+	if (backlightOn){
+	    detachChild(backlight);
+	}
+	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
+                    backlight = new Sprite( SlotMatrix.getSlotPositionLeft(j)
+                	    , SlotMatrix.getSlotPositionUp(i)
+                	    , SlotMatrix.getSlotWidth()
+                	    , SlotMatrix.getSlotHeight(),
+		    MainActivity.mainActivity.storage.getTexture("gfx_empty.png"),
+		    MainActivity.mainActivity.getVertexBufferObjectManager());
+     
+            backlight.setAlpha(BACKLIGHT_ALPHA);
+	    attachChild(backlight);
+	    backlight.getParent().sortChildren();
+	    backlightOn = true;
+	}
+    }
+    
     public int getPutInRow() {
 	
 	return putInRow;
@@ -232,6 +267,7 @@ public class GameScene extends Scene {
     public int getPutInColum() {
 	
 	return putInColum;
+<<<<<<< HEAD
     } 
     
     public void setScores(int scores) {
@@ -245,4 +281,27 @@ public class GameScene extends Scene {
 		, MainActivity.mainActivity.getVertexBufferObjectManager());
 	attachChild(scoresText);
     }
+=======
+    }
+
+    public boolean isBacklightOn() {
+        return backlightOn;
+    }
+
+    public void setBacklightOn(boolean backlight) {
+        this.backlightOn = backlight;
+    }
+
+    public Sprite getBacklight() {
+        return backlight;
+    }
+
+
+    
+    
+    
+    
+    
+   
+>>>>>>> dev_backlight
 }
