@@ -292,7 +292,7 @@ public class SlotMatrix {
 		       , fromRow
 		       , fromCol);
 	
-	score =+ matrix[fromRow][fromCol].getScore();
+	score = score + matrix[fromRow][fromCol].getScore();
  	clearSlot(fromRow, fromCol);
  	
 	if (fromRow > 0) {
