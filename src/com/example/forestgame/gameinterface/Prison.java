@@ -24,14 +24,14 @@ public class Prison extends GameSlot {
 	super(scene);
     }
     
-    public void backToGameSlot(Element element) {
+    protected void backToGameSlot(Element element) {
 	
 	slotSprite.setPosition( PRISON_POSITION_LEFT
     		                , PRISON_POSITION_UP);
 	
     }
     
-    public void show() {
+    protected void show() {
 	
 	if(!isEmpty) {
 	    
@@ -43,70 +43,75 @@ public class Prison extends GameSlot {
 		    		      , slotTexture
 		    		      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 		
-		int row = SlotMatrix.getROWS()+1;
-		int column = SlotMatrix.getCOLUMNS()+1;
+		int row = SlotMatrix.getPrisonPlaceRow();
+		int column = SlotMatrix.getPrisonPlaceColumn();
 		@Override
 		public boolean onAreaTouched( TouchEvent pSceneTouchEvent
 			    			, float pTouchAreaLocalX
 			    			, float pTouchAreaLocalY) {
 		    if (pSceneTouchEvent.isActionDown()) {
 			
-			Log.d("prison", "touch");
-			row = SlotMatrix.getROWS()+1;
-			column = SlotMatrix.getCOLUMNS()+1;
+			gameSlotIsActionDown(row, column);
 			
 		    } else if (pSceneTouchEvent.isActionUp()) {
 			    
-			Log.d("prison", "no touch");
-			    
-			if (row < SlotMatrix.getROWS() && column <SlotMatrix.getCOLUMNS() 
-				&& gameScene.getSlotMatrix().isSlotEmpty(row, column)) {
-				
-			    Log.d("prison", "new");
-			    gameScene.getSlotMatrix().putToSlot(element, row, column);
-			    clear();
-			    
-			} else {
-				
-			    Log.d("prison","nowhere");
-			    backToGameSlot(element);
-			}
+			gameSlotIsActionUp(row, column);
 			    
 		    } else if (pSceneTouchEvent.isActionMove()) {
 			    
-			Log.d("prison", "move");
-			    
-			float spriteLeftBorder = pSceneTouchEvent.getX() - this.getWidth() / 2;
-			float verticalOffset = (float)(this.getHeight() * gameScene.getOffsetCoef());
-			float spriteUpBorder = pSceneTouchEvent.getY() - this.getHeight() / 2 - verticalOffset;
+			gameSlotIsActionMove(row, column, slotSprite, pSceneTouchEvent);
 			
-			this.setPosition(spriteLeftBorder, spriteUpBorder);
-			      
-			gameScene.moveElement(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() - verticalOffset);
-			column = gameScene.getPutInColum();
-			row = gameScene.getPutInRow(); 
-			
-			Log.d("prison", Integer.toString(row));
-			Log.d("prison", Integer.toString(column)); 
-			    
 		    }
 		    return true;
 		}
 	    };
-	    
-	    gameScene.attachChild(slotSprite);
-	    gameScene.registerTouchArea(slotSprite);
-	    gameScene.setTouchAreaBindingOnActionDownEnabled(true);
-	    gameScene.setTouchAreaBindingOnActionMoveEnabled(true);
-	    
-	    slotSprite.setZIndex(PRISON_Z_INDEX);
-	    slotSprite.getParent().sortChildren();
+	
+	    gameSlotAttach(PRISON_Z_INDEX);
 	    
 	} else {
 	    
-	    gameScene.detachChild(slotSprite);
-	    gameScene.unregisterTouchArea(slotSprite);
-	    slotSprite = null;
+	    gameSlotDetach();
 	}
+    }
+    
+    protected void gameSlotIsActionDown(int row, int column) {
+	
+	Log.d("prison", "touch");
+	row = SlotMatrix.getPrisonPlaceRow();
+	column = SlotMatrix.getPrisonPlaceColumn();
+    }
+    
+    protected void gameSlotIsActionUp(int row, int column) {
+	
+	if (row < SlotMatrix.getROWS() && column <SlotMatrix.getCOLUMNS() 
+		&& gameScene.getSlotMatrix().isSlotEmpty(row, column)) {
+		
+	    Log.d("prison", "new");
+	    gameScene.getSlotMatrix().putToSlot(element, row, column);
+	    clear();
+	    
+	} else {
+		
+	    Log.d("prison","nowhere");
+	    backToGameSlot(element);
+	}
+    }
+    
+    protected void gameSlotIsActionMove(int row, int column, Sprite slotSprite, TouchEvent pSceneTouchEvent) {
+	
+	Log.d("prison", "move");
+	    
+	float spriteLeftBorder = pSceneTouchEvent.getX() - slotSprite.getWidth() / 2;
+	float verticalOffset = (float)(slotSprite.getHeight() * gameScene.getOffsetCoef());
+	float spriteUpBorder = pSceneTouchEvent.getY() - slotSprite.getHeight() / 2 - verticalOffset;
+	
+	slotSprite.setPosition(spriteLeftBorder, spriteUpBorder);
+	      
+	gameScene.moveElement(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() - verticalOffset);
+	column = gameScene.getPutInColum();
+	row = gameScene.getPutInRow(); 
+	
+	Log.d("prison", Integer.toString(row));
+	Log.d("prison", Integer.toString(column));
     }
 }

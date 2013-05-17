@@ -44,7 +44,7 @@ public class TableOfElements {
     public static String getTextureName(Element el) {
 
 	for (ElementInfo elInfo : ARRAY_OF_ELEMENTS) {
-	    if (el.getName() == elInfo.name) {
+	    if (el.getName().equals(elInfo.name)) {
 		return elInfo.texture;
 	    }
 	}
@@ -54,7 +54,7 @@ public class TableOfElements {
     public static int getScores(Element el) {
 
 	for (ElementInfo elInfo : ARRAY_OF_ELEMENTS) {
-	    if (el.getName() == elInfo.name) {
+	    if (el.getName().equals(elInfo.name)) {
 		return elInfo.scores;
 	    }
 	}
@@ -64,7 +64,7 @@ public class TableOfElements {
     public static double getChance(Element el) {
 
 	for (ElementInfo elInfo : ARRAY_OF_ELEMENTS) {
-	    if (el.getName() == elInfo.name) {
+	    if (el.getName().equals(elInfo.name)) {
 		return elInfo.chance;
 	    }
 	}
@@ -74,7 +74,7 @@ public class TableOfElements {
     public static String getNextLvl(Element el) {
 
 	for (int i = 0; i < ARRAY_OF_ELEMENTS.length; ++i) {
-	    if (el.getName() == ARRAY_OF_ELEMENTS[i].name) {
+	    if (el.getName().equals(ARRAY_OF_ELEMENTS[i].name)) {
 		if (i != ARRAY_OF_ELEMENTS.length - 1) {
 		    return ARRAY_OF_ELEMENTS[i+1].name;
 		}

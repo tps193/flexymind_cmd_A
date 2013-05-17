@@ -60,7 +60,7 @@ public class SlotMatrix {
 	return matrix[row][col].isEmpty();
     }
     
-    public void update() {
+    private void update() {
 	
 	checkSimilarElements();
 	viewSlots();
@@ -356,4 +356,25 @@ public class SlotMatrix {
 	return COLUMNS;
     }
    
+    public static int getPrisonPlaceRow() {
+	
+	return ROWS + 1;
+    }
+    
+    
+    public static int getPrisonPlaceColumn() {
+	
+	return ROWS + 1;
+    }
+    
+    public static int getRespawnPlaceRow() {
+	
+	return ROWS + 2;
+    }
+    
+    
+    public static int getRespawnPlaceColumn() {
+	
+	return ROWS + 2;
+    }
 }

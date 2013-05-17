@@ -23,18 +23,22 @@ class Slot {
     }
     
     public void setHasSimilarNeighbor(boolean has) {
+	
 	hasSimilarNeighbor = has;
     }
     
     public boolean getHasSimilarNeighbor() {
+	
 	return hasSimilarNeighbor;
     }
     
     public void setReadyForNextLevel(boolean ready) {
+	
 	readyForNextLevel = ready;
     }
     
     public boolean getReadyForNextLevel() {
+	
 	return readyForNextLevel;
     }
     
@@ -43,7 +47,7 @@ class Slot {
 	element = e;
 	isEmpty = false;
     }
-    
+    /*
     public Element getNextLevelElement() {
 	
 	element.changeToNextLvl();
@@ -51,7 +55,7 @@ class Slot {
 	readyForNextLevel = false;
 	return element;
     }
-    
+    */
     public boolean isEmpty() {
 	
 	return isEmpty;
@@ -64,7 +68,7 @@ class Slot {
 	    
 	} else {
 	    
-	    return (this.element.getName() == e.getName());
+	    return (this.element.getName().equals(e.getName()));
 	}
     }
     

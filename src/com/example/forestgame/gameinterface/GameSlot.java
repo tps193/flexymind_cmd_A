@@ -1,6 +1,7 @@
 package com.example.forestgame.gameinterface;
 
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
 
 import com.example.forestgame.GameScene;
@@ -22,19 +23,19 @@ public abstract class GameSlot {
 	isEmpty = true;
     }
     
-    public void addElement(Element e) {
+    protected void addElement(Element e) {
 	
 	element = e;
 	isEmpty = false;
 	show();
     }
     
-    public Element getElement() {
+    protected Element getElement() {
 	
 	return element;
     }
     
-    public boolean isEmpty() {
+    protected boolean isEmpty() {
 	
 	return isEmpty;
     }
@@ -46,8 +47,31 @@ public abstract class GameSlot {
 	show();
     }
     
-    public abstract void backToGameSlot(Element e);
+    protected void gameSlotAttach(int Z_INDEX) {
+	
+	gameScene.attachChild(slotSprite);
+	gameScene.registerTouchArea(slotSprite);
+	gameScene.setTouchAreaBindingOnActionDownEnabled(true);
+	gameScene.setTouchAreaBindingOnActionMoveEnabled(true);
+	    
+	slotSprite.setZIndex(Z_INDEX);
+	slotSprite.getParent().sortChildren();
+    }
     
-    public abstract void show();
+    protected void gameSlotDetach() {
+	
+	gameScene.detachChild(slotSprite);
+	gameScene.unregisterTouchArea(slotSprite);
+	slotSprite = null;
+    }
     
+    protected abstract void backToGameSlot(Element e);
+    
+    protected abstract void show();
+    
+    protected abstract void gameSlotIsActionDown(int row, int column);
+    
+    protected abstract void gameSlotIsActionUp(int row, int column);
+    
+    protected abstract void gameSlotIsActionMove(int row, int column, Sprite slotSprite, TouchEvent pSceneTouchEvent);
 }
