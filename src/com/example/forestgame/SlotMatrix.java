@@ -143,7 +143,49 @@ public class SlotMatrix {
         viewSlots();
     }
     
+    // собирает имена
+    public String[][] getNamesForSave() {
+	
+	String[][] namesMatrix = new String[ROWS][COLUMNS];
+	
+	for(int i = 0; i < ROWS; i++) {
+	    for(int j = 0; j < COLUMNS; j++) {
+		if(matrix[i][j].isEmpty()) namesMatrix[i][j] = null;
+		else namesMatrix[i][j] = matrix[i][j].getElement().getName();
+	    }
+	}
+	
+	return namesMatrix;
+    }
     
+    //инитит загруженную игру
+    public void loadInit() {
+	
+	for (int i = 0; i < ROWS; i++) {
+	    
+            for (int j = 0; j < COLUMNS; j++) {
+        	
+        	clearSlot(i, j);
+            }
+        }
+	setMatrix(MainActivity.mainActivity.loadProgress());
+	viewSlots();
+    }
+    
+    
+    //устанавливает загруженную матрицу
+    public void setMatrix(String[][] namesMatrix) {
+        for(int i = 0; i < 6; i++) {
+            for(int j = 0; j < 6; j++) {
+        	if(namesMatrix[i][j] == null) matrix[i][j] = new Slot();
+        	else {
+        	    matrix[i][j] = new Slot();
+        	    addToSlot(new Element(namesMatrix[i][j]), i, j);
+        	}
+            }
+        } 
+    }
+
     // method for visualizing textures on GameScene
     private void viewSlots() {
 	

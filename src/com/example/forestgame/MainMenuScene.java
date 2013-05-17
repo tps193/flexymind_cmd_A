@@ -118,9 +118,18 @@ public class MainMenuScene extends Scene {
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
 		    Log.d("ButtonScores", "no touch");
+<<<<<<< HEAD
 		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
 		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
 		    buttonScoresClick();
+=======
+		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
+		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
+		    MainActivity.mainActivity.mClick.play();
+		    MainScene.showScoresScene();
+		    //MainScene.gameScene.slotMatrix.setMatrix(MainActivity.mainActivity.loadProgress());
+		    //MainScene.showGameScene();
+>>>>>>> origin/saving_progress
 		}
 		return true;
 	    }

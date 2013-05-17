@@ -1,6 +1,9 @@
 package com.example.forestgame;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
@@ -26,6 +29,7 @@ import org.andengine.util.debug.Debug;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import com.example.forestgame.altasstorage.AtlasStorage;
@@ -97,6 +101,9 @@ public class MainActivity extends SimpleBaseGameActivity {
     public Sound mGameOver;
     public Sound mGameStart;
     public Sound mStep;
+    
+    private String[][] namesMatrix;
+    String[] subNamesMatrix = new String[2];
     
 
     @Override
@@ -419,9 +426,49 @@ public class MainActivity extends SimpleBaseGameActivity {
 	android.os.Process.killProcess(android.os.Process.myPid());
     }
     
+<<<<<<< HEAD
     public boolean hasLargeScreen() {
 	boolean xlarge = ((this.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
 	boolean large = ((this.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
 	return (xlarge || large);
+=======
+    public void saveProgress() {
+	try {
+	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("saves", 0));
+	    oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
+	    //oos.writeObject(MainScene.gameScene.savePrison());
+	    //oos.writeObject(MainScene.gameScene.respawn.getElement().getName());
+	    oos.flush();
+	    oos.close();
+	    Log.d("File out", "write");
+	} catch(FileNotFoundException e) {
+	   e.printStackTrace();
+	   Log.d("File out", "not found");
+	} catch(IOException e) {
+	    e.printStackTrace();
+	    Log.d("File out", "IO exception");
+	}
+    }
+    
+    public String[][] loadProgress() {
+	try {
+	    ObjectInputStream ois = new ObjectInputStream(openFileInput("saves"));
+	    namesMatrix = (String[][]) ois.readObject();
+	    //String prisonName = (String) ois.readObject();
+	    //String respawnName = (String) ois.readObject();
+	    Log.d("File in", "read");
+	} catch(FileNotFoundException e) {
+	    e.printStackTrace();
+	    Log.d("File in", "not found");
+	} catch(IOException e) {
+	    e.printStackTrace();
+	    Log.d("File in", "IO exception");
+	} catch(ClassNotFoundException e) {
+	    e.printStackTrace();
+	    Log.d("File in", "ClassNotFoundException");
+	}
+	
+	return namesMatrix;
+>>>>>>> origin/saving_progress
     }
 }

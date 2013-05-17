@@ -30,12 +30,12 @@ public abstract class GameSlot {
 	show();
     }
     
-    protected Element getElement() {
+    public Element getElement() {
 	
 	return element;
     }
     
-    protected boolean isEmpty() {
+    public boolean isEmpty() {
 	
 	return isEmpty;
     }
