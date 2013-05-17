@@ -322,6 +322,7 @@ public class GameScene extends Scene {
 	slotMatrix.loadInit();
 	prison.clear();
 	respawn.clear();
+	
 	if (MainActivity.mainActivity.loadPrison() != null) {
 	    
 	    prison.addElement(new Element(MainActivity.mainActivity.loadPrison()));
