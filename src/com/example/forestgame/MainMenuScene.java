@@ -84,6 +84,8 @@ public class MainMenuScene extends Scene {
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
 		    MainActivity.mainActivity.mClick.play();
+		    MainScene.gameScene.setSavedGame();
+		    MainScene.showGameScene();
 		}
 		return true;
 	    }

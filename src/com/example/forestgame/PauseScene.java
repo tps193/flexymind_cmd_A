@@ -72,7 +72,7 @@ public class PauseScene extends Scene {
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
 		this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
-		MainScene.gameScene.setSavedGame();
+		//MainScene.gameScene.setSavedGame();
 		MainScene.showGameScene();
 	    }
 	    return true;

@@ -465,7 +465,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    //namesMatrix = (String[][]) ois.readObject();
 	    //prisonName = (String) ois.readObject();
 	    respawnName = (String) ois.readObject();
-	    Log.d("File in", "read in resp " + respawnName);
+	    Log.d("File in", "read in resp ");
 	} catch(FileNotFoundException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "not found");

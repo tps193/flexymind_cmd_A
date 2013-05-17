@@ -179,11 +179,11 @@ public class GameScene extends Scene {
 	slotMatrix.loadInit();
 	prison.clear();
 	respawn.clear();
-	if(MainActivity.mainActivity.loadPrison().equals(null)) {}
+	if(MainActivity.mainActivity.loadPrison() == null) {}
 	else {
 	    prison.addElement(new Element(MainActivity.mainActivity.loadPrison()));
 	}
-	if(MainActivity.mainActivity.loadRespawn().equals(null)) {}
+	if(MainActivity.mainActivity.loadRespawn() == null) {}
 	else {
 	    respawn.addElement(new Element(MainActivity.mainActivity.loadRespawn())); 
 	}
