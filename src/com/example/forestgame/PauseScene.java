@@ -61,17 +61,11 @@ public class PauseScene extends Scene {
 		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
 		
 	    } else if (pSceneTouchEvent.isActionUp()) {
-		
-<<<<<<< HEAD
+
 		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-		MainActivity.mainActivity.mClick.play();	    
-		MainScene.showGameScene();	    
-=======
-		this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
-		//MainScene.gameScene.saveProgress();
-		MainActivity.mainActivity.saveProgress();
-		MainScene.showMainMenuScene();	    
->>>>>>> origin/saving_progress
+		MainActivity.mainActivity.mClick.play();	
+		MainScene.showGameScene();	
+		
 	    }
 	return true;
 	}
@@ -94,7 +88,6 @@ public class PauseScene extends Scene {
 		
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
-<<<<<<< HEAD
 		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
 		MainActivity.mainActivity.mClick.play();
 		MainScene.getGameScene().getSlotMatrix().reInit();
@@ -102,11 +95,6 @@ public class PauseScene extends Scene {
 		MainScene.getGameScene().getRespawn().clear();
 		MainScene.getGameScene().getRespawn().generateElement();
 		MainActivity.mainActivity.mClick.play();
-=======
-		this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
-		//MainScene.gameScene.slotMatrix.setMatrix(MainActivity.mainActivity.loadProgress());
-		MainScene.gameScene.slotMatrix.loadInit();
->>>>>>> origin/saving_progress
 		MainScene.showGameScene();
 	    }
 	    return true;

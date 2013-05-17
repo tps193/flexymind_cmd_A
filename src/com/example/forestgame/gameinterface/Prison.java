@@ -18,6 +18,8 @@ public class Prison extends GameSlot {
     private final static float PRISON_WIDTH = MainActivity.TEXTURE_WIDTH * 61 / 250;
     private final static float PRISON_HEIGHT = MainActivity.TEXTURE_HEIGHT * 303 / 2000;
     private static final int PRISON_Z_INDEX = 401;
+    private int row = SlotMatrix.getPrisonPlaceRow();
+    private int column = SlotMatrix.getPrisonPlaceColumn();
     
     public Prison(GameScene scene) {
 	
@@ -43,8 +45,6 @@ public class Prison extends GameSlot {
 		    		      , slotTexture
 		    		      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 		
-		int row = SlotMatrix.getPrisonPlaceRow();
-		int column = SlotMatrix.getPrisonPlaceColumn();
 		@Override
 		public boolean onAreaTouched( TouchEvent pSceneTouchEvent
 			    			, float pTouchAreaLocalX

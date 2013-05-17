@@ -20,9 +20,9 @@ public class GameScene extends Scene {
     private PauseScene pauseScene = new PauseScene();
     private GameOverScene gameOverScene = new GameOverScene();
     
-    private SlotMatrix slotMatrix;
+    public SlotMatrix slotMatrix;
     private Prison prison;
-    private Respawn respawn;
+    public Respawn respawn;
     private Sprite backlight;
     
     private Element movingElement;
@@ -301,5 +301,35 @@ public class GameScene extends Scene {
     public Sprite getBacklight() {
 	
         return backlight;
+    }
+
+    public String savePrisonName() {
+	
+	if (prison.isEmpty()) return null;
+	
+	return prison.getElement().getName();
+    }
+    
+    public String saveRespawnName() {
+	
+	if (respawn.isEmpty()) return null;
+	
+	return respawn.getElement().getName();
+    }
+    
+    public void setSavedGame() {
+	
+	slotMatrix.loadInit();
+	prison.clear();
+	respawn.clear();
+	if (MainActivity.mainActivity.loadPrison() != null) {
+	    
+	    prison.addElement(new Element(MainActivity.mainActivity.loadPrison()));
+	}
+	
+	if (MainActivity.mainActivity.loadRespawn() != null) {
+	    
+	    respawn.addElement(new Element(MainActivity.mainActivity.loadRespawn())); 
+	}
     }
 }

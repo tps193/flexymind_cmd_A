@@ -18,6 +18,8 @@ public class Respawn extends GameSlot {
     private final static float RESPAWN_WIDTH = MainActivity.TEXTURE_WIDTH * 61 / 250;
     private final static float RESPAWN_HEIGHT = MainActivity.TEXTURE_HEIGHT * 303 / 2000;
     private static final int RESPAWN_Z_INDEX = 401;
+    private int row = SlotMatrix.getRespawnPlaceRow();
+    private int column = SlotMatrix.getRespawnPlaceColumn();
     
     public Respawn(GameScene scene) {
 	
@@ -31,7 +33,7 @@ public class Respawn extends GameSlot {
 	isEmpty = false;
 	show();
     }
-    
+
     //For Animation
     protected void backToGameSlot(Element e) {
 	
@@ -57,8 +59,6 @@ public class Respawn extends GameSlot {
 		    			 , slotTexture
 		    			 , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 		
-		int row = SlotMatrix.getRespawnPlaceRow();
-		int column = SlotMatrix.getRespawnPlaceColumn();
 		@Override
 		public boolean onAreaTouched(TouchEvent pSceneTouchEvent
 			    		     , float pTouchAreaLocalX

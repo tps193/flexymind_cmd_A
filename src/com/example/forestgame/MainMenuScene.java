@@ -88,8 +88,9 @@ public class MainMenuScene extends Scene {
 		return true;
 	    }
 	};
-	
+
 	private void buttonPlayPress() {
+	    
 	    MainScene.getGameScene().getSlotMatrix().reInit();
 	    MainScene.getGameScene().getPrison().clear();
 	    MainScene.getGameScene().getRespawn().clear();
@@ -98,12 +99,41 @@ public class MainMenuScene extends Scene {
 	    MainScene.showGameScene();
 	}
 	
+
+	Sprite ButtonResume = new Sprite( MainActivity.TEXTURE_WIDTH * 125 / 400
+					, MainActivity.TEXTURE_HEIGHT * 67 / 128
+					, MainActivity.TEXTURE_WIDTH * 150 / 400
+					, MainActivity.TEXTURE_HEIGHT * 10 / 128
+					, MainActivity.mainActivity.textureResume
+					, MainActivity.mainActivity.getVertexBufferObjectManager()) {
+	    @Override
+	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
+		    			, float pTouchAreaLocalX
+		    			, float pTouchAreaLocalY) {
+
+		if (pSceneTouchEvent.isActionDown()) {
+
+	Log.d("ButtonResume", "touch");
+	this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+	this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+
+		} else if (pSceneTouchEvent.isActionUp()) {
+
+		    Log.d("ButtonResume", "no touch");
+		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    MainActivity.mainActivity.mClick.play();
+		}
+		return true;
+	    }
+	};
+	
 	private Sprite buttonScores = new Sprite( BUTTON_SCORES_POSITION_LEFT
-	    			        , BUTTON_SCORE_POSITION_UP
-	    			        , BUTTON_SCORES_WIDTH
-	    			        , BUTTON_SCORES_HEIGHT
-	    			        , MainActivity.mainActivity.textureScores
-	    			        , MainActivity.mainActivity.getVertexBufferObjectManager()) {
+		        			, BUTTON_SCORE_POSITION_UP
+		        			, BUTTON_SCORES_WIDTH
+		        			, BUTTON_SCORES_HEIGHT
+		        			, MainActivity.mainActivity.textureScores
+		        			, MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	    @Override
 	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
 					, float pTouchAreaLocalX
@@ -118,26 +148,19 @@ public class MainMenuScene extends Scene {
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
 		    Log.d("ButtonScores", "no touch");
-<<<<<<< HEAD
 		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
 		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
 		    buttonScoresClick();
-=======
-		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
-		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
-		    MainActivity.mainActivity.mClick.play();
-		    MainScene.showScoresScene();
-		    //MainScene.gameScene.slotMatrix.setMatrix(MainActivity.mainActivity.loadProgress());
-		    //MainScene.showGameScene();
->>>>>>> origin/saving_progress
 		}
 		return true;
 	    }
 	};
 
 	private void buttonScoresClick() {
+	    
 	    MainActivity.mainActivity.mClick.play();
 	    MainScene.showScoresScene();
+	    MainScene.gameScene.slotMatrix.loadInit();
 	}
 	
 		
@@ -170,10 +193,10 @@ public class MainMenuScene extends Scene {
 	};
 	
 	private void buttonCreditsClick() {
+
 	    MainActivity.mainActivity.mClick.play();
 	    MainScene.showCreditsScene();
 	}
-
 		    
 	private Sprite buttonExit = new Sprite( BUTTON_EXIT_POSITION_LEFT
 				      , BUTTON_EXIT_POSITION_UP
@@ -251,11 +274,15 @@ public class MainMenuScene extends Scene {
 					  , MainActivity.mainActivity.textureMuteOn
 					  , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
-	private void muteIconCLick() {	    
+	private void muteIconCLick() {
+
 	    if (!MainActivity.isMute) {
+		
 		MainActivity.mainActivity.muteSounds();
 		muteOn.setVisible(false);
+		
 	    } else {
+		
 		MainActivity.mainActivity.unmuteSounds();
 		muteOn.setVisible(true);
 	    }
@@ -291,8 +318,11 @@ public class MainMenuScene extends Scene {
 	setVisible(true);
 	setIgnoreUpdate(false);
 	if (!MainActivity.isMute) {
+	    
 	    muteOn.setVisible(true);
+	    
 	} else {
+	    
 	    muteOn.setVisible(false);
 	}
 	MainActivity.mainActivity.mMusic.play();

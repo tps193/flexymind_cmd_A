@@ -71,6 +71,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion textureSlots;
     public TextureRegion textureTitle;
     public TextureRegion texturePlay;
+    public TextureRegion textureResume;
     public TextureRegion textureScores;
     public TextureRegion textureCredits;
     public TextureRegion textureExit;
@@ -103,7 +104,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     public Sound mStep;
     
     private String[][] namesMatrix;
-    String[] subNamesMatrix = new String[2];
+    private String prisonName;
+    private String respawnName;
     
 
     @Override
@@ -163,19 +165,18 @@ public class MainActivity extends SimpleBaseGameActivity {
 			   , this, "main_menu/"
 			   , "main_menu_title.png"
 			   , "menu_play.png"
-			   , "menu_play_light.png"
+			   , "menu_resume.png"
 			   , "menu_scores.png"
-			   , "menu_scores_light.png"
 			   , "menu_credits.png"
 			   , "menu_credits_light.png"
 			   , "menu_exit.png"
 			   , "menu_exit_light.png"
 			   , "mute_on.png"
 			   , "mute_off.png");
-	
-	
+
 	textureTitle = storage.getTexture("main_menu_title.png");
 	texturePlay = storage.getTexture("menu_play.png");
+	textureResume = storage.getTexture("menu_resume.png");
 	textureScores = storage.getTexture("menu_scores.png");
 	textureCredits = storage.getTexture("menu_credits.png");
 	textureExit = storage.getTexture("menu_exit.png");
@@ -398,6 +399,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     }
     
     public void muteSounds() {
+	
 	MainActivity.mainActivity.mClick.play();
 	MainActivity.mainActivity.mMusic.setVolume(0);
 	MainActivity.mainActivity.mClick.setVolume(0);
@@ -409,6 +411,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     }
     
     public void unmuteSounds() {
+	
 	MainActivity.mainActivity.mClick.play();
 	MainActivity.mainActivity.mMusic.setVolume(1);
 	MainActivity.mainActivity.mClick.setVolume(1);
@@ -425,15 +428,22 @@ public class MainActivity extends SimpleBaseGameActivity {
 	super.onDestroy();
 	android.os.Process.killProcess(android.os.Process.myPid());
     }
-    
-<<<<<<< HEAD
+
     public boolean hasLargeScreen() {
-	boolean xlarge = ((this.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
-	boolean large = ((this.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+	
+	boolean xlarge = ((this.getResources().getConfiguration().screenLayout 
+		& Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
+	
+	boolean large = ((this.getResources().getConfiguration().screenLayout 
+		& Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+	
 	return (xlarge || large);
-=======
+    }
+
     public void saveProgress() {
+	
 	try {
+	    
 	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("saves", 0));
 	    oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
 	    //oos.writeObject(MainScene.gameScene.savePrison());
@@ -441,34 +451,149 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    oos.flush();
 	    oos.close();
 	    Log.d("File out", "write");
+	    
 	} catch(FileNotFoundException e) {
+	    
 	   e.printStackTrace();
 	   Log.d("File out", "not found");
 	} catch(IOException e) {
+	    
+	    e.printStackTrace();
+	    Log.d("File out", "IO exception");
+	}
+    }
+
+    public void savePrison() {
+	
+	try {
+	    
+	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("savesprison", 0));
+	    //oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
+	    oos.writeObject(MainScene.gameScene.savePrisonName());
+	    //oos.writeObject(MainScene.gameScene.respawn.getElement().getName());
+	    oos.flush();
+	    oos.close();
+	    Log.d("File out", "write in prison");
+	    
+	} catch(FileNotFoundException e) {
+	    
+	   e.printStackTrace();
+	   Log.d("File out", "not found");
+	   
+	} catch(IOException e) {
+	    
 	    e.printStackTrace();
 	    Log.d("File out", "IO exception");
 	}
     }
     
-    public String[][] loadProgress() {
+    public void saveRespawn() {
+	
 	try {
+	    
+	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("savesrespawn", 0));
+	    //oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
+	    //oos.writeObject(MainScene.gameScene.prison.getElement().getName());
+	    oos.writeObject(MainScene.gameScene.saveRespawnName());
+	    oos.flush();
+	    oos.close();
+	    Log.d("File out", "write in resp " + MainScene.gameScene.respawn.getElement().getName());
+	    
+	} catch(FileNotFoundException e) {
+	    
+	   e.printStackTrace();
+	   Log.d("File out", "not found");
+	   
+	} catch(IOException e) {
+	    
+	    e.printStackTrace();
+	    Log.d("File out", "IO exception");
+	}
+    }
+
+    public String[][] loadProgress() {
+	
+	try {
+	    
 	    ObjectInputStream ois = new ObjectInputStream(openFileInput("saves"));
 	    namesMatrix = (String[][]) ois.readObject();
 	    //String prisonName = (String) ois.readObject();
 	    //String respawnName = (String) ois.readObject();
 	    Log.d("File in", "read");
+	    
 	} catch(FileNotFoundException e) {
+	    
 	    e.printStackTrace();
 	    Log.d("File in", "not found");
+	    
 	} catch(IOException e) {
+	    
 	    e.printStackTrace();
 	    Log.d("File in", "IO exception");
+	    
 	} catch(ClassNotFoundException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "ClassNotFoundException");
 	}
 	
 	return namesMatrix;
->>>>>>> origin/saving_progress
+    }
+    
+    public String loadPrison() {
+	
+	try {
+	    
+	    ObjectInputStream ois = new ObjectInputStream(openFileInput("savesprison"));
+	    //namesMatrix = (String[][]) ois.readObject();
+	    prisonName = (String) ois.readObject();
+	    //String respawnName = (String) ois.readObject();
+	    Log.d("File in", "read");
+	    
+	} catch(FileNotFoundException e) {
+	    
+	    e.printStackTrace();
+	    Log.d("File in", "not found");
+	    
+	} catch(IOException e) {
+	    
+	    e.printStackTrace();
+	    Log.d("File in", "IO exception");
+	    
+	} catch(ClassNotFoundException e) {
+	    
+	    e.printStackTrace();
+	    Log.d("File in", "ClassNotFoundException");
+	}
+	
+	return prisonName;
+    }
+    
+    public String loadRespawn() {
+	
+	try {
+	    
+	    ObjectInputStream ois = new ObjectInputStream(openFileInput("savesrespawn"));
+	    //namesMatrix = (String[][]) ois.readObject();
+	    //prisonName = (String) ois.readObject();
+	    respawnName = (String) ois.readObject();
+	    Log.d("File in", "read in resp " + respawnName);
+	    
+	} catch(FileNotFoundException e) {
+	    
+	    e.printStackTrace();
+	    Log.d("File in", "not found");
+	    
+	} catch(IOException e) {
+	    
+	    e.printStackTrace();
+	    Log.d("File in", "IO exception");
+	    
+	} catch(ClassNotFoundException e) {
+	    
+	    e.printStackTrace();
+	    Log.d("File in", "ClassNotFoundException");
+	}
+	
+	return respawnName;
     }
 }

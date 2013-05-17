@@ -11,7 +11,7 @@ public class MainScene extends Scene {
     private static GameState gameState;
     
     private static MainMenuScene mainMenuScene = new MainMenuScene();
-    private static GameScene gameScene = new GameScene();
+    public static GameScene gameScene = new GameScene();
     private static CreditsScene creditsScene = new CreditsScene();
     private static ScoresScene scoresScene = new ScoresScene();
     

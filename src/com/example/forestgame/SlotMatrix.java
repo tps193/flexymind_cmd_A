@@ -169,17 +169,21 @@ public class SlotMatrix {
             }
         }
 	setMatrix(MainActivity.mainActivity.loadProgress());
-	viewSlots();
+	//viewSlots();
+	update();
     }
     
     
     //устанавливает загруженную матрицу
-    public void setMatrix(String[][] namesMatrix) {
-        for(int i = 0; i < 6; i++) {
-            for(int j = 0; j < 6; j++) {
+    private void setMatrix(String[][] namesMatrix) {
+	
+        for(int i = 0; i < ROWS; i++) {
+            
+            for(int j = 0; j < COLUMNS; j++) {
+        	
         	if(namesMatrix[i][j] == null) matrix[i][j] = new Slot();
-        	else {
-        	    matrix[i][j] = new Slot();
+        	
+        	else { matrix[i][j] = new Slot();
         	    addToSlot(new Element(namesMatrix[i][j]), i, j);
         	}
             }
@@ -407,7 +411,7 @@ public class SlotMatrix {
     
     public static int getPrisonPlaceColumn() {
 	
-	return ROWS + 1;
+	return COLUMNS + 1;
     }
     
     public static int getRespawnPlaceRow() {
@@ -418,7 +422,7 @@ public class SlotMatrix {
     
     public static int getRespawnPlaceColumn() {
 	
-	return ROWS + 2;
+	return COLUMNS + 2;
     }
     
     public static int getMilkPointRow() {
@@ -428,6 +432,6 @@ public class SlotMatrix {
 
     public static int getMilkPointColumn() {
 	
-	return ROWS + 20;
+	return COLUMNS + 20;
     }
 }

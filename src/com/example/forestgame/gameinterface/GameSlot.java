@@ -23,7 +23,7 @@ public abstract class GameSlot {
 	isEmpty = true;
     }
     
-    protected void addElement(Element e) {
+    public void addElement(Element e) {
 	
 	element = e;
 	isEmpty = false;
