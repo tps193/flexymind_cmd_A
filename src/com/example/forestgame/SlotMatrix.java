@@ -1,5 +1,6 @@
 package com.example.forestgame;
 
+import java.io.IOException;
 import java.util.Random;
 
 import org.andengine.entity.sprite.Sprite;
@@ -131,7 +132,7 @@ public class SlotMatrix {
     }
     
     //инитит загруженную игру
-    public void loadInit() {
+    public void loadInit() throws IOException {
 	
 	for (int i = 0; i < ROWS; i++) {
 	    

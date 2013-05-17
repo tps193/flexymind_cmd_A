@@ -417,20 +417,20 @@ public class MainActivity extends SimpleBaseGameActivity {
 	}
     }
     
-    public String[][] loadProgress() {
+    public String[][] loadProgress() throws IOException {
 	try {
 	    ObjectInputStream ois = new ObjectInputStream(openFileInput("saves"));
 	    namesMatrix = (String[][]) ois.readObject();
 	    //String prisonName = (String) ois.readObject();
 	    //String respawnName = (String) ois.readObject();
 	    Log.d("File in", "read");
-	} catch(FileNotFoundException e) {
+	} /*catch(FileNotFoundException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "not found");
 	} catch(IOException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "IO exception");
-	} catch(ClassNotFoundException e) {
+	} */catch(ClassNotFoundException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "ClassNotFoundException");
 	}
@@ -438,20 +438,20 @@ public class MainActivity extends SimpleBaseGameActivity {
 	return namesMatrix;
     }
     
-    public String loadPrison() {
+    public String loadPrison() throws IOException {
 	try {
 	    ObjectInputStream ois = new ObjectInputStream(openFileInput("savesprison"));
 	    //namesMatrix = (String[][]) ois.readObject();
 	    prisonName = (String) ois.readObject();
 	    //String respawnName = (String) ois.readObject();
 	    Log.d("File in", "read");
-	} catch(FileNotFoundException e) {
+	} /*catch(FileNotFoundException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "not found");
 	} catch(IOException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "IO exception");
-	} catch(ClassNotFoundException e) {
+	} */catch(ClassNotFoundException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "ClassNotFoundException");
 	}
@@ -459,20 +459,20 @@ public class MainActivity extends SimpleBaseGameActivity {
 	return prisonName;
     }
     
-    public String loadRespawn() {
+    public String loadRespawn() throws IOException {
 	try {
 	    ObjectInputStream ois = new ObjectInputStream(openFileInput("savesrespawn"));
 	    //namesMatrix = (String[][]) ois.readObject();
 	    //prisonName = (String) ois.readObject();
 	    respawnName = (String) ois.readObject();
 	    Log.d("File in", "read in resp ");
-	} catch(FileNotFoundException e) {
+	} /*catch(FileNotFoundException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "not found");
 	} catch(IOException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "IO exception");
-	} catch(ClassNotFoundException e) {
+	} */catch(ClassNotFoundException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "ClassNotFoundException");
 	}

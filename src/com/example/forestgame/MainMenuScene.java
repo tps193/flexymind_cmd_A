@@ -1,5 +1,7 @@
 package com.example.forestgame;
 
+import java.io.IOException;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import org.andengine.entity.modifier.AlphaModifier;
@@ -84,8 +86,18 @@ public class MainMenuScene extends Scene {
 		    this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
 		    MainActivity.mainActivity.mClick.play();
-		    MainScene.gameScene.setSavedGame();
-		    MainScene.showGameScene();
+		    try {
+			MainScene.gameScene.setSavedGame();
+			MainScene.showGameScene();
+		    } catch(IOException e) {
+			MainScene.gameScene.slotMatrix.reInit();
+			MainScene.gameScene.prison.clear();
+			MainScene.gameScene.respawn.clear();
+			MainScene.gameScene.respawn.generateElement();
+			MainActivity.mainActivity.mClick.play();
+			MainScene.showGameScene();
+		    }
+		    //MainScene.showGameScene();
 		}
 		return true;
 	    }
@@ -115,7 +127,7 @@ public class MainMenuScene extends Scene {
 		    this.registerEntityModifier(new AlphaModifier(0.001f, 0.5f, 1.0f));
 		    MainActivity.mainActivity.mClick.play();
 		    MainScene.showScoresScene();
-		    MainScene.gameScene.slotMatrix.loadInit();
+		    //MainScene.gameScene.slotMatrix.loadInit();
 		}
 		return true;
 	    }
