@@ -91,6 +91,7 @@ public class GameScene extends Scene {
    	slots.setAlpha(0.5f);
     }
     
+    //возвращает матрицу слотов
     public SlotMatrix getSlotMatrix() {
 	
 	return slotMatrix;
@@ -154,5 +155,24 @@ public class GameScene extends Scene {
 	
 	return putInColum;
     } 
+    
+    //возвращает имя элемента в тюрьме
+    public String savePrison() {
+	if(prison.isEmpty()) return null;
+	return prison.getElement().getName();
+    }
+    
+    public void setPrison(Prison prison) {
+	this.prison = prison;
+    }
+    
+    public void setRespawn(Respawn respawn) {
+	this.respawn = respawn;
+    }
+    
+    public void setSavedGame() {
+	slotMatrix.setMatrix(MainActivity.mainActivity.loadProgress());
+	
+    }
    
 }
