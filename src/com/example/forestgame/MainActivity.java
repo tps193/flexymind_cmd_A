@@ -57,6 +57,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion textureSlots;
     public TextureRegion textureTitle;
     public TextureRegion texturePlay;
+    public TextureRegion textureResume;
     public TextureRegion textureScores;
     public TextureRegion textureCredits;
     public TextureRegion textureExit;
@@ -148,17 +149,15 @@ public class MainActivity extends SimpleBaseGameActivity {
 			   , this, "main_menu/"
 			   , "main_menu_title.png"
 			   , "menu_play.png"
-			   , "menu_play_light.png"
+			   , "menu_resume.png"
 			   , "menu_scores.png"
-			   , "menu_scores_light.png"
 			   , "menu_credits.png"
-			   , "menu_credits_light.png"
-			   , "menu_exit.png"
-			   , "menu_exit_light.png");
+			   , "menu_exit.png");
 	
 	
 	textureTitle = storage.getTexture("main_menu_title.png");
 	texturePlay = storage.getTexture("menu_play.png");
+	textureResume = storage.getTexture("menu_resume.png");
 	textureScores = storage.getTexture("menu_scores.png");
 	textureCredits = storage.getTexture("menu_credits.png");
 	textureExit = storage.getTexture("menu_exit.png");
