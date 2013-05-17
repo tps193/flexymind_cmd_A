@@ -18,8 +18,6 @@ public class Prison extends GameSlot {
     private final static float PRISON_WIDTH = MainActivity.TEXTURE_WIDTH * 61 / 250;
     private final static float PRISON_HEIGHT = MainActivity.TEXTURE_HEIGHT * 303 / 2000;
     private static final int PRISON_Z_INDEX = 401;
-    private int row = SlotMatrix.getPrisonPlaceRow();
-    private int column = SlotMatrix.getPrisonPlaceColumn();
     
     public Prison(GameScene scene) {
 	
@@ -51,15 +49,15 @@ public class Prison extends GameSlot {
 			    			, float pTouchAreaLocalY) {
 		    if (pSceneTouchEvent.isActionDown()) {
 			
-			gameSlotIsActionDown(row, column);
+			gameSlotIsActionDown();
 			
 		    } else if (pSceneTouchEvent.isActionUp()) {
 			    
-			gameSlotIsActionUp(row, column);
+			gameSlotIsActionUp();
 			    
 		    } else if (pSceneTouchEvent.isActionMove()) {
 			    
-			gameSlotIsActionMove(row, column, slotSprite, pSceneTouchEvent);
+			gameSlotIsActionMove(pSceneTouchEvent);
 			
 		    }
 		    return true;
@@ -74,14 +72,14 @@ public class Prison extends GameSlot {
 	}
     }
     
-    protected void gameSlotIsActionDown(int row, int column) {
+    protected void gameSlotIsActionDown() {
 	
 	Log.d("prison", "touch");
 	row = SlotMatrix.getPrisonPlaceRow();
 	column = SlotMatrix.getPrisonPlaceColumn();
     }
     
-    protected void gameSlotIsActionUp(int row, int column) {
+    protected void gameSlotIsActionUp() {
 	
 	if (row < SlotMatrix.getROWS() && column <SlotMatrix.getCOLUMNS() 
 		&& gameScene.getSlotMatrix().isSlotEmpty(row, column)) {
@@ -97,7 +95,7 @@ public class Prison extends GameSlot {
 	}
     }
     
-    protected void gameSlotIsActionMove(int row, int column, Sprite slotSprite, TouchEvent pSceneTouchEvent) {
+    protected void gameSlotIsActionMove(TouchEvent pSceneTouchEvent) {
 	
 	Log.d("prison", "move");
 	    

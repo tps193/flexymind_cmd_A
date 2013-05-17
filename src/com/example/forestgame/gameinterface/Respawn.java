@@ -18,8 +18,6 @@ public class Respawn extends GameSlot {
     private final static float RESPAWN_WIDTH = MainActivity.TEXTURE_WIDTH * 61 / 250;
     private final static float RESPAWN_HEIGHT = MainActivity.TEXTURE_HEIGHT * 303 / 2000;
     private static final int RESPAWN_Z_INDEX = 401;
-    private int row = SlotMatrix.getRespawnPlaceRow();
-    private int column = SlotMatrix.getRespawnPlaceColumn();
     
     public Respawn(GameScene scene) {
 	
@@ -66,15 +64,15 @@ public class Respawn extends GameSlot {
 
 		    if (pSceneTouchEvent.isActionDown()) {
 			
-			gameSlotIsActionDown(row, column);
+			gameSlotIsActionDown();
 			    
 		    } else if (pSceneTouchEvent.isActionUp()) {
 			
-			gameSlotIsActionUp(row, column);
+			gameSlotIsActionUp();
 			
 		    } else if (pSceneTouchEvent.isActionMove()) {
 			    
-			gameSlotIsActionMove(row, column, slotSprite, pSceneTouchEvent);
+			gameSlotIsActionMove(pSceneTouchEvent);
 			
 		    }
 		    return true;
@@ -89,7 +87,7 @@ public class Respawn extends GameSlot {
 	}
     }
     
-    protected void gameSlotIsActionDown(int row, int column) {
+    protected void gameSlotIsActionDown() {
 	
 	row = SlotMatrix.getRespawnPlaceRow();
 	column = SlotMatrix.getRespawnPlaceColumn();
@@ -98,7 +96,7 @@ public class Respawn extends GameSlot {
 	Log.d("resp", Integer.toString(column));
     }
     
-    protected void gameSlotIsActionUp(int row, int column) {
+    protected void gameSlotIsActionUp() {
 	
 	Log.d("resp", "no touch");
 	Log.d("resp", Integer.toString(row));
@@ -135,7 +133,7 @@ public class Respawn extends GameSlot {
 	}
     }
     
-    protected void gameSlotIsActionMove(int row, int column, Sprite slotSprite, TouchEvent pSceneTouchEvent) {
+    protected void gameSlotIsActionMove(TouchEvent pSceneTouchEvent) {
 	
 	Log.d("resp", "move");
 	

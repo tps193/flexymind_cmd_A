@@ -16,6 +16,9 @@ public abstract class GameSlot {
     protected TextureRegion slotTexture;
     protected Sprite slotSprite;
     
+    protected int row;
+    protected int column;
+    
     public GameSlot(GameScene scene) {
 	
 	gameScene = scene;
@@ -69,9 +72,9 @@ public abstract class GameSlot {
     
     protected abstract void show();
     
-    protected abstract void gameSlotIsActionDown(int row, int column);
+    protected abstract void gameSlotIsActionDown();
     
-    protected abstract void gameSlotIsActionUp(int row, int column);
+    protected abstract void gameSlotIsActionUp();
     
-    protected abstract void gameSlotIsActionMove(int row, int column, Sprite slotSprite, TouchEvent pSceneTouchEvent);
+    protected abstract void gameSlotIsActionMove(TouchEvent pSceneTouchEvent);
 }
