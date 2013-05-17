@@ -70,54 +70,11 @@ public class Respawn extends GameSlot {
 			    
 		    } else if (pSceneTouchEvent.isActionUp()) {
 			
-<<<<<<< HEAD
 			gameSlotIsActionUp(row, column);
 			
 		    } else if (pSceneTouchEvent.isActionMove()) {
 			    
 			gameSlotIsActionMove(row, column, slotSprite, pSceneTouchEvent);
-=======
-			Log.d("resp", "no touch");
-			Log.d("resp", Integer.toString(row));
-			Log.d("resp", Integer.toString(column));
-			
-			if (gameScene.isBacklightOn()){
-			    gameScene.detachChild(gameScene.getBacklight());
-			    gameScene.setBacklightOn(false);
-			}
-			    
-			if (column == SlotMatrix.getCOLUMNS()+1 && row  == SlotMatrix.getROWS()+1 
-				&& gameScene.getPrison().isEmpty()) {
-			    
-			    Log.d("resp", "newprison");
-			    gameScene.getPrison().addElement(element);
-			    clear();
-			    generateElement();
-			    
-			} else if (row < SlotMatrix.getROWS() && column < SlotMatrix.getCOLUMNS() 
-				&& gameScene.getSlotMatrix().isSlotEmpty(row, column)) {
-			    
-			    Log.d("resp", "newSlot");
-			    gameScene.getSlotMatrix().putToSlot(element, row, column);
-			    clear();
-			    generateElement();
-			    
-			} else {
-			    
-			    Log.d("resp", Integer.toString(row));
-			    Log.d("resp", Integer.toString(column));
-			    Log.d("resp","nowhere");
-			    backToGameSlot(element);
-			}
-			
-		    } else if (pSceneTouchEvent.isActionMove()) {
-			
-			Log.d("resp", "move");
-			    
-			float spriteLeftBorder = pSceneTouchEvent.getX() - this.getWidth() / 2;
-			float verticalOffset = (float)(this.getHeight() * gameScene.getOffsetCoef());
-			float spriteUpBorder = pSceneTouchEvent.getY() - this.getHeight() / 2 - verticalOffset;
->>>>>>> dev_backlight
 			
 		    }
 		    return true;
@@ -146,7 +103,13 @@ public class Respawn extends GameSlot {
 	Log.d("resp", "no touch");
 	Log.d("resp", Integer.toString(row));
 	Log.d("resp", Integer.toString(column));
+	
+	if (gameScene.isBacklightOn()) {
 	    
+	    gameScene.detachChild(gameScene.getBacklight());
+	    gameScene.setBacklightOn(false);
+	}
+	
 	if (column == SlotMatrix.getPrisonPlaceColumn() && row  == SlotMatrix.getPrisonPlaceRow() 
 		&& gameScene.getPrison().isEmpty()) {
 	    
@@ -175,7 +138,7 @@ public class Respawn extends GameSlot {
     protected void gameSlotIsActionMove(int row, int column, Sprite slotSprite, TouchEvent pSceneTouchEvent) {
 	
 	Log.d("resp", "move");
-	    
+	
 	float spriteLeftBorder = pSceneTouchEvent.getX() - slotSprite.getWidth() / 2;
 	float verticalOffset = (float)(slotSprite.getHeight() * gameScene.getOffsetCoef());
 	float spriteUpBorder = pSceneTouchEvent.getY() - slotSprite.getHeight() / 2 - verticalOffset;
