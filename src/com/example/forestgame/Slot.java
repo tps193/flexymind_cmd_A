@@ -48,7 +48,7 @@ class Slot {
 	    
 	} else {
 	    
-	    return (this.element.getName() == e.getName());
+	    return (this.element.getName().equals(e.getName()));
 	}
     }
     

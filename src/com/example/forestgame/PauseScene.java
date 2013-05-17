@@ -46,6 +46,8 @@ public class PauseScene extends Scene {
 		this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
 		//MainScene.gameScene.saveProgress();
 		MainActivity.mainActivity.saveProgress();
+		MainActivity.mainActivity.savePrison();
+		MainActivity.mainActivity.saveRespawn();
 		MainScene.showMainMenuScene();	    
 	    }
 	return true;
@@ -70,8 +72,7 @@ public class PauseScene extends Scene {
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
 		this.registerEntityModifier(new ScaleModifier(0.001f, 0.95f, 1.0f));
-		//MainScene.gameScene.slotMatrix.setMatrix(MainActivity.mainActivity.loadProgress());
-		MainScene.gameScene.slotMatrix.loadInit();
+		MainScene.gameScene.setSavedGame();
 		MainScene.showGameScene();
 	    }
 	    return true;

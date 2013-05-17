@@ -157,22 +157,36 @@ public class GameScene extends Scene {
     } 
     
     //возвращает имя элемента в тюрьме
-    public String savePrison() {
+    public String savePrisonName() {
 	if(prison.isEmpty()) return null;
 	return prison.getElement().getName();
     }
     
-    public void setPrison(Prison prison) {
+    public String saveRespawnName() {
+	if(respawn.isEmpty()) return null;
+	return respawn.getElement().getName();
+    }
+    
+    /*public void setPrison(Prison prison) {
 	this.prison = prison;
     }
     
     public void setRespawn(Respawn respawn) {
 	this.respawn = respawn;
-    }
+    }*/
     
     public void setSavedGame() {
-	slotMatrix.setMatrix(MainActivity.mainActivity.loadProgress());
-	
+	slotMatrix.loadInit();
+	prison.clear();
+	respawn.clear();
+	if(MainActivity.mainActivity.loadPrison().equals(null)) {}
+	else {
+	    prison.addElement(new Element(MainActivity.mainActivity.loadPrison()));
+	}
+	if(MainActivity.mainActivity.loadRespawn().equals(null)) {}
+	else {
+	    respawn.addElement(new Element(MainActivity.mainActivity.loadRespawn())); 
+	}
     }
    
 }

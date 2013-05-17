@@ -50,7 +50,7 @@ public class SlotMatrix {
 	return matrix[row][col].isEmpty();
     }
     
-    public void update() {
+    private void update() {
 	
 	checkSimilarElements();
 	viewSlots();
@@ -141,14 +141,15 @@ public class SlotMatrix {
             }
         }
 	setMatrix(MainActivity.mainActivity.loadProgress());
-	viewSlots();
+	//viewSlots();
+	update();
     }
     
     
     //устанавливает загруженную матрицу
-    public void setMatrix(String[][] namesMatrix) {
-        for(int i = 0; i < 6; i++) {
-            for(int j = 0; j < 6; j++) {
+    private void setMatrix(String[][] namesMatrix) {
+        for(int i = 0; i < ROWS; i++) {
+            for(int j = 0; j < COLUMNS; j++) {
         	if(namesMatrix[i][j] == null) matrix[i][j] = new Slot();
         	else {
         	    matrix[i][j] = new Slot();

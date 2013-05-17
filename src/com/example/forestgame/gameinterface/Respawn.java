@@ -47,9 +47,11 @@ public class Respawn {
 	return element;
     }
     
-    public void setElement(Element e) {
+    public void addElement(Element e) {
 	
 	element = e;
+	isEmpty = false;
+	show();
     }
     
     public void clear() {

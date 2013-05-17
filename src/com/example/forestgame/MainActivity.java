@@ -83,7 +83,9 @@ public class MainActivity extends SimpleBaseGameActivity {
     public Sound mClick;
     
     private String[][] namesMatrix;
-    String[] subNamesMatrix = new String[2];
+    private String prisonName;
+    private String respawnName;
+    //String[] subNamesMatrix = new String[2];
     
 
     @Override
@@ -380,6 +382,42 @@ public class MainActivity extends SimpleBaseGameActivity {
 	}
     }
     
+    public void savePrison() {
+	try {
+	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("savesprison", 0));
+	    //oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
+	    oos.writeObject(MainScene.gameScene.savePrisonName());
+	    //oos.writeObject(MainScene.gameScene.respawn.getElement().getName());
+	    oos.flush();
+	    oos.close();
+	    Log.d("File out", "write in prison");
+	} catch(FileNotFoundException e) {
+	   e.printStackTrace();
+	   Log.d("File out", "not found");
+	} catch(IOException e) {
+	    e.printStackTrace();
+	    Log.d("File out", "IO exception");
+	}
+    }
+    
+    public void saveRespawn() {
+	try {
+	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("savesrespawn", 0));
+	    //oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
+	    //oos.writeObject(MainScene.gameScene.prison.getElement().getName());
+	    oos.writeObject(MainScene.gameScene.saveRespawnName());
+	    oos.flush();
+	    oos.close();
+	    Log.d("File out", "write in resp " + MainScene.gameScene.respawn.getElement().getName());
+	} catch(FileNotFoundException e) {
+	   e.printStackTrace();
+	   Log.d("File out", "not found");
+	} catch(IOException e) {
+	    e.printStackTrace();
+	    Log.d("File out", "IO exception");
+	}
+    }
+    
     public String[][] loadProgress() {
 	try {
 	    ObjectInputStream ois = new ObjectInputStream(openFileInput("saves"));
@@ -399,5 +437,47 @@ public class MainActivity extends SimpleBaseGameActivity {
 	}
 	
 	return namesMatrix;
+    }
+    
+    public String loadPrison() {
+	try {
+	    ObjectInputStream ois = new ObjectInputStream(openFileInput("savesprison"));
+	    //namesMatrix = (String[][]) ois.readObject();
+	    prisonName = (String) ois.readObject();
+	    //String respawnName = (String) ois.readObject();
+	    Log.d("File in", "read");
+	} catch(FileNotFoundException e) {
+	    e.printStackTrace();
+	    Log.d("File in", "not found");
+	} catch(IOException e) {
+	    e.printStackTrace();
+	    Log.d("File in", "IO exception");
+	} catch(ClassNotFoundException e) {
+	    e.printStackTrace();
+	    Log.d("File in", "ClassNotFoundException");
+	}
+	
+	return prisonName;
+    }
+    
+    public String loadRespawn() {
+	try {
+	    ObjectInputStream ois = new ObjectInputStream(openFileInput("savesrespawn"));
+	    //namesMatrix = (String[][]) ois.readObject();
+	    //prisonName = (String) ois.readObject();
+	    respawnName = (String) ois.readObject();
+	    Log.d("File in", "read in resp " + respawnName);
+	} catch(FileNotFoundException e) {
+	    e.printStackTrace();
+	    Log.d("File in", "not found");
+	} catch(IOException e) {
+	    e.printStackTrace();
+	    Log.d("File in", "IO exception");
+	} catch(ClassNotFoundException e) {
+	    e.printStackTrace();
+	    Log.d("File in", "ClassNotFoundException");
+	}
+	
+	return respawnName;
     }
 }
