@@ -74,6 +74,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     public StrokeFont tCaptions;
     private static ITexture creditsCaps;
     private static ITexture creditsNames;
+    private static ITexture scoresAtlas;
     public StrokeFont tPause;
     public StrokeFont tResume;
     private static ITexture pauseLabel;
@@ -81,6 +82,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     public StrokeFont tGameOver;
     public StrokeFont tMainMenu;
     public StrokeFont tNewGame;
+    public StrokeFont tScores;
     private static ITexture GameOver;
     private static ITexture MainMenu;
     private static ITexture NewGame;
@@ -224,6 +226,11 @@ public class MainActivity extends SimpleBaseGameActivity {
 						, 2048
 						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	
+	scoresAtlas = new BitmapTextureAtlas(	this.getTextureManager()
+						, 2048
+						, 1024
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
 	tCaptions = new StrokeFont(this.getFontManager()
 				   , creditsCaps
 				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
@@ -232,6 +239,15 @@ public class MainActivity extends SimpleBaseGameActivity {
 				   , new Color(1.0f, 0.6f, 0.0f)
 				   , 2
 				   , new Color(1.0f, 0.2f, 0.0f));
+	
+	tScores = new StrokeFont(this.getFontManager()
+                		 , scoresAtlas
+                		 , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                		 , 100
+                		 , true
+                		 , new Color(1.0f, 0.6f, 0.0f)
+                		 , 2
+                		 , new Color(1.0f, 0.2f, 0.0f));
 	
 	tDevNames = new StrokeFont(this.getFontManager()
 				   , creditsNames

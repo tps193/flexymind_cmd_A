@@ -6,6 +6,7 @@ import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 
 import android.util.Log;
@@ -51,6 +52,8 @@ public class GameScene extends Scene {
     private static final float PRISON_POSITION_RIGHT = PRISON_POSITION_LEFT + CAGE_WIDTH;
     private static final float PRISON_POSITION_BOTTOM = PRISON_POSITION_UP + CAGE_HEIGHT;
     private static double OFFSET_ON_MOVING;
+    
+    private Text scoresText;
     
     private Sprite background = new Sprite( 0
 	                              , 0
@@ -204,12 +207,12 @@ public class GameScene extends Scene {
 			
 		     Log.d("slotPrison x ",Integer.toString(7));
 		     Log.d("slotPrison y ",Integer.toString(7));
-		     putInRow = SlotMatrix.getROWS()+1;
-		     putInColum = SlotMatrix.getCOLUMNS()+1;
+		     putInRow = SlotMatrix.getPrisonPlaceRow();
+		     putInColum = SlotMatrix.getPrisonPlaceRow();
 		     break;
 		 } else {
-		     putInRow = SlotMatrix.getROWS()+20;
-		     putInColum = SlotMatrix.getCOLUMNS()+20;
+		     putInRow = SlotMatrix.getMilkPointRow();
+		     putInColum = SlotMatrix.getMilkPointColumn();
 		     flg=false;
 		 }
 		   
@@ -230,5 +233,16 @@ public class GameScene extends Scene {
 	
 	return putInColum;
     } 
-   
+    
+    public void setScores(int scores) {
+	Log.d("scores",""+scores);
+	detachChild(scoresText);
+	scoresText=null;
+	scoresText= new Text(	MainActivity.TEXTURE_WIDTH * 1 / 6
+		, MainActivity.TEXTURE_HEIGHT / 200
+		, MainActivity.mainActivity.tScores
+		, Integer.toString(scores)
+		, MainActivity.mainActivity.getVertexBufferObjectManager());
+	attachChild(scoresText);
+    }
 }

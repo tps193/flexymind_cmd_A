@@ -63,6 +63,7 @@ public class SlotMatrix {
     private void update() {
 	
 	checkSimilarElements();
+	gameScene.setScores(getScore());
 	viewSlots();
 	
 	filledSlots = 0;
@@ -376,5 +377,15 @@ public class SlotMatrix {
     public static int getRespawnPlaceColumn() {
 	
 	return ROWS + 2;
+    }
+    
+    public static int getMilkPointRow() {
+	
+	return ROWS + 20;
+    }
+
+    public static int getMilkPointColumn() {
+	
+	return ROWS + 20;
     }
 }
