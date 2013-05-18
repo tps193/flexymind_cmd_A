@@ -349,6 +349,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	tPause.load();
 	tResume.load();
 	tGameOver.load();
+	tScores.load();
 	tMainMenu.load();
 	tNewGame.load();
     }
