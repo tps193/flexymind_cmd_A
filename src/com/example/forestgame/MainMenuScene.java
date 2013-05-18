@@ -1,5 +1,7 @@
 package com.example.forestgame;
 
+import java.io.IOException;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import org.andengine.entity.scene.Scene;
@@ -123,8 +125,12 @@ public class MainMenuScene extends Scene {
 		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
 		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
 		    MainActivity.mainActivity.mClick.play();
-		    MainScene.gameScene.setSavedGame();
-		    MainScene.showGameScene();
+		    try {
+			MainScene.gameScene.setSavedGame();
+			MainScene.showGameScene();
+		    } catch(IOException e) {
+			
+		    }
 		}
 		return true;
 	    }
@@ -162,7 +168,7 @@ public class MainMenuScene extends Scene {
 	    
 	    MainActivity.mainActivity.mClick.play();
 	    MainScene.showScoresScene();
-	    MainScene.gameScene.slotMatrix.loadInit();
+	    //MainScene.gameScene.slotMatrix.loadInit();
 	}
 	
 		

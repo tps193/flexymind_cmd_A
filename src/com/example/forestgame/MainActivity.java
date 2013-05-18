@@ -511,7 +511,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	}
     }
 
-    public String[][] loadProgress() {
+    public String[][] loadProgress() throws IOException {
 	
 	try {
 	    
@@ -521,16 +521,6 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    //String respawnName = (String) ois.readObject();
 	    Log.d("File in", "read");
 	    
-	} catch(FileNotFoundException e) {
-	    
-	    e.printStackTrace();
-	    Log.d("File in", "not found");
-	    
-	} catch(IOException e) {
-	    
-	    e.printStackTrace();
-	    Log.d("File in", "IO exception");
-	    
 	} catch(ClassNotFoundException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "ClassNotFoundException");
@@ -539,7 +529,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	return namesMatrix;
     }
     
-    public String loadPrison() {
+    public String loadPrison() throws IOException {
 	prisonName=null;
 	try {
 	    
@@ -548,16 +538,6 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    prisonName = (String) ois.readObject();
 	    //String respawnName = (String) ois.readObject();
 	    Log.d("File in", "read");
-	    
-	} catch(FileNotFoundException e) {
-	    
-	    e.printStackTrace();
-	    Log.d("File in", "not found");
-	    
-	} catch(IOException e) {
-	    
-	    e.printStackTrace();
-	    Log.d("File in", "IO exception");
 	    
 	} catch(ClassNotFoundException e) {
 	    
@@ -568,7 +548,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	return prisonName;
     }
     
-    public String loadRespawn() {
+    public String loadRespawn() throws IOException {
 	respawnName=null;
 	try {
 	    
@@ -579,16 +559,6 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 	    Log.d("File in", "read in resp ");
 
-	} catch(FileNotFoundException e) {
-	    
-	    e.printStackTrace();
-	    Log.d("File in", "not found");
-	    
-	} catch(IOException e) {
-	    
-	    e.printStackTrace();
-	    Log.d("File in", "IO exception");
-	    
 	} catch(ClassNotFoundException e) {
 	    
 	    e.printStackTrace();

@@ -1,5 +1,7 @@
 package com.example.forestgame;
 
+import java.io.IOException;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import org.andengine.entity.modifier.AlphaModifier;
@@ -317,7 +319,7 @@ public class GameScene extends Scene {
 	return respawn.getElement().getName();
     }
     
-    public void setSavedGame() {
+    public void setSavedGame() throws IOException {
 	
 	slotMatrix.loadInit();
 	prison.clear();
