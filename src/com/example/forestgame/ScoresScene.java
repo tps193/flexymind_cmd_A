@@ -26,10 +26,10 @@ public class ScoresScene extends Scene {
     
     public void show() {
 	ScoresTable scoresTable = new ScoresTable();
-	scoresTable.createFile();
-	scoresTable.addScores(1000);
-	scoresTable.sort();
-	scoresTable.save();
+	//scoresTable.createFile();
+	//scoresTable.addScores(1000);
+	//scoresTable.sort();
+	//scoresTable.save();
 	scoresTable.show();
 	setVisible(true);
 	setIgnoreUpdate(false);

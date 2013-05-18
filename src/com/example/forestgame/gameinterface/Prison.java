@@ -81,6 +81,12 @@ public class Prison extends GameSlot {
     
     protected void gameSlotIsActionUp() {
 	
+	if (gameScene.isBacklightOn()) {
+	    
+	    gameScene.detachChild(gameScene.getBacklight());
+	    gameScene.setBacklightOn(false);
+	}
+	
 	if (row < SlotMatrix.getROWS() && column <SlotMatrix.getCOLUMNS() 
 		&& gameScene.getSlotMatrix().isSlotEmpty(row, column)) {
 		

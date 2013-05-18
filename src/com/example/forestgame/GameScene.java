@@ -221,6 +221,7 @@ public class GameScene extends Scene {
 		     if (backlightOn) {
 			 
 			 detachChild(backlight);
+			 setBacklightOn(false);
 		     }
 		     break;
 		     
@@ -232,6 +233,7 @@ public class GameScene extends Scene {
 		     if (backlightOn) {
 			 
 			 detachChild(backlight);
+			 setBacklightOn(false);
 		     }
 		 }
 	     }
