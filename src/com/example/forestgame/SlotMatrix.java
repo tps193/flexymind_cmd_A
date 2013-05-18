@@ -106,6 +106,8 @@ public class SlotMatrix {
 		i--;
 	    }
 	}
+	score=0;
+	gameScene.setScores(score);
     }
     
     public int getScore() {
@@ -169,8 +171,8 @@ public class SlotMatrix {
             }
         }
 	setMatrix(MainActivity.mainActivity.loadProgress());
-	//viewSlots();
-	update();
+	viewSlots();
+	//update();
     }
     
     

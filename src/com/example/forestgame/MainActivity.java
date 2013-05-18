@@ -540,7 +540,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     }
     
     public String loadPrison() {
-	
+	prisonName=null;
 	try {
 	    
 	    ObjectInputStream ois = new ObjectInputStream(openFileInput("savesprison"));
@@ -569,7 +569,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     }
     
     public String loadRespawn() {
-	
+	respawnName=null;
 	try {
 	    
 	    ObjectInputStream ois = new ObjectInputStream(openFileInput("savesrespawn"));

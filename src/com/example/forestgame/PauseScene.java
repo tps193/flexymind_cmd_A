@@ -120,6 +120,9 @@ public class PauseScene extends Scene {
 
 		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
 		MainActivity.mainActivity.mClick.play();
+		MainActivity.mainActivity.saveProgress();
+		MainActivity.mainActivity.saveRespawn();
+		MainActivity.mainActivity.savePrison();
 		MainScene.showMainMenuScene();
 	    }
 	    return true;

@@ -100,8 +100,8 @@ public class MainMenuScene extends Scene {
 	}
 	
 
-	Sprite ButtonResume = new Sprite( MainActivity.TEXTURE_WIDTH * 125 / 400
-					, MainActivity.TEXTURE_HEIGHT * 67 / 128
+	Sprite buttonResume = new Sprite( MainActivity.TEXTURE_WIDTH * 125 / 400
+					, MainActivity.TEXTURE_HEIGHT * 2 / 6
 					, MainActivity.TEXTURE_WIDTH * 150 / 400
 					, MainActivity.TEXTURE_HEIGHT * 10 / 128
 					, MainActivity.mainActivity.textureResume
@@ -305,12 +305,14 @@ public class MainMenuScene extends Scene {
 	attachChild(buttonExit);
 	attachChild(muteOff);
 	attachChild(muteOn);
+	attachChild(buttonResume);
 	muteOn.setVisible(true);
 	registerTouchArea(buttonPlay);
 	registerTouchArea(buttonScores);
 	registerTouchArea(buttonCredits);
 	registerTouchArea(buttonExit);
 	registerTouchArea(muteOff);
+	registerTouchArea(buttonResume);
 	setTouchAreaBindingOnActionDownEnabled(true);
 	setTouchAreaBindingOnActionMoveEnabled(true);
     }
