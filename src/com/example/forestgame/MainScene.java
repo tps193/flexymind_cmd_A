@@ -7,8 +7,8 @@ import android.view.KeyEvent;
 
 public class MainScene extends Scene {
     
-    private enum GameState { MAIN_MENU, GAME_RUNNING, SHOW_SCORES, SHOW_CREDITS, PAUSE, GAME_OVER };
-    private static GameState gameState;
+    public enum GameState { MAIN_MENU, GAME_RUNNING, SHOW_SCORES, SHOW_CREDITS, PAUSE, GAME_OVER };
+    public static GameState gameState;
     
     private static MainMenuScene mainMenuScene = new MainMenuScene();
     public static GameScene gameScene = new GameScene();

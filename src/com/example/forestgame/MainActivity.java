@@ -382,9 +382,32 @@ public class MainActivity extends SimpleBaseGameActivity {
         super.onResume();
         System.gc();
         if (this.isGameLoaded()) {
-            MainActivity.mainActivity.mMusic.play(); 
-            MainActivity.mainActivity.mGameStart.play();
-            MainActivity.mainActivity.mGameMusic.play();
+            switch(MainScene.gameState) {
+            	case MAIN_MENU:
+            	    MainActivity.mainActivity.mMusic.play();
+            	    break;
+            	    
+            	case GAME_RUNNING: 
+                    MainActivity.mainActivity.mGameStart.play();
+                    MainActivity.mainActivity.mGameMusic.play();
+            	    break;
+            	    
+            	case SHOW_CREDITS:
+            	    MainActivity.mainActivity.mMusic.play();
+        	    break;
+        	    
+        	case SHOW_SCORES:
+        	    MainActivity.mainActivity.mMusic.play();
+        	    break;
+        	    
+        	case PAUSE:
+        	    MainActivity.mainActivity.mGameMusic.play();
+        	    break;
+        	    
+        	case GAME_OVER:
+        	    MainActivity.mainActivity.mGameMusic.play();
+        	    break;
+            }
         }
     }
     

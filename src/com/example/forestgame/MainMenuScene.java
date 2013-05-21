@@ -95,7 +95,8 @@ public class MainMenuScene extends Scene {
 	};
 
 	private void buttonPlayPress() {
-	    
+
+	    MainActivity.mainActivity.mClick.play();
 	    MainScene.getGameScene().getSlotMatrix().reInit();
 	    MainScene.getGameScene().getPrison().clear();
 	    MainScene.getGameScene().getRespawn().clear();
@@ -121,7 +122,7 @@ public class MainMenuScene extends Scene {
 		    applyTouchEffects(buttonResume);
 
 		} else if (pSceneTouchEvent.isActionUp()) {
-
+		    MainActivity.mainActivity.mClick.play();
 		    Log.d("ButtonResume", "no touch");
 		    applyUntouchEffects(buttonResume);
 		    try {
@@ -162,6 +163,7 @@ public class MainMenuScene extends Scene {
 	};
 
 	private void buttonScoresClick() {
+	    MainActivity.mainActivity.mClick.play();
 	    MainScene.showScoresScene();
 	    //MainScene.gameScene.slotMatrix.loadInit();
 	}
@@ -195,6 +197,7 @@ public class MainMenuScene extends Scene {
 	
 	private void buttonCreditsClick() {
 
+	    MainActivity.mainActivity.mClick.play();
 	    MainScene.showCreditsScene();
 	}
 		    
@@ -226,6 +229,8 @@ public class MainMenuScene extends Scene {
 	};
 	
 	private void buttonExitCLick() {
+
+	    MainActivity.mainActivity.mClick.play();
 	    MainActivity.mainActivity.finish();
 	    if (MainActivity.mainActivity.isFinishing() == false) {
 		
@@ -293,19 +298,19 @@ public class MainMenuScene extends Scene {
 	attachChild(background);
 	attachChild(title);
 	attachChild(buttonPlay);
+	attachChild(buttonResume);
 	attachChild(buttonScores);
 	attachChild(buttonCredits);
 	attachChild(buttonExit);
 	attachChild(muteOff);
 	attachChild(muteOn);
-	attachChild(buttonResume);
 	muteOn.setVisible(true);
 	registerTouchArea(buttonPlay);
+	registerTouchArea(buttonResume);
 	registerTouchArea(buttonScores);
 	registerTouchArea(buttonCredits);
 	registerTouchArea(buttonExit);
 	registerTouchArea(muteOff);
-	registerTouchArea(buttonResume);
 	setTouchAreaBindingOnActionDownEnabled(true);
 	setTouchAreaBindingOnActionMoveEnabled(true);
 	
@@ -327,6 +332,13 @@ public class MainMenuScene extends Scene {
 	MainActivity.mainActivity.mGameMusic.pause();
 	MainActivity.mainActivity.mMusic.play();
    	background.registerEntityModifier(MainActivity.HIDE_ALPHA_MODIFIER.deepCopy());
+   	
+   	applyUntouchEffects(buttonPlay);
+   	applyUntouchEffects(buttonResume);
+   	applyUntouchEffects(buttonScores);
+   	applyUntouchEffects(buttonCredits);
+   	applyUntouchEffects(buttonExit);
+   	
     }
     
     public void hide() {
@@ -343,6 +355,5 @@ public class MainMenuScene extends Scene {
     private void applyUntouchEffects(Sprite button) {
 	button.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
 	button.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
-	MainActivity.mainActivity.mClick.play();
     }
 }

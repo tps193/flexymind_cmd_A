@@ -1,6 +1,5 @@
 package com.example.forestgame;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -12,7 +11,6 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 
-import android.os.Environment;
 import android.util.Log;
 
 import com.example.forestgame.element.Element;
