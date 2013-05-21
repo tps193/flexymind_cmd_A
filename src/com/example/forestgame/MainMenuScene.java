@@ -82,14 +82,12 @@ public class MainMenuScene extends Scene {
 		if (pSceneTouchEvent.isActionDown()) {
 		    
 		    Log.d("ButtonPlay", "touch");
-		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyTouchEffects(buttonPlay);
 		    
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
 		    Log.d("ButtonPlay", "no touch");
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyUntouchEffects(buttonPlay);
 		    buttonPlayPress();
 		}
 		return true;
@@ -102,7 +100,6 @@ public class MainMenuScene extends Scene {
 	    MainScene.getGameScene().getPrison().clear();
 	    MainScene.getGameScene().getRespawn().clear();
 	    MainScene.getGameScene().getRespawn().generateElement();
-	    MainActivity.mainActivity.mClick.play();
 	    MainScene.showGameScene();
 	}
 	
@@ -117,19 +114,16 @@ public class MainMenuScene extends Scene {
 	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
 		    			, float pTouchAreaLocalX
 		    			, float pTouchAreaLocalY) {
-
+		
 		if (pSceneTouchEvent.isActionDown()) {
 
 		    Log.d("ButtonResume", "touch");
-		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyTouchEffects(buttonResume);
 
 		} else if (pSceneTouchEvent.isActionUp()) {
 
 		    Log.d("ButtonResume", "no touch");
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
-		    MainActivity.mainActivity.mClick.play();
+		    applyUntouchEffects(buttonResume);
 		    try {
 			MainScene.gameScene.setSavedGame();
 			MainScene.showGameScene();
@@ -155,14 +149,12 @@ public class MainMenuScene extends Scene {
 		if (pSceneTouchEvent.isActionDown()) {
 		    
 		    Log.d("ButtonScores", "touch");
-		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyTouchEffects(buttonScores);
 		    
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
 		    Log.d("ButtonScores", "no touch");
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyUntouchEffects(buttonScores);
 		    buttonScoresClick();
 		}
 		return true;
@@ -170,8 +162,6 @@ public class MainMenuScene extends Scene {
 	};
 
 	private void buttonScoresClick() {
-	    
-	    MainActivity.mainActivity.mClick.play();
 	    MainScene.showScoresScene();
 	    //MainScene.gameScene.slotMatrix.loadInit();
 	}
@@ -191,14 +181,12 @@ public class MainMenuScene extends Scene {
 		if (pSceneTouchEvent.isActionDown()) {
 		    
 		    Log.d("ButtonCredits", "touch");
-		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyTouchEffects(buttonCredits);
 		    
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
 		    Log.d("ButtonCredits", "no touch");
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyUntouchEffects(buttonCredits);
 		    buttonCreditsClick();
 		}
 		return true;
@@ -207,7 +195,6 @@ public class MainMenuScene extends Scene {
 	
 	private void buttonCreditsClick() {
 
-	    MainActivity.mainActivity.mClick.play();
 	    MainScene.showCreditsScene();
 	}
 		    
@@ -226,14 +213,12 @@ public class MainMenuScene extends Scene {
 		if (pSceneTouchEvent.isActionDown()) {
 		    
 		    Log.d("ButtonExit", "touch");
-		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyTouchEffects(buttonExit);
 		    
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
 		    Log.d("ButtonExit", "no touch");
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyUntouchEffects(buttonExit);
 		    buttonExitCLick();
 		}
 		return true;
@@ -241,7 +226,6 @@ public class MainMenuScene extends Scene {
 	};
 	
 	private void buttonExitCLick() {
-	    MainActivity.mainActivity.mClick.play();
 	    MainActivity.mainActivity.finish();
 	    if (MainActivity.mainActivity.isFinishing() == false) {
 		
@@ -265,14 +249,12 @@ public class MainMenuScene extends Scene {
 		if (pSceneTouchEvent.isActionDown()) {
 
 		    Log.d("MuteOff", "touch");
-		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyTouchEffects(muteOff);
 
 		} else if (pSceneTouchEvent.isActionUp()) {
 
 		    Log.d("MuteOff", "no touch");
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyUntouchEffects(muteOff);
 		    muteIconCLick();
 		}
 		return true;
@@ -351,5 +333,16 @@ public class MainMenuScene extends Scene {
    	setVisible(false);
    	background.setAlpha(0.5f);
    	setIgnoreUpdate(true);
+    }
+    
+    private void applyTouchEffects(Sprite button) {
+	button.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+	button.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+    }
+    
+    private void applyUntouchEffects(Sprite button) {
+	button.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+	button.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+	MainActivity.mainActivity.mClick.play();
     }
 }
