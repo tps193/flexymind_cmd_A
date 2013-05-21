@@ -39,9 +39,12 @@ public class GameScene extends Scene {
     private static final float CAGE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 313 / 2000;
     
     private static final float PAUSE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 516 / 625;
-    private static final float PAUSE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1820 / 2000;
+    private static final float PAUSE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 17 / 2000;
     private static final float PAUSE_WIDTH = MainActivity.TEXTURE_WIDTH * 30 / 250;
     private static final float PAUSE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 18 / 250;
+    
+    private static final float SCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 4 / 60;
+    private static final float SCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT *3 / 200;
     
     private static final int CAGE_Z_INDEX = 9999;
     private static final int PAUSE_SCENE_Z_INDEX = 10000;
@@ -95,15 +98,67 @@ public class GameScene extends Scene {
 	if (pSceneTouchEvent.isActionDown()) {
 	    
 	    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER);
+	    this.setAlpha(0.5f);
 	} else if (pSceneTouchEvent.isActionUp()) {
 	    
 	    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER);
 	    MainActivity.mainActivity.mClick.play();
 	    MainScene.showInGamePause();
+	    this.setAlpha(1.0f);
 	}
 	return true;
 	}
     };
+    
+    
+    private Sprite muteOff = new Sprite( MainMenuScene.MUTE_POSITION_LEFT
+	    			       , MainMenuScene.MUTE_POSITION_UP
+	    			       , MainMenuScene.MUTE_WIDTH
+	    			       , MainMenuScene.MUTE_HEIGHT
+	    			       , MainActivity.mainActivity.textureMuteOff
+	    			       , MainActivity.mainActivity.getVertexBufferObjectManager()) {
+
+	@Override
+	public boolean onAreaTouched( TouchEvent pSceneTouchEvent
+				    , float pTouchAreaLocalX
+				    , float pTouchAreaLocalY) {
+
+	    if (pSceneTouchEvent.isActionDown()) {
+
+		Log.d("MuteOff", "touch");
+		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+		this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+
+	    } else if (pSceneTouchEvent.isActionUp()) {
+
+		Log.d("MuteOff", "no touch");
+		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		muteIconCLick();
+	    }
+	    return true;
+	}
+    };
+
+
+    private Sprite muteOn = new Sprite( MainMenuScene.MUTEON_POSITION_LEFT
+	    			      , MainMenuScene.MUTEON_POSITION_UP
+	    			      , MainMenuScene.MUTEON_WIDTH
+	    			      , MainMenuScene.MUTEON_HEIGHT
+	    			      , MainActivity.mainActivity.textureMuteOn
+	    			      , MainActivity.mainActivity.getVertexBufferObjectManager());
+
+    private void muteIconCLick() {	    
+	if (!MainActivity.isMute) {
+	    MainActivity.mainActivity.muteSounds();
+	    muteOn.setVisible(false);
+	} else {
+	    MainActivity.mainActivity.unmuteSounds();
+	    muteOn.setVisible(true);
+	}
+    }
+    
+    
 
     public GameScene() {
 	
@@ -116,7 +171,11 @@ public class GameScene extends Scene {
 	attachChild(slots);
 	attachChild(cage);
 	attachChild(pauseIcon);
+	attachChild(muteOff);
+	attachChild(muteOn);
+	muteOn.setVisible(true);
 	registerTouchArea(pauseIcon);
+	registerTouchArea(muteOff);
 	
 	prison = new Prison(this);
 	respawn = new Respawn(this);
@@ -126,6 +185,8 @@ public class GameScene extends Scene {
 	attachChild(gameOverScene);
 	pauseScene.hide();
 	gameOverScene.hide();
+
+   	MainActivity.mainActivity.mGameMusic.play();
 	
 	cage.setZIndex(CAGE_Z_INDEX);
 	pauseScene.setZIndex(PAUSE_SCENE_Z_INDEX);
@@ -148,13 +209,18 @@ public class GameScene extends Scene {
 	setVisible(true);
 	setIgnoreUpdate(false);
 	MainActivity.mainActivity.mMusic.pause();
+   	MainActivity.mainActivity.mGameMusic.play();
 	MainActivity.mainActivity.mGameStart.play();
+	if (!MainActivity.isMute) {
+	    muteOn.setVisible(true);
+	} else {
+	    muteOn.setVisible(false);
+	}
    	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER.deepCopy());
    	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {
-	
    	setVisible(false);
    	setIgnoreUpdate(true);
    	background.setAlpha(1.0f);
@@ -254,11 +320,11 @@ public class GameScene extends Scene {
 	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
 	    
 	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j)
-                	    	   , SlotMatrix.getSlotPositionUp(i)
-                	    	   , SlotMatrix.getSlotWidth()
-                	    	   , SlotMatrix.getSlotHeight()
-                	    	   , MainActivity.mainActivity.storage.getTexture("gfx_empty.png")
-                	    	   , MainActivity.mainActivity.getVertexBufferObjectManager());
+                	    	 , SlotMatrix.getSlotPositionUp(i)
+                	    	 , SlotMatrix.getSlotWidth()
+                	    	 , SlotMatrix.getSlotHeight()
+                	    	 , MainActivity.mainActivity.storage.getTexture("gfx_empty.png")
+                	    	 , MainActivity.mainActivity.getVertexBufferObjectManager());
      
             backlight.setAlpha(BACKLIGHT_ALPHA);
 	    attachChild(backlight);
@@ -283,11 +349,11 @@ public class GameScene extends Scene {
 	detachChild(scoresText);
 	scoresText=null;
 	
-	scoresText= new Text(MainActivity.TEXTURE_WIDTH * 1 / 6
-			     , MainActivity.TEXTURE_HEIGHT / 200
-			     , MainActivity.mainActivity.tScores
-			     , Integer.toString(scores)
-			     , MainActivity.mainActivity.getVertexBufferObjectManager());
+	scoresText= new Text(SCORES_POSITION_LEFT
+			   , SCORES_POSITION_UP
+			   , MainActivity.mainActivity.tScores
+			   , "Scores: "+Integer.toString(scores)
+			   , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
 	attachChild(scoresText);
     }

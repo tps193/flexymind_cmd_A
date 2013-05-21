@@ -35,6 +35,8 @@ public class Prison extends GameSlot {
 	
 	if(!isEmpty) {
 	    
+	    MainActivity.mainActivity.mStep.play();
+	    
 	    slotTexture = MainActivity.mainActivity.storage.getTexture(TableOfElements.getTextureName(element));
 	    slotSprite = new Sprite ( PRISON_POSITION_LEFT
 		    		      , PRISON_POSITION_UP

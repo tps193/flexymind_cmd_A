@@ -19,34 +19,39 @@ public class MainMenuScene extends Scene {
     private static final float TITLE_HEIGHT = MainActivity.TEXTURE_HEIGHT / 4;
     
     private static final float BUTTON_PLAY_POSITION_LEFT = MainActivity.TEXTURE_WIDTH / 4;
-    private static final float BUTTON_PLAY_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 52 / 128;
-    private static final float BUTTON_PLAY_WIDTH = MainActivity.TEXTURE_WIDTH / 2;
+    private static final float BUTTON_PLAY_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 48 / 128;
+    private static final float BUTTON_PLAY_WIDTH = MainActivity.TEXTURE_WIDTH * 2 / 4;
     private static final float BUTTON_PLAY_HEIGHT = MainActivity.TEXTURE_HEIGHT * 12 / 128;
     
-    private static final float BUTTON_SCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH / 4;
-    private static final float BUTTON_SCORE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 69 / 128;
-    private static final float BUTTON_SCORES_WIDTH = MainActivity.TEXTURE_WIDTH / 2;
-    private static final float BUTTON_SCORES_HEIGHT = MainActivity.TEXTURE_HEIGHT * 12 / 128;
+    private static final float BUTTON_RESUME_POSITION_LEFT =  MainActivity.TEXTURE_WIDTH * 125 / 400;
+    private static final float BUTTON_RESUME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 67 / 128;
+    private static final float BUTTON_RESUME_WIDTH = MainActivity.TEXTURE_WIDTH * 150 / 400;
+    private static final float BUTTON_RESUME_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
     
-    private static final float BUTTON_CREDITS_POSITION_LEFT = MainActivity.TEXTURE_WIDTH / 4;
-    private static final float BUTTON_CREDITS_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 86 / 128;
-    private static final float BUTTON_CREDITS_WIDTH = MainActivity.TEXTURE_WIDTH / 2;
-    private static final float BUTTON_CREDITS_HEIGHT = MainActivity.TEXTURE_HEIGHT * 12 / 128;
+    private static final float BUTTON_SCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 125 / 400;
+    private static final float BUTTON_SCORE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 79 / 128;
+    private static final float BUTTON_SCORES_WIDTH = MainActivity.TEXTURE_WIDTH * 150 / 400;
+    private static final float BUTTON_SCORES_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
     
-    private static final float BUTTON_EXIT_POSITION_LEFT = MainActivity.TEXTURE_WIDTH / 4;
+    private static final float BUTTON_CREDITS_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 125 / 400;
+    private static final float BUTTON_CREDITS_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 91 / 128;
+    private static final float BUTTON_CREDITS_WIDTH = MainActivity.TEXTURE_WIDTH * 150 / 400;
+    private static final float BUTTON_CREDITS_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
+    
+    private static final float BUTTON_EXIT_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 125 / 400;
     private static final float BUTTON_EXIT_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 103 / 128;
-    private static final float BUTTON_EXIT_WIDTH = MainActivity.TEXTURE_WIDTH / 2;
-    private static final float BUTTON_EXIT_HEIGHT = MainActivity.TEXTURE_HEIGHT * 12 / 128;
+    private static final float BUTTON_EXIT_WIDTH = MainActivity.TEXTURE_WIDTH * 150 / 400;
+    private static final float BUTTON_EXIT_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
     
-    private static final float MUTE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 520 / 625;
-    private static final float MUTE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1850 / 2000;
-    private static final float MUTE_WIDTH = MainActivity.TEXTURE_WIDTH * 20 / 250;
-    private static final float MUTE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 18 / 250;
+    public static final float MUTE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 520 / 625;
+    public static final float MUTE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1850 / 2000;
+    public static final float MUTE_WIDTH = MainActivity.TEXTURE_WIDTH * 36 / 250;
+    public static final float MUTE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 100 / 2000;
     
-    private static final float MUTEON_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 575 / 625;
-    private static final float MUTEON_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1840 / 2000;
-    private static final float MUTEON_WIDTH = MainActivity.TEXTURE_WIDTH * 15 / 250;
-    private static final float MUTEON_HEIGHT = MainActivity.TEXTURE_HEIGHT * 160 / 2000;
+    public static final float MUTEON_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 568 / 625;
+    public static final float MUTEON_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1842 / 2000;
+    public static final float MUTEON_WIDTH = MainActivity.TEXTURE_WIDTH * 13 / 250;
+    public static final float MUTEON_HEIGHT = MainActivity.TEXTURE_HEIGHT * 116 / 2000;
 
     
     private Sprite background = new Sprite( 0
@@ -102,10 +107,10 @@ public class MainMenuScene extends Scene {
 	}
 	
 
-	Sprite buttonResume = new Sprite( MainActivity.TEXTURE_WIDTH * 125 / 400
-					, MainActivity.TEXTURE_HEIGHT * 2 / 6
-					, MainActivity.TEXTURE_WIDTH * 150 / 400
-					, MainActivity.TEXTURE_HEIGHT * 10 / 128
+	Sprite buttonResume = new Sprite( BUTTON_RESUME_POSITION_LEFT
+					, BUTTON_RESUME_POSITION_UP
+					, BUTTON_RESUME_WIDTH
+					, BUTTON_RESUME_HEIGHT
 					, MainActivity.mainActivity.textureResume
 					, MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	    @Override
@@ -321,6 +326,8 @@ public class MainMenuScene extends Scene {
 	registerTouchArea(buttonResume);
 	setTouchAreaBindingOnActionDownEnabled(true);
 	setTouchAreaBindingOnActionMoveEnabled(true);
+	
+	MainActivity.mainActivity.mMusic.play();
     }
     
     public void show() {
@@ -335,12 +342,12 @@ public class MainMenuScene extends Scene {
 	    
 	    muteOn.setVisible(false);
 	}
+	MainActivity.mainActivity.mGameMusic.pause();
 	MainActivity.mainActivity.mMusic.play();
    	background.registerEntityModifier(MainActivity.HIDE_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {
-	
    	setVisible(false);
    	background.setAlpha(0.5f);
    	setIgnoreUpdate(true);

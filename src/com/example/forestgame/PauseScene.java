@@ -19,18 +19,7 @@ public class PauseScene extends Scene {
     private static final float NEWGAME_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 260 / 1024;
     private static final float NEWGAME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 31 / 64;
     private static final float MAINMENU_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 235 / 1024;
-    private static final float MAINMENU_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 38 / 64;
-    
-    private static final float MUTE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 520 / 625;
-    private static final float MUTE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1850 / 2000;
-    private static final float MUTE_WIDTH = MainActivity.TEXTURE_WIDTH * 20 / 250;
-    private static final float MUTE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 18 / 250;
-    
-    private static final float MUTEON_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 575 / 625;
-    private static final float MUTEON_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1840 / 2000;
-    private static final float MUTEON_WIDTH = MainActivity.TEXTURE_WIDTH * 15 / 250;
-    private static final float MUTEON_HEIGHT = MainActivity.TEXTURE_HEIGHT * 160 / 2000;
-    
+    private static final float MAINMENU_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 38 / 64;    
 
     private Sprite background = new Sprite( 0
             				   , 0
@@ -130,10 +119,10 @@ public class PauseScene extends Scene {
     };
    
     
-    private Sprite muteOff = new Sprite( MUTE_POSITION_LEFT
-	    			       , MUTE_POSITION_UP
-	    			       , MUTE_WIDTH
-	    			       , MUTE_HEIGHT
+    private Sprite muteOff = new Sprite( MainMenuScene.MUTE_POSITION_LEFT
+	    			       , MainMenuScene.MUTE_POSITION_UP
+	    			       , MainMenuScene.MUTE_WIDTH
+	    			       , MainMenuScene.MUTE_HEIGHT
 	    			       , MainActivity.mainActivity.textureMuteOff
 	    			       , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 
@@ -160,33 +149,19 @@ public class PauseScene extends Scene {
     };
 
 
-    private Sprite muteOn = new Sprite( MUTEON_POSITION_LEFT
-	    		       	      , MUTEON_POSITION_UP
-	    		       	      , MUTEON_WIDTH
-	    		       	      , MUTEON_HEIGHT
+    private Sprite muteOn = new Sprite( MainMenuScene.MUTEON_POSITION_LEFT
+	    		       	      , MainMenuScene.MUTEON_POSITION_UP
+	    		       	      , MainMenuScene.MUTEON_WIDTH
+	    		       	      , MainMenuScene.MUTEON_HEIGHT
 	    		       	      , MainActivity.mainActivity.textureMuteOn
 	    		       	      , MainActivity.mainActivity.getVertexBufferObjectManager());
 
     private void muteIconCLick() {	    
 	if (!MainActivity.isMute) {
-	    MainActivity.mainActivity.mClick.play();
-	    MainActivity.mainActivity.mMusic.setVolume(0);
-	    MainActivity.mainActivity.mClick.setVolume(0);
-	    MainActivity.mainActivity.mGameOver.setVolume(0);
-	    MainActivity.mainActivity.mGameStart.setVolume(0);
-	    MainActivity.mainActivity.mSound.setVolume(0);
-	    MainActivity.mainActivity.mStep.setVolume(0);
-	    MainActivity.isMute = !MainActivity.isMute;
+	    MainActivity.mainActivity.muteSounds();
 	    muteOn.setVisible(false);
 	} else {
-	    MainActivity.mainActivity.mMusic.setVolume(1);
-	    MainActivity.mainActivity.mClick.setVolume(1);
-	    MainActivity.mainActivity.mGameOver.setVolume(1);
-	    MainActivity.mainActivity.mGameStart.setVolume(1);
-	    MainActivity.mainActivity.mSound.setVolume(1);
-	    MainActivity.mainActivity.mStep.setVolume(1);
-	    MainActivity.mainActivity.mClick.play();
-	    MainActivity.isMute = !MainActivity.isMute;
+	    MainActivity.mainActivity.unmuteSounds();
 	    muteOn.setVisible(true);
 	}
     }

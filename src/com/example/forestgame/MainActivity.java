@@ -97,6 +97,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     private static ITexture NewGame;
     
     public Music mMusic;
+    public Music mGameMusic;
     public Sound mSound;
     public Sound mClick;
     public Sound mGameOver;
@@ -214,8 +215,10 @@ public class MainActivity extends SimpleBaseGameActivity {
 	MusicFactory.setAssetBasePath("sounds/");
 	
         try {
-                mMusic = MusicFactory.createMusicFromAsset(mEngine.getMusicManager(), this, "main_menu.mp3");
+                mMusic = MusicFactory.createMusicFromAsset(mEngine.getMusicManager(), this, "main_menu.ogg");
+                mGameMusic = MusicFactory.createMusicFromAsset(mEngine.getMusicManager(), this, "game_background.ogg");
                 mMusic.setLooping(true);
+                mGameMusic.setLooping(true);
         } catch (final IOException e) {
                 Debug.e("Error", e);
         }
@@ -223,11 +226,11 @@ public class MainActivity extends SimpleBaseGameActivity {
         SoundFactory.setAssetBasePath("sounds/");
         
         try {
-    		mSound = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "convolution.mp3");
-    		mClick = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "click.wav");
-    		mGameOver = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "game_over.mp3");
-    		mGameStart = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "game_start.mp3");
-    		mStep = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "general_step.wav");
+    		mSound = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "convolution.ogg");
+    		mClick = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "click.ogg");
+    		mGameOver = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "game_over.ogg");
+    		mGameStart = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "game_start.ogg");
+    		mStep = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "general_step.ogg");
         } catch (final IOException e) {
     		Debug.e("Error", e);
         }	
@@ -261,7 +264,7 @@ public class MainActivity extends SimpleBaseGameActivity {
                 		 , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
                 		 , 100
                 		 , true
-                		 , new Color(1.0f, 0.6f, 0.0f)
+                		 , new Color(1.0f, 1.0f, 1.0f)
                 		 , 2
                 		 , new Color(1.0f, 0.2f, 0.0f));
 	
@@ -366,8 +369,11 @@ public class MainActivity extends SimpleBaseGameActivity {
     protected void onPause()
     {
         super.onPause();
-        if (this.isGameLoaded())
+        if (this.isGameLoaded()) {
             MainActivity.mainActivity.mMusic.pause();
+            MainActivity.mainActivity.mGameStart.pause();
+            MainActivity.mainActivity.mGameMusic.pause();
+        }
     }
 
     @Override
@@ -375,8 +381,11 @@ public class MainActivity extends SimpleBaseGameActivity {
     {
         super.onResume();
         System.gc();
-        if (this.isGameLoaded())
+        if (this.isGameLoaded()) {
             MainActivity.mainActivity.mMusic.play(); 
+            MainActivity.mainActivity.mGameStart.play();
+            MainActivity.mainActivity.mGameMusic.play();
+        }
     }
     
     @Override
@@ -392,6 +401,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    if (mainScene != null && gameLoaded) {
 	      
 		mainScene.keyPressed(keyCode, event);
+		MainActivity.mainActivity.mClick.play();
 		return true;
 	    }
 	return true;
@@ -401,8 +411,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     
     public void muteSounds() {
 	
-	MainActivity.mainActivity.mClick.play();
 	MainActivity.mainActivity.mMusic.setVolume(0);
+	MainActivity.mainActivity.mGameMusic.setVolume(0);
 	MainActivity.mainActivity.mClick.setVolume(0);
 	MainActivity.mainActivity.mGameOver.setVolume(0);
 	MainActivity.mainActivity.mGameStart.setVolume(0);
@@ -415,6 +425,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	
 	MainActivity.mainActivity.mClick.play();
 	MainActivity.mainActivity.mMusic.setVolume(1);
+	MainActivity.mainActivity.mGameMusic.setVolume(1);
 	MainActivity.mainActivity.mClick.setVolume(1);
 	MainActivity.mainActivity.mGameOver.setVolume(1);
 	MainActivity.mainActivity.mGameStart.setVolume(1);
