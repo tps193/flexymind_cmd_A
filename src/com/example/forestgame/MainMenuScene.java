@@ -120,9 +120,9 @@ public class MainMenuScene extends Scene {
 
 		if (pSceneTouchEvent.isActionDown()) {
 
-	Log.d("ButtonResume", "touch");
-	this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-	this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    Log.d("ButtonResume", "touch");
+		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
 
 		} else if (pSceneTouchEvent.isActionUp()) {
 
