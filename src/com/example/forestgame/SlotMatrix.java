@@ -3,6 +3,8 @@ package com.example.forestgame;
 import java.io.IOException;
 import java.util.Random;
 
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
@@ -36,10 +38,11 @@ public class SlotMatrix {
     private final static float BORDER_HEIGHT = 26; 
     
     ParallelEntityModifier entityModifier;
-    float animationDuration = 0.5f;
+    float animationDuration = 0.2f;
     float fromAlpha = 1;
     float toAlpha = 0;
     IEaseFunction easeFunction = EaseLinear.getInstance();
+    TimerHandler spriteTimerHandler;
     
     public SlotMatrix(GameScene scene) {
 	
@@ -414,6 +417,17 @@ public class SlotMatrix {
 							  	   , easeFunction));
 	
 	matrix[fromRow][fromCol].getSprite().registerEntityModifier(entityModifier);
+	
+	MainActivity.mainActivity.getEngine().registerUpdateHandler(
+		spriteTimerHandler = new TimerHandler(animationDuration
+						    , false
+						    , new ITimerCallback() {
+						        
+						        @Override
+						        public void onTimePassed(TimerHandler pTimerHandler) {
+						    	// TODO Auto-generated method stub
+						        }
+						    }));
     }    
     
     public static int getROWS() {
