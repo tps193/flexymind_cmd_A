@@ -80,6 +80,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion textureMuteOn;
     public AtlasStorage storage;
     public StrokeFont tDevNames;
+    public StrokeFont tScoresSceneCaptions;
+    public StrokeFont tScoresSceneScores;
     public StrokeFont tCaptions;
     private static ITexture creditsCaps;
     private static ITexture creditsNames;
@@ -92,6 +94,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     public StrokeFont tMainMenu;
     public StrokeFont tNewGame;
     public StrokeFont tScores;
+    private BitmapTextureAtlas scoresSceneCaps;
+    private BitmapTextureAtlas scoresSceneScores;
     private static ITexture GameOver;
     private static ITexture MainMenu;
     private static ITexture NewGame;
@@ -107,6 +111,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     private String[][] namesMatrix;
     private String prisonName;
     private String respawnName;
+   
     
 
     @Override
@@ -239,6 +244,14 @@ public class MainActivity extends SimpleBaseGameActivity {
 						, 2048
 						, 1024
 						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	scoresSceneCaps = new BitmapTextureAtlas(this.getTextureManager()
+						, 2048
+						, 1024
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	scoresSceneScores = new BitmapTextureAtlas(this.getTextureManager()
+						, 2048
+						, 1024
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	
 	creditsNames = new BitmapTextureAtlas(	this.getTextureManager()
 						, 2048
@@ -258,6 +271,23 @@ public class MainActivity extends SimpleBaseGameActivity {
 				   , new Color(1.0f, 0.6f, 0.0f)
 				   , 2
 				   , new Color(1.0f, 0.2f, 0.0f));
+	
+	tScoresSceneCaptions = new StrokeFont(this.getFontManager()
+		   			, scoresSceneCaps
+		   			, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+		   			, 150
+		   			, true
+		   			, new Color(1.0f, 0.6f, 0.0f)
+		   			, 2
+		   			, new Color(1.0f, 0.2f, 0.0f));
+	tScoresSceneScores = new StrokeFont(this.getFontManager()
+		 			, scoresSceneScores
+		 			, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+		 			, 120
+		 			, true
+		 			, new Color(1.0f, 1.0f, 1.0f)
+					, 2
+					, new Color(1.0f, 0.2f, 0.0f));
 	
 	tScores = new StrokeFont(this.getFontManager()
                 		 , scoresAtlas
@@ -347,6 +377,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 				  , 2
 				  , new Color(1.0f, 0.2f, 0.0f));
 	
+	tScoresSceneCaptions.load();
+	tScoresSceneScores.load();
 	tDevNames.load();
 	tCaptions.load();
 	tPause.load();
@@ -355,6 +387,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	tScores.load();
 	tMainMenu.load();
 	tNewGame.load();
+	
     }
 
     @Override

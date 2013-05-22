@@ -14,15 +14,18 @@ import android.os.Environment;
 
 public class ScoresTable {
 
-    private static final float HIGHSCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 1 / 4;
+    private static final float HIGHSCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 1 / 5;
     private static final float HIGHSCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT / 6;
-    private static final float SCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 1 / 4;
+    private static final float SCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 1 / 5;
     private static final float SCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT / 3;
 
     private final int NUMBER_OF_SCORES = 6;
     private final String FILEPATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/TheNutsKing";
-    private final String FILENAME = "/scores.txt";
+    private final String FILENAME = "/scores.dat";
     private long[] scores = new long[NUMBER_OF_SCORES];
+    
+    private Text scoresText;
+    private Text caption;
 
     public void createFile() {
 	File f = new File(FILEPATH);
@@ -54,23 +57,22 @@ public class ScoresTable {
 
     public void show() {
 	String str = "";
-
+	MainScene.getScoresScene().detachChild(caption);
+	MainScene.getScoresScene().detachChild(scoresText);
 	for (int i = 0; i < scores.length - 1; i++) {
 	    str += Integer.toString(i + 1) + ".  " + Long.toString(scores[i]) + "\n";
 	}
-
-	Text caption = new Text(HIGHSCORES_POSITION_LEFT,
-		HIGHSCORES_POSITION_UP, MainActivity.mainActivity.tCaptions,
+	caption = new Text(HIGHSCORES_POSITION_LEFT,
+		HIGHSCORES_POSITION_UP, MainActivity.mainActivity.tScoresSceneCaptions,
 		"High Scores \n\n\n",
 		MainActivity.mainActivity.getVertexBufferObjectManager());
 
-	Text scoresText = new Text(SCORES_POSITION_LEFT, SCORES_POSITION_UP,
-		MainActivity.mainActivity.tDevNames, str,
+	scoresText = new Text(SCORES_POSITION_LEFT, SCORES_POSITION_UP,
+		MainActivity.mainActivity.tScoresSceneScores, str,
 		MainActivity.mainActivity.getVertexBufferObjectManager());
 
 	MainScene.getScoresScene().attachChild(caption);
 	MainScene.getScoresScene().attachChild(scoresText);
-
     }
 
     public void save() {
@@ -90,9 +92,6 @@ public class ScoresTable {
 	}
     }
 
-    public void addScores(long result) {
-	scores[NUMBER_OF_SCORES - 1] = result;
-    }
 
     public void sort() {
 	for (int i = 0; i < scores.length - 1; i++) {
@@ -104,5 +103,13 @@ public class ScoresTable {
 		}
 	    }
 	}
+    }
+    
+    public void saveResult(long result){
+	createFile();
+	init();
+	scores[NUMBER_OF_SCORES - 1] = result;
+	sort();
+	save();
     }
 }
