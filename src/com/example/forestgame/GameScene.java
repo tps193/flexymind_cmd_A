@@ -21,6 +21,8 @@ public class GameScene extends Scene {
     
     private PauseScene pauseScene = new PauseScene();
     private GameOverScene gameOverScene = new GameOverScene();
+    private ScoresTable scoresTable = new ScoresTable();
+    
     
     public SlotMatrix slotMatrix;
     private Prison prison;
@@ -31,7 +33,6 @@ public class GameScene extends Scene {
     
     private int putInRow;
     private int putInColum;
-    private boolean backlightOn;
     
     private static final float CAGE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 136 / 625;
     private static final float CAGE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
@@ -247,6 +248,12 @@ public class GameScene extends Scene {
 	return gameOverScene;
     }
     
+    public ScoresTable getScoresTable() {
+        return scoresTable;
+    }
+
+
+
     public Element getMovingElement() {
 	return movingElement;
     }
@@ -283,11 +290,7 @@ public class GameScene extends Scene {
 		     putInColum = SlotMatrix.getPrisonPlaceRow();
 		     putInRow = SlotMatrix.getROWS()+1;
 		     putInColum = SlotMatrix.getCOLUMNS()+1;
-		     if (backlightOn) {
-			 
-			 detachChild(backlight);
-			 setBacklightOn(false);
-		     }
+		     detachChild(backlight);
 		     break;
 		     
 		 } else {
@@ -295,15 +298,10 @@ public class GameScene extends Scene {
 		     putInRow = SlotMatrix.getMilkPointRow();
 		     putInColum = SlotMatrix.getMilkPointColumn();
 		     flg=false;
-		     if (backlightOn) {
-			 
-			 detachChild(backlight);
-			 setBacklightOn(false);
-		     }
+		     detachChild(backlight);
 		 }
 	     }
-	     if (flg) {
-		 
+	     if (flg) { 
 		break;
 	     }
 	 }
@@ -311,24 +309,20 @@ public class GameScene extends Scene {
     
     public void slotBacklight(int i, int j) {
 	
-	if (backlightOn) {
-	    
-	    detachChild(backlight);
-	}
+	detachChild(backlight);
 	
 	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
 	    
-	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j)
+	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
                 	    	 , SlotMatrix.getSlotPositionUp(i)
-                	    	 , SlotMatrix.getSlotWidth()
-                	    	 , SlotMatrix.getSlotHeight()
+                	    	 , SlotMatrix.getSlotWidth() + MainActivity.TEXTURE_WIDTH / 210
+                	    	 , SlotMatrix.getSlotHeight() + MainActivity.TEXTURE_HEIGHT / 220
                 	    	 , MainActivity.mainActivity.storage.getTexture("gfx_empty.png")
                 	    	 , MainActivity.mainActivity.getVertexBufferObjectManager());
      
             backlight.setAlpha(BACKLIGHT_ALPHA);
 	    attachChild(backlight);
 	    backlight.getParent().sortChildren();
-	    backlightOn = true;
 	}
     }
     
@@ -355,16 +349,6 @@ public class GameScene extends Scene {
 			   , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
 	attachChild(scoresText);
-    }
-
-    public boolean isBacklightOn() {
-	
-        return backlightOn;
-    }
-
-    public void setBacklightOn(boolean backlight) {
-	
-        this.backlightOn = backlight;
     }
 
     public Sprite getBacklight() {

@@ -16,6 +16,7 @@ import android.util.Log;
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
 
+
 public class SlotMatrix {
     
     private Slot[][] matrix;
@@ -40,7 +41,10 @@ public class SlotMatrix {
     float fromAlpha = 1;
     float toAlpha = 0;
     IEaseFunction easeFunction = EaseLinear.getInstance();
+
     
+    
+
     public SlotMatrix(GameScene scene) {
 	
 	gameScene = scene;
@@ -155,7 +159,7 @@ public class SlotMatrix {
         viewSlots();
     }
     
-    // собирает имена
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     public String[][] getNamesForSave() {
 	
 	String[][] namesMatrix = new String[ROWS][COLUMNS];
@@ -170,7 +174,7 @@ public class SlotMatrix {
 	return namesMatrix;
     }
     
-    //инитит загруженную игру
+    //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
     public void loadInit() throws IOException {
 	
 	for (int i = 0; i < ROWS; i++) {
@@ -186,7 +190,7 @@ public class SlotMatrix {
     }
     
     
-    //устанавливает загруженную матрицу
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     private void setMatrix(String[][] namesMatrix) {
 	
         for(int i = 0; i < ROWS; i++) {
@@ -401,19 +405,21 @@ public class SlotMatrix {
     
     private void graphicalMoving(int toRow, int toCol, int fromRow, int fromCol) {
 	
+	// need to do some graphic operations when elements are moving to the last added to change level (next Sprint)
 	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration
-								    , fromAlpha
-								    , toAlpha
-								    , easeFunction)
-		  
-						  , new MoveModifier(animationDuration
-							  	   , getSlotPositionLeft(fromRow)
-							  	   , getSlotPositionUp(fromCol)
-							  	   , getSlotPositionLeft(toRow)
-							  	   , getSlotPositionUp(toCol)
-							  	   , easeFunction));
-	
-	matrix[fromRow][fromCol].getSprite().registerEntityModifier(entityModifier);
+										    , fromAlpha
+										    , toAlpha
+										    , easeFunction)
+				  
+								  , new MoveModifier(animationDuration
+									  	   , getSlotPositionLeft(fromRow)
+									  	   , getSlotPositionUp(fromCol)
+								  	   , getSlotPositionLeft(toRow)
+									  	   , getSlotPositionUp(toCol)
+									  	   , easeFunction));
+		 	
+			matrix[fromRow][fromCol].getSprite().registerEntityModifier(entityModifier);
+
     }    
     
     public static int getROWS() {

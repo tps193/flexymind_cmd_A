@@ -43,12 +43,12 @@ public class MainMenuScene extends Scene {
     private static final float BUTTON_EXIT_WIDTH = MainActivity.TEXTURE_WIDTH * 150 / 400;
     private static final float BUTTON_EXIT_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
     
-    public static final float MUTE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 500 / 625;
+    public static final float MUTE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 520 / 625;
     public static final float MUTE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1850 / 2000;
     public static final float MUTE_WIDTH = MainActivity.TEXTURE_WIDTH * 36 / 250;
     public static final float MUTE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 100 / 2000;
     
-    public static final float MUTEON_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 548 / 625;
+    public static final float MUTEON_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 568 / 625;
     public static final float MUTEON_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1842 / 2000;
     public static final float MUTEON_WIDTH = MainActivity.TEXTURE_WIDTH * 13 / 250;
     public static final float MUTEON_HEIGHT = MainActivity.TEXTURE_HEIGHT * 116 / 2000;
@@ -95,8 +95,9 @@ public class MainMenuScene extends Scene {
 	};
 
 	private void buttonPlayPress() {
-
 	    MainActivity.mainActivity.mClick.play();
+	    if (MainScene.getGameScene().getSlotMatrix().getScore() != 0)
+	    MainScene.getGameScene().getScoresTable().saveResult(MainScene.getGameScene().getSlotMatrix().getScore());
 	    MainScene.getGameScene().getSlotMatrix().reInit();
 	    MainScene.getGameScene().getPrison().clear();
 	    MainScene.getGameScene().getRespawn().clear();

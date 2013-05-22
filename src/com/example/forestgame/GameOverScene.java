@@ -107,7 +107,7 @@ public class GameOverScene extends Scene {
     }
     
     public void show() {
-	
+	MainScene.getGameScene().getScoresTable().saveResult(MainScene.getGameScene().getSlotMatrix().getScore());
 	setVisible(true);
 	setIgnoreUpdate(false);
 	MainActivity.mainActivity.mGameOver.play();

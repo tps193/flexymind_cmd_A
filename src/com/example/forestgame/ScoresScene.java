@@ -25,12 +25,8 @@ public class ScoresScene extends Scene {
     }
     
     public void show() {
-	ScoresTable scoresTable = new ScoresTable();
-	//scoresTable.createFile();
-	//scoresTable.addScores(1000);
-	//scoresTable.sort();
-	//scoresTable.save();
-	scoresTable.show();
+	MainScene.getGameScene().getScoresTable().init();
+	MainScene.getGameScene().getScoresTable().show();
 	setVisible(true);
 	setIgnoreUpdate(false);
    	background.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER.deepCopy());
