@@ -3,8 +3,13 @@ package com.example.forestgame;
 import java.io.IOException;
 import java.util.Random;
 
+import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.MoveModifier;
+import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.util.modifier.ease.EaseLinear;
+import org.andengine.util.modifier.ease.IEaseFunction;
 
 import android.util.Log;
 
@@ -30,8 +35,12 @@ public class SlotMatrix {
     private final static float BORDER_WIDTH = 24;
     private final static float BORDER_HEIGHT = 26; 
     
+    ParallelEntityModifier entityModifier;
+    float animationDuration = 0.5f;
+    float fromAlpha = 1;
+    float toAlpha = 0;
+    IEaseFunction easeFunction = EaseLinear.getInstance();
     
-
     public SlotMatrix(GameScene scene) {
 	
 	gameScene = scene;
@@ -392,8 +401,19 @@ public class SlotMatrix {
     
     private void graphicalMoving(int toRow, int toCol, int fromRow, int fromCol) {
 	
-	// need to do some graphic operations when elements are moving to the last added to change level (next Sprint)
+	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration
+								    , fromAlpha
+								    , toAlpha
+								    , easeFunction)
+		  
+						  , new MoveModifier(animationDuration
+							  	   , getSlotPositionLeft(fromRow)
+							  	   , getSlotPositionUp(fromCol)
+							  	   , getSlotPositionLeft(toRow)
+							  	   , getSlotPositionUp(toCol)
+							  	   , easeFunction));
 	
+	matrix[fromRow][fromCol].getSprite().registerEntityModifier(entityModifier);
     }    
     
     public static int getROWS() {
