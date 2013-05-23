@@ -426,7 +426,6 @@ public class SlotMatrix {
 		    					@Override
 							public void onTimePassed(TimerHandler pTimerHandler) {
 							// TODO Auto-generated method stub
-		    					    MainActivity.mainActivity.getEngine().start();
 							}
 						    }));
     }    
