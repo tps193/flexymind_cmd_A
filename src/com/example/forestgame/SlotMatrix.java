@@ -404,44 +404,31 @@ public class SlotMatrix {
     
     private void graphicalMoving(final int toRow, final int toCol, final int fromRow, final int fromCol) {
 	
-	MainActivity.mainActivity.runOnUpdateThread(new Runnable() {
-	    
-	    @Override
-	    public void run() {
-		// TODO Auto-generated method stub
-		
-		
-		entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration
-			    				  , fromAlpha
-			    				  , toAlpha
-			    				  , easeFunction)
+	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration
+			    					    , fromAlpha
+			    					    , toAlpha
+			    					    , easeFunction)
 
-							  , new MoveModifier(animationDuration
-							  , getSlotPositionLeft(fromRow)
-							  , getSlotPositionUp(fromCol)
-							  , getSlotPositionLeft(toRow)
-							  , getSlotPositionUp(toCol)
-							  , easeFunction));
+						  , new MoveModifier(animationDuration
+							  	   , getSlotPositionLeft(fromRow)
+							  	   , getSlotPositionUp(fromCol)
+							  	   , getSlotPositionLeft(toRow)
+							  	   , getSlotPositionUp(toCol)
+							  	   , easeFunction));
 		
-		matrix[fromRow][fromCol].getSprite().registerEntityModifier(entityModifier);
-		
-		MainActivity.mainActivity.getEngine().stop();
-		
-		MainActivity.mainActivity.getEngine().registerUpdateHandler(
-			spriteTimerHandler = new TimerHandler(animationDuration
-							    , false
-							    , new ITimerCallback() {
-							        
-							        @Override
-							        public void onTimePassed(TimerHandler pTimerHandler) {
-							    	// TODO Auto-generated method stub
-							            MainActivity.mainActivity.getEngine().start();
-							        }
-							    }));
-	    }
-	});
-	
-	
+	matrix[fromRow][fromCol].getSprite().registerEntityModifier(entityModifier);
+
+	MainActivity.mainActivity.getEngine().registerUpdateHandler(
+		spriteTimerHandler = new TimerHandler(animationDuration
+						    , false
+						    , new ITimerCallback() {
+		    
+		    					@Override
+							public void onTimePassed(TimerHandler pTimerHandler) {
+							// TODO Auto-generated method stub
+		    					    MainActivity.mainActivity.getEngine().start();
+							}
+						    }));
     }    
     
     public static int getROWS() {
