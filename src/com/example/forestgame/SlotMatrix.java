@@ -418,6 +418,8 @@ public class SlotMatrix {
 	
 	matrix[fromRow][fromCol].getSprite().registerEntityModifier(entityModifier);
 	
+	MainActivity.mainActivity.getEngine().stop();
+	
 	MainActivity.mainActivity.getEngine().registerUpdateHandler(
 		spriteTimerHandler = new TimerHandler(animationDuration
 						    , false
@@ -426,6 +428,7 @@ public class SlotMatrix {
 						        @Override
 						        public void onTimePassed(TimerHandler pTimerHandler) {
 						    	// TODO Auto-generated method stub
+						            MainActivity.mainActivity.getEngine().start();
 						        }
 						    }));
     }    
