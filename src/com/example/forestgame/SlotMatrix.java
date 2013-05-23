@@ -415,8 +415,23 @@ public class SlotMatrix {
 							  	   , getSlotPositionLeft(toRow)
 							  	   , getSlotPositionUp(toCol)
 							  	   , easeFunction));
-		
-	matrix[fromRow][fromCol].getSprite().registerEntityModifier(entityModifier);
+	
+	Slot s = matrix[fromRow][fromCol];
+	
+	TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(TableOfElements
+                							       . getTextureName
+                							       ( s.getElement()));
+
+	final Sprite animationSprite = new Sprite (getSlotPositionLeft(fromCol)
+					   , getSlotPositionUp(fromRow)
+					   , SLOT_WIDTH
+					   , SLOT_HEIGHT
+					   , slotTexture
+					   , MainActivity.mainActivity.getVertexBufferObjectManager());
+	
+	gameScene.attachChild(animationSprite);
+	
+	animationSprite.registerEntityModifier(entityModifier);
 
 	MainActivity.mainActivity.getEngine().registerUpdateHandler(
 		spriteTimerHandler = new TimerHandler(animationDuration
@@ -426,6 +441,7 @@ public class SlotMatrix {
 		    					@Override
 							public void onTimePassed(TimerHandler pTimerHandler) {
 							// TODO Auto-generated method stub
+		    					    gameScene.detachChild(animationSprite);
 							}
 						    }));
     }    
