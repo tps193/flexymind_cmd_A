@@ -83,11 +83,9 @@ public class Prison extends GameSlot {
     
     protected void gameSlotIsActionUp() {
 	
-	if (gameScene.isBacklightOn()) {
 	    
 	    gameScene.detachChild(gameScene.getBacklight());
-	    gameScene.setBacklightOn(false);
-	}
+	    
 	
 	if (row < SlotMatrix.getROWS() && column <SlotMatrix.getCOLUMNS() 
 		&& gameScene.getSlotMatrix().isSlotEmpty(row, column)) {
@@ -114,7 +112,7 @@ public class Prison extends GameSlot {
 	slotSprite.setPosition(spriteLeftBorder, spriteUpBorder);
 	      
 	gameScene.moveElement(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() - verticalOffset);
-	column = gameScene.getPutInColum();
+	column = gameScene.getPutInColumn();
 	row = gameScene.getPutInRow(); 
 	
 	Log.d("prison", Integer.toString(row));

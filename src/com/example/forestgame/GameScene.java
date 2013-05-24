@@ -21,6 +21,8 @@ public class GameScene extends Scene {
     
     private PauseScene pauseScene = new PauseScene();
     private GameOverScene gameOverScene = new GameOverScene();
+    private ScoresTable scoresTable = new ScoresTable();
+    
     
     public SlotMatrix slotMatrix;
     private Prison prison;
@@ -30,8 +32,7 @@ public class GameScene extends Scene {
     private Element movingElement;
     
     private int putInRow;
-    private int putInColum;
-    private boolean backlightOn;
+    private int putInColumn;
     
     private static final float CAGE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 136 / 625;
     private static final float CAGE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
@@ -247,88 +248,66 @@ public class GameScene extends Scene {
 	return gameOverScene;
     }
     
+    public ScoresTable getScoresTable() {
+        return scoresTable;
+    }
+
+
+
     public Element getMovingElement() {
 	return movingElement;
     }
 
     public void moveElement(float touchPointX, float touchPointY) {
 	
-	 for (int i = 0; i < SlotMatrix.getROWS(); i++) {
-	     
-	     boolean flg=false;
-	     for (int j = 0; j < SlotMatrix.getCOLUMNS(); j++) {
-		   
-		 flg=true;
-		 float slotLeftBorder = SlotMatrix.getSlotPositionLeft(j);
-		 float slotUpperBorder = SlotMatrix.getSlotPositionUp(i);
-		 float slotRightBorder = slotLeftBorder + SlotMatrix.getSlotWidth();
-		 float slotBottomBorder = slotUpperBorder + SlotMatrix.getSlotHeight();
-		 
-		 if (slotLeftBorder <= touchPointX && touchPointX <= slotRightBorder && 
-		     slotUpperBorder <= touchPointY && touchPointY <= slotBottomBorder) {
+	if ((touchPointX >= SlotMatrix.getSlotPositionLeft(0)) && 
+		(touchPointX <= SlotMatrix.getSlotPositionLeft(SlotMatrix.getCOLUMNS()) + SlotMatrix.getSlotWidth()) &&
+	    	(touchPointY >= SlotMatrix.getSlotPositionUp(0) &&
+	    	(touchPointY <= SlotMatrix.getSlotPositionUp(SlotMatrix.getROWS()) + SlotMatrix.getSlotHeight()))) {
+	    
+	    float borderWidth = SlotMatrix.getSlotPositionLeft(1) - SlotMatrix.getSlotPositionLeft(0) - SlotMatrix.getSlotWidth();
+	    float borderHeight = SlotMatrix.getSlotPositionUp(1) - SlotMatrix.getSlotPositionUp(0) - SlotMatrix.getSlotHeight();
+	    putInRow = (int) ((touchPointY - SlotMatrix.getSlotPositionUp(0)) / (SlotMatrix.getSlotHeight() + borderHeight));
+	    putInColumn = (int) ((touchPointX - SlotMatrix.getSlotPositionLeft(0)) / (SlotMatrix.getSlotWidth() + borderWidth));
+	    Log.d("slot x ",Integer.toString(putInColumn));
+	    Log.d("slot y ",Integer.toString(putInRow));
+	    slotBacklight(putInRow, putInColumn);
+	    
+	} else if (PRISON_POSITION_LEFT <= touchPointX && touchPointX <= PRISON_POSITION_RIGHT && 
+		    PRISON_POSITION_UP <= touchPointY && touchPointY <= PRISON_POSITION_BOTTOM) {
 		
-		     Log.d("slot x ",Integer.toString(j));
-		     Log.d("slot y ",Integer.toString(i));
-		     putInRow = i;
-		     putInColum = j;
-		     slotBacklight(i,j);
-		     break;
-		     
-		 } else if (PRISON_POSITION_LEFT <= touchPointX && touchPointX <= PRISON_POSITION_RIGHT && 
-			    PRISON_POSITION_UP <= touchPointY && touchPointY <= PRISON_POSITION_BOTTOM) {
-			
-		     Log.d("slotPrison x ",Integer.toString(7));
-		     Log.d("slotPrison y ",Integer.toString(7));
-		     putInRow = SlotMatrix.getPrisonPlaceRow();
-		     putInColum = SlotMatrix.getPrisonPlaceRow();
-		     putInRow = SlotMatrix.getROWS()+1;
-		     putInColum = SlotMatrix.getCOLUMNS()+1;
-		     if (backlightOn) {
-			 
-			 detachChild(backlight);
-			 setBacklightOn(false);
-		     }
-		     break;
-		     
-		 } else {
-		     
-		     putInRow = SlotMatrix.getMilkPointRow();
-		     putInColum = SlotMatrix.getMilkPointColumn();
-		     flg=false;
-		     if (backlightOn) {
-			 
-			 detachChild(backlight);
-			 setBacklightOn(false);
-		     }
-		 }
-	     }
-	     if (flg) {
-		 
-		break;
-	     }
-	 }
+	     Log.d("slotPrison x ",Integer.toString(7));
+	     Log.d("slotPrison y ",Integer.toString(7));
+	     putInRow = SlotMatrix.getPrisonPlaceRow();
+	     putInColumn = SlotMatrix.getPrisonPlaceRow();
+	     putInRow = SlotMatrix.getROWS()+1;
+	     putInColumn = SlotMatrix.getCOLUMNS()+1;
+	     detachChild(backlight);
+	     
+	} else {
+	    
+	    putInRow = SlotMatrix.getMilkPointRow();
+	    putInColumn = SlotMatrix.getMilkPointColumn();
+	    detachChild(backlight);
+	}
     }
     
     public void slotBacklight(int i, int j) {
 	
-	if (backlightOn) {
-	    
-	    detachChild(backlight);
-	}
+	detachChild(backlight);
 	
 	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
 	    
-	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j)
+	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
                 	    	 , SlotMatrix.getSlotPositionUp(i)
-                	    	 , SlotMatrix.getSlotWidth()
-                	    	 , SlotMatrix.getSlotHeight()
+                	    	 , SlotMatrix.getSlotWidth() + MainActivity.TEXTURE_WIDTH / 210
+                	    	 , SlotMatrix.getSlotHeight() + MainActivity.TEXTURE_HEIGHT / 220
                 	    	 , MainActivity.mainActivity.storage.getTexture("gfx_empty.png")
                 	    	 , MainActivity.mainActivity.getVertexBufferObjectManager());
      
             backlight.setAlpha(BACKLIGHT_ALPHA);
 	    attachChild(backlight);
 	    backlight.getParent().sortChildren();
-	    backlightOn = true;
 	}
     }
     
@@ -337,9 +316,9 @@ public class GameScene extends Scene {
 	return putInRow;
     }  
     
-    public int getPutInColum() {
+    public int getPutInColumn() {
 	
-	return putInColum;
+	return putInColumn;
     } 
     
     public void setScores(int scores) {
@@ -355,16 +334,6 @@ public class GameScene extends Scene {
 			   , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
 	attachChild(scoresText);
-    }
-
-    public boolean isBacklightOn() {
-	
-        return backlightOn;
-    }
-
-    public void setBacklightOn(boolean backlight) {
-	
-        this.backlightOn = backlight;
     }
 
     public Sprite getBacklight() {
