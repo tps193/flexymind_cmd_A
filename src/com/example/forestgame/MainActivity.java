@@ -18,13 +18,16 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.util.FPSLogger;
 import org.andengine.opengl.font.StrokeFont;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
@@ -98,6 +101,15 @@ public class MainActivity extends SimpleBaseGameActivity {
     private static ITexture GameOver;
     private static ITexture MainMenu;
     private static ITexture NewGame;
+    
+    private TextureRegion regionStatic;
+    private Sprite spriteStatic;
+    private BitmapTextureAtlas textureAnim;
+    private TiledTextureRegion regionAnim;
+    private AnimatedSprite  spriteAnim;
+     
+    private static int   TILED_SPRITE_COLUMNS  = 2;
+    private static int   TILED_SPRITE_ROWS  = 5;
     
     public Music mMusic;
     public Music mGameMusic;
@@ -178,11 +190,31 @@ public class MainActivity extends SimpleBaseGameActivity {
         	   , "background.jpg");
 	textureBackground = storage.getTexture("background.jpg");
 	
+	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
+     	   , MainActivity.mainActivity
+     	   , "gfx_loading/"
+     	   , "gfx_static.png");
+	regionStatic = storage.getTexture("gfx_static.png");
+	
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx_loading/");
+	textureAnim = new BitmapTextureAtlas(MainActivity.mainActivity.getTextureManager(), 512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	regionAnim = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAnim, MainActivity.mainActivity,"gfx_anim.png", 0, 0, TILED_SPRITE_COLUMNS, TILED_SPRITE_ROWS);
+	mEngine.getTextureManager().loadTexture(textureAnim);
+	
+	spriteAnim = new AnimatedSprite(840, 890, regionAnim, MainActivity.mainActivity.getVertexBufferObjectManager());
+		
 	preLoadBackground = new Sprite( 0
 	          , 0
 	          , MainActivity.TEXTURE_WIDTH
 	          , MainActivity.TEXTURE_HEIGHT
 	          , MainActivity.mainActivity.textureBackground
+	          , MainActivity.mainActivity.getVertexBufferObjectManager());
+	
+	spriteStatic = new Sprite( MainActivity.TEXTURE_WIDTH / 4
+	          , MainActivity.TEXTURE_HEIGHT * 48 / 128
+	          , MainActivity.TEXTURE_WIDTH * 64 / 128
+	          , MainActivity.TEXTURE_HEIGHT * 20 / 128
+	          , MainActivity.mainActivity.regionStatic
 	          , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
 	preLoadBackground.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
@@ -191,12 +223,20 @@ public class MainActivity extends SimpleBaseGameActivity {
 
     @Override
     protected Scene onCreateScene() {
-	
+	this.mEngine.registerUpdateHandler(new FPSLogger());
 	preLoadScene = new Scene();
 	preLoadScene.setIgnoreUpdate(true);
 	/*preLoadScene.setBackgroundEnabled(true);
 	preLoadScene.setBackground(new Background(Color.GREEN));*/
 	preLoadScene.attachChild(preLoadBackground);
+	preLoadScene.attachChild(spriteStatic);
+	
+	spriteAnim.setWidth(94);
+	spriteAnim.setHeight(44);
+	spriteAnim.animate(150, true);
+	preLoadScene.attachChild(spriteAnim);
+	
+	
 	gameLoaded = false;
 	
 	final IAsyncCallback callback = new IAsyncCallback() {
