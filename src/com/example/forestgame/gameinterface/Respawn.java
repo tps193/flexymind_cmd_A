@@ -2,7 +2,6 @@ package com.example.forestgame.gameinterface;
 
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.region.TextureRegion;
 
 import android.util.Log;
 
@@ -12,21 +11,17 @@ import com.example.forestgame.SlotMatrix;
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
 
-public class Respawn {
-
-    private boolean isEmpty;
-    private Element element;
-    private GameScene gameScene;
+public class Respawn extends GameSlot {
     
-    TextureRegion respawnTexture;
-    Sprite respawnSprite;
-    
-    TextureRegion movingTexture;
-    Sprite movingSprite;
+    private final static float RESPAWN_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 27 / 50;
+    private final static float RESPAWN_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
+    private final static float RESPAWN_WIDTH = MainActivity.TEXTURE_WIDTH * 61 / 250;
+    private final static float RESPAWN_HEIGHT = MainActivity.TEXTURE_HEIGHT * 303 / 2000;
+    private static final int RESPAWN_Z_INDEX = 401;
     
     public Respawn(GameScene scene) {
 	
-	gameScene = scene;
+	super(scene);
 	generateElement();
     }
     
@@ -36,55 +31,32 @@ public class Respawn {
 	isEmpty = false;
 	show();
     }
-    
-    public boolean isEmpty() {
-	
-	return isEmpty;
-    }
-    
-    public Element getElement() {
-	
-	return element;
-    }
-    
-    public void addElement(Element e) {
-	
-	element = e;
-	isEmpty = false;
-	show();
-    }
-    
-    public void clear() {
-	
-	element = null;
-	isEmpty = true;
-	show();
-    }
-    
+
     //For Animation
-    public void backToRespawn(Element e) {
+    protected void backToGameSlot(Element e) {
 	
-	respawnSprite.setPosition(MainActivity.TEXTURE_WIDTH * 27 / 50
-				  , MainActivity.TEXTURE_HEIGHT * 1381 / 2000);
+	slotSprite.setPosition(RESPAWN_POSITION_LEFT
+				  , RESPAWN_POSITION_UP);
+	
     }
     
-    public void show() {
+    protected void show() {
 	
 	if(!isEmpty) {
 	    
-	    respawnTexture = MainActivity.mainActivity.storage.getTexture(TableOfElements
+	    slotTexture = MainActivity.mainActivity.storage.getTexture(TableOfElements
 			    						  . getTextureName
 			    						  (element));
 	    
-	    respawnSprite = new Sprite ( MainActivity.TEXTURE_WIDTH * 27 / 50
-		    			 , MainActivity.TEXTURE_HEIGHT * 1381 / 2000
-		    			 , MainActivity.TEXTURE_WIDTH * 61 / 250
-		    			 , MainActivity.TEXTURE_HEIGHT * 303 / 2000
-		    			 , respawnTexture
+	    
+	    
+	    slotSprite = new Sprite ( RESPAWN_POSITION_LEFT
+		    			 , RESPAWN_POSITION_UP
+		    			 , RESPAWN_WIDTH
+		    			 , RESPAWN_HEIGHT
+		    			 , slotTexture
 		    			 , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 		
-		int row = SlotMatrix.getROWS()+2;
-		int colum = SlotMatrix.getCOLUMNS()+2;
 		@Override
 		public boolean onAreaTouched(TouchEvent pSceneTouchEvent
 			    		     , float pTouchAreaLocalX
@@ -92,73 +64,90 @@ public class Respawn {
 
 		    if (pSceneTouchEvent.isActionDown()) {
 			
-			int row = SlotMatrix.getROWS()+2;
-			int colum = SlotMatrix.getCOLUMNS()+2;
-			Log.d("resp", "touch");
-			Log.d("resp", Integer.toString(row));
-			Log.d("resp", Integer.toString(colum));
+			gameSlotIsActionDown();
 			    
 		    } else if (pSceneTouchEvent.isActionUp()) {
 			
-			Log.d("resp", "no touch");
-			Log.d("resp", Integer.toString(row));
-			Log.d("resp", Integer.toString(colum));
-			    
-			if (colum == SlotMatrix.getCOLUMNS()+1 && row  == SlotMatrix.getROWS()+1 
-				&& gameScene.prison.isEmpty()) {
-			    
-			    Log.d("resp", "newprison");
-			    gameScene.prison.addElement(element);
-			    clear();
-			    generateElement();
-			    
-			} else if (row < SlotMatrix.getROWS() && colum < SlotMatrix.getCOLUMNS() 
-				&& gameScene.getSlotMatrix().isSlotEmpty(row, colum)) {
-			    
-			    Log.d("resp", "newSlot");
-			    gameScene.getSlotMatrix().putToSlot(element, row, colum);
-			    clear();
-			    generateElement();
-			    
-			} else {
-			    
-			    Log.d("resp", Integer.toString(row));
-			    Log.d("resp", Integer.toString(colum));
-			    Log.d("resp","nowhere");
-			    backToRespawn(element);
-			}
+			gameSlotIsActionUp();
 			
 		    } else if (pSceneTouchEvent.isActionMove()) {
 			    
-			Log.d("resp", "move");
-			    
-			float touchX = pSceneTouchEvent.getX() - this.getWidth() / 2;
-			float touchY = pSceneTouchEvent.getY() - this.getHeight() / 2;
-			this.setPosition(touchX, touchY - (float)(this.getHeight() / 1.4));
-			      
-			gameScene.moveElement(touchX, touchY - (float)(this.getHeight() / 1.4));
-			colum = gameScene.getPutInColum();
-			row = gameScene.getPutInRow(); 
-			Log.d("resp", Integer.toString(row));
-			Log.d("resp", Integer.toString(colum));
+			gameSlotIsActionMove(pSceneTouchEvent);
+			
 		    }
 		    return true;
 		}
 	    };
 	    
-	    gameScene.attachChild(respawnSprite);
-	    gameScene.registerTouchArea(respawnSprite);
-	    gameScene.setTouchAreaBindingOnActionDownEnabled(true);
-	    gameScene.setTouchAreaBindingOnActionMoveEnabled(true);
-	    
-	    respawnSprite.setZIndex(400);
-	    respawnSprite.getParent().sortChildren();
+	    gameSlotAttach(RESPAWN_Z_INDEX);
 	    
 	} else {
 	    
-	    gameScene.detachChild(respawnSprite);
-	    gameScene.unregisterTouchArea(respawnSprite);
-	    respawnSprite=null;
+	    gameSlotDetach();
 	}
+    }
+    
+    protected void gameSlotIsActionDown() {
+	
+	row = SlotMatrix.getRespawnPlaceRow();
+	column = SlotMatrix.getRespawnPlaceColumn();
+	Log.d("resp", "touch");
+	Log.d("resp", Integer.toString(row));
+	Log.d("resp", Integer.toString(column));
+    }
+    
+    protected void gameSlotIsActionUp() {
+	
+	Log.d("resp", "no touch");
+	Log.d("resp", Integer.toString(row));
+	Log.d("resp", Integer.toString(column));
+	
+	if (gameScene.isBacklightOn()) {
+	    
+	    gameScene.detachChild(gameScene.getBacklight());
+	    gameScene.setBacklightOn(false);
+	}
+	
+	if (column == SlotMatrix.getPrisonPlaceColumn() && row  == SlotMatrix.getPrisonPlaceRow() 
+		&& gameScene.getPrison().isEmpty()) {
+	    
+	    Log.d("resp", "newprison");
+	    gameScene.getPrison().addElement(element);
+	    clear();
+	    generateElement();
+	    
+	} else if (row < SlotMatrix.getROWS() && column < SlotMatrix.getCOLUMNS() 
+		&& gameScene.getSlotMatrix().isSlotEmpty(row, column)) {
+	    
+	    Log.d("resp", "newSlot");
+	    gameScene.getSlotMatrix().putToSlot(element, row, column);
+	    clear();
+	    generateElement();
+	    
+	} else {
+	    
+	    Log.d("resp", Integer.toString(row));
+	    Log.d("resp", Integer.toString(column));
+	    Log.d("resp","nowhere");
+	    backToGameSlot(element);
+	}
+    }
+    
+    protected void gameSlotIsActionMove(TouchEvent pSceneTouchEvent) {
+	
+	Log.d("resp", "move");
+	
+	float spriteLeftBorder = pSceneTouchEvent.getX() - slotSprite.getWidth() / 2;
+	float verticalOffset = (float)(slotSprite.getHeight() * gameScene.getOffsetCoef());
+	float spriteUpBorder = pSceneTouchEvent.getY() - slotSprite.getHeight() / 2 - verticalOffset;
+	
+	slotSprite.setPosition(spriteLeftBorder, spriteUpBorder);
+	      
+	gameScene.moveElement(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() - verticalOffset);
+	column = gameScene.getPutInColum();
+	row = gameScene.getPutInRow(); 
+	
+	Log.d("resp", Integer.toString(row));
+	Log.d("resp", Integer.toString(column));
     }
 }

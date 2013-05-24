@@ -8,7 +8,8 @@ import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.util.color.Color;
+import org.andengine.entity.text.Text;
+import org.andengine.input.touch.TouchEvent;
 
 import android.util.Log;
 
@@ -18,19 +19,53 @@ import com.example.forestgame.gameinterface.Respawn;
 
 public class GameScene extends Scene {
     
-    public PauseScene pauseScene = new PauseScene();
-    public GameOverScene gameOverScene = new GameOverScene();
+    private PauseScene pauseScene = new PauseScene();
+    private GameOverScene gameOverScene = new GameOverScene();
     
     public SlotMatrix slotMatrix;
-    public Prison prison;
+    private Prison prison;
     public Respawn respawn;
+    private Sprite backlight;
     
-    public Element movingElement;
+    private Element movingElement;
     
     private int putInRow;
     private int putInColum;
+    private boolean backlightOn;
     
-    private Sprite sprite = new Sprite( 0
+    private static final int SUBMATRIX_LENGTH = 2;
+    
+    private static final float CAGE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 136 / 625;
+    private static final float CAGE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
+    private static final float CAGE_WIDTH = MainActivity.TEXTURE_WIDTH * 63 / 250;
+    private static final float CAGE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 313 / 2000;
+    
+    private static final float PAUSE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 516 / 625;
+    private static final float PAUSE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 17 / 2000;
+    private static final float PAUSE_WIDTH = MainActivity.TEXTURE_WIDTH * 30 / 250;
+    private static final float PAUSE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 18 / 250;
+    
+    private static final float SCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 4 / 60;
+    private static final float SCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT *3 / 200;
+    
+    private static final int CAGE_Z_INDEX = 9999;
+    private static final int PAUSE_SCENE_Z_INDEX = 10000;
+    private static final int GAME_OVER_SCENE_Z_INDEX = 10000;
+    
+    private static final AlphaModifier BACKGROUND_ALPHA_MODIFIER = new AlphaModifier(0.55f, 1.0f, 0.8f);
+    private static final AlphaModifier SLOTS_ALPHA_MODIFIER = new AlphaModifier(0.4f, 0.5f, 1.0f);
+    
+    
+    private static final float PRISON_POSITION_LEFT = CAGE_POSITION_LEFT;
+    private static final float PRISON_POSITION_UP = CAGE_POSITION_UP;
+    private static final float PRISON_POSITION_RIGHT = PRISON_POSITION_LEFT + CAGE_WIDTH;
+    private static final float PRISON_POSITION_BOTTOM = PRISON_POSITION_UP + CAGE_HEIGHT;
+    private static final float BACKLIGHT_ALPHA = 0.7f;
+    private static double OFFSET_ON_MOVING;
+    
+    private Text scoresText;
+    
+    private Sprite background = new Sprite( 0
 	                              , 0
 	                              , MainActivity.TEXTURE_WIDTH
 	                              , MainActivity.TEXTURE_HEIGHT
@@ -44,23 +79,105 @@ public class GameScene extends Scene {
 	    			     , MainActivity.mainActivity.textureSlots
 	    			     , MainActivity.mainActivity.getVertexBufferObjectManager());
     
-    private Sprite cage = new Sprite( MainActivity.TEXTURE_WIDTH * 136 / 625
-	        		    , MainActivity.TEXTURE_HEIGHT * 1381 / 2000
-	        		    , MainActivity.TEXTURE_WIDTH * 63 / 250
-	        		    , MainActivity.TEXTURE_HEIGHT * 313 / 2000
+    private Sprite cage = new Sprite( CAGE_POSITION_LEFT
+	        		    , CAGE_POSITION_UP
+	        		    , CAGE_WIDTH
+	        		    , CAGE_HEIGHT
 	        		    , MainActivity.mainActivity.textureCage
 	        		    , MainActivity.mainActivity.getVertexBufferObjectManager());
     
+    private Sprite pauseIcon = new Sprite( PAUSE_POSITION_LEFT
+	    				 , PAUSE_POSITION_UP
+	    				 , PAUSE_WIDTH
+	    				 , PAUSE_HEIGHT
+	    				 , MainActivity.mainActivity.texturePauseIcon
+	    				 , MainActivity.mainActivity.getVertexBufferObjectManager()) {
+    @Override
+    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
+	    			, float pTouchAreaLocalX
+	    			, float pTouchAreaLocalY) {
+	
+	if (pSceneTouchEvent.isActionDown()) {
+	    
+	    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER);
+	    this.setAlpha(0.5f);
+	} else if (pSceneTouchEvent.isActionUp()) {
+	    
+	    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER);
+	    MainActivity.mainActivity.mClick.play();
+	    MainScene.showInGamePause();
+	    this.setAlpha(1.0f);
+	}
+	return true;
+	}
+    };
+    
+    
+    private Sprite muteOff = new Sprite( MainMenuScene.MUTE_POSITION_LEFT
+	    			       , MainMenuScene.MUTE_POSITION_UP
+	    			       , MainMenuScene.MUTE_WIDTH
+	    			       , MainMenuScene.MUTE_HEIGHT
+	    			       , MainActivity.mainActivity.textureMuteOff
+	    			       , MainActivity.mainActivity.getVertexBufferObjectManager()) {
+
+	@Override
+	public boolean onAreaTouched( TouchEvent pSceneTouchEvent
+				    , float pTouchAreaLocalX
+				    , float pTouchAreaLocalY) {
+
+	    if (pSceneTouchEvent.isActionDown()) {
+
+		Log.d("MuteOff", "touch");
+		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+		this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+
+	    } else if (pSceneTouchEvent.isActionUp()) {
+
+		Log.d("MuteOff", "no touch");
+		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		muteIconCLick();
+	    }
+	    return true;
+	}
+    };
+
+
+    private Sprite muteOn = new Sprite( MainMenuScene.MUTEON_POSITION_LEFT
+	    			      , MainMenuScene.MUTEON_POSITION_UP
+	    			      , MainMenuScene.MUTEON_WIDTH
+	    			      , MainMenuScene.MUTEON_HEIGHT
+	    			      , MainActivity.mainActivity.textureMuteOn
+	    			      , MainActivity.mainActivity.getVertexBufferObjectManager());
+
+    private void muteIconCLick() {	    
+	if (!MainActivity.isMute) {
+	    MainActivity.mainActivity.muteSounds();
+	    muteOn.setVisible(false);
+	} else {
+	    MainActivity.mainActivity.unmuteSounds();
+	    muteOn.setVisible(true);
+	}
+    }
+    
+    
+
     public GameScene() {
 	
 	setBackgroundEnabled(true);
-	setBackground(new Background(new Color(0.1f, 0.1f, 0.0f)));
-	sprite.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.8f));
-	sprite.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	slots.registerEntityModifier(new AlphaModifier(0.4f, 0.5f, 1.0f));
-	attachChild(sprite);
+	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
+	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER.deepCopy());
+	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
+	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER.deepCopy());
+	attachChild(background);
 	attachChild(slots);
 	attachChild(cage);
+	attachChild(pauseIcon);
+	attachChild(muteOff);
+	attachChild(muteOn);
+	muteOn.setVisible(true);
+	registerTouchArea(pauseIcon);
+	registerTouchArea(muteOff);
 	
 	prison = new Prison(this);
 	respawn = new Respawn(this);
@@ -70,36 +187,73 @@ public class GameScene extends Scene {
 	attachChild(gameOverScene);
 	pauseScene.hide();
 	gameOverScene.hide();
+
+   	MainActivity.mainActivity.mGameMusic.play();
 	
-	cage.setZIndex(9999);
-	pauseScene.setZIndex(10000);
-	gameOverScene.setZIndex(10000);
+	cage.setZIndex(CAGE_Z_INDEX);
+	pauseScene.setZIndex(PAUSE_SCENE_Z_INDEX);
+	gameOverScene.setZIndex(GAME_OVER_SCENE_Z_INDEX);
+	
+	//here the test for tablet/phone is needed
+	if (MainActivity.mainActivity.hasLargeScreen()) {
+	    OFFSET_ON_MOVING = 0.2;
+	} else {
+	    OFFSET_ON_MOVING = 0.7;
+	}
+    }
+    
+    public double getOffsetCoef() {
+	return OFFSET_ON_MOVING;
     }
     
     public void show() {
-	
 	setVisible(true);
 	setIgnoreUpdate(false);
 	MainActivity.mainActivity.mMusic.pause();
-   	sprite.registerEntityModifier(new AlphaModifier(0.55f, 1.0f, 0.8f));
-   	slots.registerEntityModifier(new AlphaModifier(0.4f, 0.5f, 1.0f));
+   	MainActivity.mainActivity.mGameMusic.play();
+	MainActivity.mainActivity.mGameStart.play();
+	if (!MainActivity.isMute) {
+	    muteOn.setVisible(true);
+	} else {
+	    muteOn.setVisible(false);
+	}
+   	background.registerEntityModifier(BACKGROUND_ALPHA_MODIFIER.deepCopy());
+   	slots.registerEntityModifier(SLOTS_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {
-	
    	setVisible(false);
    	setIgnoreUpdate(true);
-   	sprite.setAlpha(1.0f);
+   	background.setAlpha(1.0f);
    	slots.setAlpha(0.5f);
     }
     
-    //возвращает матрицу слотов
     public SlotMatrix getSlotMatrix() {
 	
 	return slotMatrix;
     }
     
-    public void moveElement(float touchX, float touchY) {
+    public Prison getPrison() {
+	return prison;
+    }
+    
+    public Respawn getRespawn() {
+	return respawn;
+    }
+    
+    public PauseScene getPauseScene() {
+	return pauseScene;
+    }
+    
+    public GameOverScene getGameOverScene() {
+	return gameOverScene;
+    }
+    
+    public Element getMovingElement() {
+	return movingElement;
+    }
+
+    public void moveElement(float touchPointX, float touchPointY) {
 	
 	 for (int i = 0; i < SlotMatrix.getROWS(); i++) {
 	     
@@ -107,45 +261,77 @@ public class GameScene extends Scene {
 	     for (int j = 0; j < SlotMatrix.getCOLUMNS(); j++) {
 		   
 		 flg=true;
-		 float slotX1 = 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24))
-			   	- MainActivity.TEXTURE_WIDTH/8;
-		    
-		 float slotY1 = 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26)) 
-			    	- MainActivity.TEXTURE_HEIGHT/13;
-		    
-		 float slotX2 = 96 + (int) (i * (MainActivity.TEXTURE_WIDTH/8 + 24));
-		 float slotY2 = 218 + (int) (j * (MainActivity.TEXTURE_HEIGHT/13 + 26));
-		 float prisonX1 = MainActivity.TEXTURE_WIDTH * 70 / 625;
-		 float prisonY1 = MainActivity.TEXTURE_HEIGHT * 1250 / 2000;
-		 float prisonX2 = MainActivity.TEXTURE_WIDTH * 70 / 625 +  MainActivity.TEXTURE_WIDTH * 61 / 250;
-		 float prisonY2 = MainActivity.TEXTURE_HEIGHT * 1250 / 2000 +  MainActivity.TEXTURE_HEIGHT * 303 / 2000;
-		    
-		 if (slotX1 < touchX && touchX < slotX2 && slotY1 < touchY && touchY < slotY2) {
-			
+		 float slotLeftBorder = SlotMatrix.getSlotPositionLeft(j);
+		 float slotUpperBorder = SlotMatrix.getSlotPositionUp(i);
+		 float slotRightBorder = slotLeftBorder + SlotMatrix.getSlotWidth();
+		 float slotBottomBorder = slotUpperBorder + SlotMatrix.getSlotHeight();
+		 
+		 if (slotLeftBorder <= touchPointX && touchPointX <= slotRightBorder && 
+		     slotUpperBorder <= touchPointY && touchPointY <= slotBottomBorder) {
+		
 		     Log.d("slot x ",Integer.toString(j));
 		     Log.d("slot y ",Integer.toString(i));
 		     putInRow = i;
 		     putInColum = j;
+		     slotBacklight(i,j);
 		     break;
-		 } else if (prisonX1 < touchX && touchX < prisonX2 && prisonY1 < touchY && touchY < prisonY2) {
+		     
+		 } else if (PRISON_POSITION_LEFT <= touchPointX && touchPointX <= PRISON_POSITION_RIGHT && 
+			    PRISON_POSITION_UP <= touchPointY && touchPointY <= PRISON_POSITION_BOTTOM) {
 			
 		     Log.d("slotPrison x ",Integer.toString(7));
 		     Log.d("slotPrison y ",Integer.toString(7));
+		     putInRow = SlotMatrix.getPrisonPlaceRow();
+		     putInColum = SlotMatrix.getPrisonPlaceRow();
 		     putInRow = SlotMatrix.getROWS()+1;
 		     putInColum = SlotMatrix.getCOLUMNS()+1;
+		     if (backlightOn) {
+			 
+			 detachChild(backlight);
+			 setBacklightOn(false);
+		     }
 		     break;
+		     
 		 } else {
-		     putInRow = SlotMatrix.getROWS()+20;
-		     putInColum = SlotMatrix.getCOLUMNS()+20;
+		     
+		     putInRow = SlotMatrix.getMilkPointRow();
+		     putInColum = SlotMatrix.getMilkPointColumn();
 		     flg=false;
+		     if (backlightOn) {
+			 
+			 detachChild(backlight);
+			 setBacklightOn(false);
+		     }
 		 }
-		   
 	     }
 	     if (flg) {
 		 
 		break;
 	     }
 	 }
+    }
+    
+    public void slotBacklight(int i, int j) {
+	
+	if (backlightOn) {
+	    
+	    detachChild(backlight);
+	}
+	
+	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
+	    
+	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j)
+                	    	 , SlotMatrix.getSlotPositionUp(i)
+                	    	 , SlotMatrix.getSlotWidth()
+                	    	 , SlotMatrix.getSlotHeight()
+                	    	 , MainActivity.mainActivity.storage.getTexture("gfx_empty.png")
+                	    	 , MainActivity.mainActivity.getVertexBufferObjectManager());
+     
+            backlight.setAlpha(BACKLIGHT_ALPHA);
+	    attachChild(backlight);
+	    backlight.getParent().sortChildren();
+	    backlightOn = true;
+	}
     }
     
     public int getPutInRow() {
@@ -158,37 +344,73 @@ public class GameScene extends Scene {
 	return putInColum;
     } 
     
-    //возвращает имя элемента в тюрьме
-    public String savePrisonName() {
-	if(prison.isEmpty()) return null;
-	return prison.getElement().getName();
+    public void setScores(int scores) {
+	
+	Log.d("scores",""+scores);
+	detachChild(scoresText);
+	scoresText=null;
+	
+	scoresText= new Text(SCORES_POSITION_LEFT
+			   , SCORES_POSITION_UP
+			   , MainActivity.mainActivity.tScores
+			   , "Scores: "+Integer.toString(scores)
+			   , MainActivity.mainActivity.getVertexBufferObjectManager());
+	
+	attachChild(scoresText);
+    }
+
+    public boolean isBacklightOn() {
+	
+        return backlightOn;
+    }
+
+    public void setBacklightOn(boolean backlight) {
+	
+        this.backlightOn = backlight;
+    }
+
+    public Sprite getBacklight() {
+	
+        return backlight;
     }
     
-    public String saveRespawnName() {
-	if(respawn.isEmpty()) return null;
-	return respawn.getElement().getName();
+    public String[] getNamesSubmatrix() {
+	String[] subNames = new String[SUBMATRIX_LENGTH];
+	
+	if (prison.isEmpty()) subNames[0] = null;
+	else
+	subNames[0] = prison.getElement().getName();
+	
+	if (respawn.isEmpty()) subNames[1] = null; 
+	else
+	subNames[1] = respawn.getElement().getName();
+	
+	return subNames;
     }
-    
-    /*public void setPrison(Prison prison) {
-	this.prison = prison;
-    }
-    
-    public void setRespawn(Respawn respawn) {
-	this.respawn = respawn;
-    }*/
     
     public void setSavedGame() throws IOException {
+	
+	/*String newPrison = MainActivity.mainActivity.loadPrisonAndRespawn()[0];
+	String newRespawn = MainActivity.mainActivity.loadPrisonAndRespawn()[1];
+	
+	slotMatrix.loadInit();
+	setScores(MainActivity.mainActivity.loadScores());
+	prison.clear();
+	respawn.clear();
+	if(newPrison!=null)prison.addElement(new Element(newPrison));
+	if(newRespawn!=null)respawn.addElement(new Element(newRespawn));*/
+	
+	int scores = Integer.valueOf(MainActivity.mainActivity.load()[2].toString());
+	String[] loadedSubMatrix = (String[]) MainActivity.mainActivity.load()[1];
+	String loadedPrison = loadedSubMatrix[0];
+	String loadedRepawn = loadedSubMatrix[1];
+	//String loadedPrison = (String)MainActivity.mainActivity.load()[1][0];
+	
 	slotMatrix.loadInit();
 	prison.clear();
 	respawn.clear();
-	if(MainActivity.mainActivity.loadPrison() == null) {}
-	else {
-	    prison.addElement(new Element(MainActivity.mainActivity.loadPrison()));
-	}
-	if(MainActivity.mainActivity.loadRespawn() == null) {}
-	else {
-	    respawn.addElement(new Element(MainActivity.mainActivity.loadRespawn())); 
-	}
+	if(loadedPrison!=null)prison.addElement(new Element(loadedPrison));
+	if(loadedRepawn!=null)respawn.addElement(new Element(loadedRepawn));
+	setScores(scores);
     }
-   
 }

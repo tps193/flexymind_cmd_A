@@ -9,8 +9,8 @@ import com.example.forestgame.element.TableOfElements;
 class Slot {
     
     private boolean isEmpty;
-    boolean hasSimilarNeighbor; // Not private, has only one similar neighbor
-    boolean readyForNextLevel; // Not private, has more than 1 similar neighbor
+    private boolean hasSimilarNeighbor; // has only one similar neighbor
+    private boolean readyForNextLevel; // has more than 1 similar neighbor
     private Element element;
     private Sprite slotSprite;
     
@@ -22,12 +22,32 @@ class Slot {
 	slotSprite = null;
     }
     
+    public void setHasSimilarNeighbor(boolean has) {
+	
+	hasSimilarNeighbor = has;
+    }
+    
+    public boolean getHasSimilarNeighbor() {
+	
+	return hasSimilarNeighbor;
+    }
+    
+    public void setReadyForNextLevel(boolean ready) {
+	
+	readyForNextLevel = ready;
+    }
+    
+    public boolean getReadyForNextLevel() {
+	
+	return readyForNextLevel;
+    }
+    
     public void addElement(Element e) {
 	
 	element = e;
 	isEmpty = false;
     }
-    
+    /*
     public Element getNextLevelElement() {
 	
 	element.changeToNextLvl();
@@ -35,7 +55,7 @@ class Slot {
 	readyForNextLevel = false;
 	return element;
     }
-    
+    */
     public boolean isEmpty() {
 	
 	return isEmpty;

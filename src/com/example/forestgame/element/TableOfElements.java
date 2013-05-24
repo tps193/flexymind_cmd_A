@@ -32,13 +32,13 @@ public class TableOfElements {
     //column 3 - chance
     private static final ElementInfo[] ARRAY_OF_ELEMENTS = {
 
-	  new ElementInfo("GRASS",      "gfx_grass.png",          10,  0.35)
+	  new ElementInfo("GRASS",      "gfx_grass.png",          10,  0.60)
 	, new ElementInfo("TREE",       "gfx_tree.png",           50,  0.25)
-	, new ElementInfo("SQUIRREL",   "gfx_squirrel.png",      500,   0.2)
-	, new ElementInfo("NUT",        "gfx_nut.png",          3000, 0.184)
-	, new ElementInfo("GOLDEN_NUT", "gfx_golden_nut.png",  20000,  0.01)
-	, new ElementInfo("CROWN",      "gfx_crown.png",      100000, 0.005)
-	, new ElementInfo("NUTS_KING",  "gfx_nuts_king.png",  500000, 0.001)
+	, new ElementInfo("SQUIRREL",   "gfx_squirrel.png",      500,  0.10)
+	, new ElementInfo("NUT",        "gfx_nut.png",          3000,  0.045)
+	, new ElementInfo("GOLDEN_NUT", "gfx_golden_nut.png",  20000,  0.004)
+	, new ElementInfo("CROWN",      "gfx_crown.png",      100000,  0.0009)
+	, new ElementInfo("NUTS_KING",  "gfx_nuts_king.png",  500000,  0.0001)
     };
    
     public static String getTextureName(Element el) {
@@ -90,22 +90,22 @@ public class TableOfElements {
 
 	double random = randomGenerator.nextDouble();
 
-	if (random < 0.35) {
+	if (random < 0.60) {
 	    return new Element("GRASS");
 	}
-	else if (random < 0.60) {
+	else if (random < 0.85) {
 	    return new Element("TREE");
 	}
-	else if (random < 0.80) {
+	else if (random < 0.95) {
 	    return new Element("SQUIRREL");
 	}
-	else if (random < 0.984) {
+	else if (random < 0.995) {
 	    return new Element("NUT");
 	}
-	else if (random < 0.994) {
+	else if (random < 0.999) {
 	    return new Element("GOLDEN_NUT");
 	}
-	else if (random < 0.999) {
+	else if (random < 0.9999) {
 	    return new Element("CROWN");
 	}
 	return new Element("NUTS_KING");
