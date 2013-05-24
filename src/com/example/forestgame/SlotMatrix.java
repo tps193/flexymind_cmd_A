@@ -3,6 +3,8 @@ package com.example.forestgame;
 import java.io.IOException;
 import java.util.Random;
 
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
@@ -36,10 +38,11 @@ public class SlotMatrix {
     private final static float BORDER_HEIGHT = 26; 
     
     ParallelEntityModifier entityModifier;
-    float animationDuration = 0.5f;
-    float fromAlpha = 1;
-    float toAlpha = 0;
+    float animationDuration = 0.3f;
+    float fromAlpha = 1.0f;
+    float toAlpha = 0.3f;
     IEaseFunction easeFunction = EaseLinear.getInstance();
+    TimerHandler spriteTimerHandler;
     
     public SlotMatrix(GameScene scene) {
 	
@@ -180,9 +183,9 @@ public class SlotMatrix {
         	clearSlot(i, j);
             }
         }
-	//setMatrix(MainActivity.mainActivity.loadProgress());
-	setMatrix((String[][])MainActivity.mainActivity.load()[0]);
+	setMatrix(MainActivity.mainActivity.loadProgress());
 	viewSlots();
+	//update();
     }
     
     
@@ -399,21 +402,48 @@ public class SlotMatrix {
 	}
     }
     
-    private void graphicalMoving(int toRow, int toCol, int fromRow, int fromCol) {
+    private void graphicalMoving(final int toRow, final int toCol, final int fromRow, final int fromCol) {
 	
 	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration
-								    , fromAlpha
-								    , toAlpha
-								    , easeFunction)
-		  
+			    					    , fromAlpha
+			    					    , toAlpha
+			    					    , easeFunction)
+
 						  , new MoveModifier(animationDuration
 							  	   , getSlotPositionLeft(fromRow)
-							  	   , getSlotPositionUp(fromCol)
 							  	   , getSlotPositionLeft(toRow)
+							  	   , getSlotPositionUp(fromCol)
 							  	   , getSlotPositionUp(toCol)
 							  	   , easeFunction));
 	
-	matrix[fromRow][fromCol].getSprite().registerEntityModifier(entityModifier);
+	Slot s = matrix[fromRow][fromCol];
+	
+	TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(TableOfElements
+                							       . getTextureName
+                							       ( s.getElement()));
+
+	final Sprite animationSprite = new Sprite (getSlotPositionLeft(fromCol)
+					   , getSlotPositionUp(fromRow)
+					   , SLOT_WIDTH
+					   , SLOT_HEIGHT
+					   , slotTexture
+					   , MainActivity.mainActivity.getVertexBufferObjectManager());
+	
+	gameScene.attachChild(animationSprite);
+	
+	animationSprite.registerEntityModifier(entityModifier);
+
+	MainActivity.mainActivity.getEngine().registerUpdateHandler(
+		spriteTimerHandler = new TimerHandler(animationDuration
+						    , false
+						    , new ITimerCallback() {
+		    
+		    					@Override
+							public void onTimePassed(TimerHandler pTimerHandler) {
+							// TODO Auto-generated method stub
+		    					    gameScene.detachChild(animationSprite);
+							}
+						    }));
     }    
     
     public static int getROWS() {

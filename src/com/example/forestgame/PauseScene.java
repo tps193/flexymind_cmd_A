@@ -78,6 +78,8 @@ public class PauseScene extends Scene {
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
 		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		if (MainScene.getGameScene().getSlotMatrix().getScore() != 0)
+		MainScene.getGameScene().getScoresTable().saveResult(MainScene.getGameScene().getSlotMatrix().getScore());
 		MainActivity.mainActivity.mClick.play();
 		MainScene.getGameScene().getSlotMatrix().reInit();
 		MainScene.getGameScene().getPrison().clear();
@@ -110,8 +112,8 @@ public class PauseScene extends Scene {
 		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
 		MainActivity.mainActivity.mClick.play();
 		MainActivity.mainActivity.saveProgress();
-		//MainActivity.mainActivity.saveRespawn();
-		//MainActivity.mainActivity.savePrison();
+		MainActivity.mainActivity.saveRespawn();
+		MainActivity.mainActivity.savePrison();
 		MainScene.showMainMenuScene();
 	    }
 	    return true;

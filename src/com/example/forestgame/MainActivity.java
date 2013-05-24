@@ -18,13 +18,16 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.util.FPSLogger;
 import org.andengine.opengl.font.StrokeFont;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
@@ -83,6 +86,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion textureMuteOn;
     public AtlasStorage storage;
     public StrokeFont tDevNames;
+    public StrokeFont tScoresSceneCaptions;
+    public StrokeFont tScoresSceneScores;
     public StrokeFont tCaptions;
     private static ITexture creditsCaps;
     private static ITexture creditsNames;
@@ -95,9 +100,20 @@ public class MainActivity extends SimpleBaseGameActivity {
     public StrokeFont tMainMenu;
     public StrokeFont tNewGame;
     public StrokeFont tScores;
+    private BitmapTextureAtlas scoresSceneCaps;
+    private BitmapTextureAtlas scoresSceneScores;
     private static ITexture GameOver;
     private static ITexture MainMenu;
     private static ITexture NewGame;
+    
+    private TextureRegion regionStatic;
+    private Sprite spriteStatic;
+    private BitmapTextureAtlas textureAnim;
+    private TiledTextureRegion regionAnim;
+    private AnimatedSprite  spriteAnim;
+     
+    private static int   TILED_SPRITE_COLUMNS  = 2;
+    private static int   TILED_SPRITE_ROWS  = 5;
     
     public Music mMusic;
     public Music mGameMusic;
@@ -108,13 +124,18 @@ public class MainActivity extends SimpleBaseGameActivity {
     public Sound mStep;
     
     private String[][] namesMatrix;
-    private String[] subNames;
+    private String prisonName;
+    private String respawnName;
+   
     
     private static Scene preLoadScene;
     
-    private Sprite preLoadBackground;
-    
-    private Object[] obj;
+    private Sprite preLoadBackground; /*= new Sprite( 0
+	          , 0
+	          , MainActivity.TEXTURE_WIDTH
+	          , MainActivity.TEXTURE_HEIGHT
+	          , MainActivity.mainActivity.textureBackground
+	          , MainActivity.mainActivity.getVertexBufferObjectManager());*/
     
 
     @Override
@@ -174,6 +195,19 @@ public class MainActivity extends SimpleBaseGameActivity {
         	   , "background.jpg");
 	textureBackground = storage.getTexture("background.jpg");
 	
+	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
+     	   , MainActivity.mainActivity
+     	   , "gfx_loading/"
+     	   , "gfx_static.png");
+	regionStatic = storage.getTexture("gfx_static.png");
+	
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx_loading/");
+	textureAnim = new BitmapTextureAtlas(MainActivity.mainActivity.getTextureManager(), 512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	regionAnim = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(textureAnim, MainActivity.mainActivity,"gfx_anim.png", 0, 0, TILED_SPRITE_COLUMNS, TILED_SPRITE_ROWS);
+	mEngine.getTextureManager().loadTexture(textureAnim);
+	
+	spriteAnim = new AnimatedSprite(840, 890, regionAnim, MainActivity.mainActivity.getVertexBufferObjectManager());
+		
 	preLoadBackground = new Sprite( 0
 	          , 0
 	          , MainActivity.TEXTURE_WIDTH
@@ -181,18 +215,226 @@ public class MainActivity extends SimpleBaseGameActivity {
 	          , MainActivity.mainActivity.textureBackground
 	          , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
+	spriteStatic = new Sprite( MainActivity.TEXTURE_WIDTH / 4
+	          , MainActivity.TEXTURE_HEIGHT * 48 / 128
+	          , MainActivity.TEXTURE_WIDTH * 64 / 128
+	          , MainActivity.TEXTURE_HEIGHT * 20 / 128
+	          , MainActivity.mainActivity.regionStatic
+	          , MainActivity.mainActivity.getVertexBufferObjectManager());
+	
 	preLoadBackground.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
 	preLoadBackground.setAlpha(0.5f);
+	storage.createAtlas( this.getTextureManager()
+		 	   , this
+		 	   , "game_scene_gfx/"
+		 	   , "gfx_slots.png");
+        textureSlots = storage.getTexture("gfx_slots.png");
+	
+	storage.createAtlas( this.getTextureManager()
+			   , this
+			   , "game_scene_gfx/"
+			   , "gfx_crown.png"
+			   , "gfx_golden_nut.png"
+			   , "gfx_nut.png"
+			   , "gfx_grass.png"
+			   , "gfx_tree.png"
+			   , "gfx_nuts_king.png"
+			   , "gfx_squirrel.png"
+			   , "gfx_cage.png"
+			   , "gfx_empty.png"
+			   , "gfx_pause_icon.png");
+	
+	textureCage = storage.getTexture("gfx_cage.png");
+	texturePauseIcon = storage.getTexture("gfx_pause_icon.png");
+	MusicFactory.setAssetBasePath("sounds/");
+	
+        try {
+                mMusic = MusicFactory.createMusicFromAsset(mEngine.getMusicManager(), this, "main_menu.ogg");
+                mGameMusic = MusicFactory.createMusicFromAsset(mEngine.getMusicManager(), this, "game_background.ogg");
+                mMusic.setLooping(true);
+                mGameMusic.setLooping(true);
+        } catch (final IOException e) {
+                Debug.e("Error", e);
+        }
+        
+        SoundFactory.setAssetBasePath("sounds/");
+        
+        try {
+    		mSound = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "convolution.ogg");
+    		mClick = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "click.ogg");
+    		mGameOver = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "game_over.ogg");
+    		mGameStart = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "game_start.ogg");
+    		mStep = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "general_step.ogg");
+        } catch (final IOException e) {
+    		Debug.e("Error", e);
+        }	
+	
+	creditsCaps = new BitmapTextureAtlas(	this.getTextureManager()
+						, 2048
+						, 1024
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	scoresSceneCaps = new BitmapTextureAtlas(this.getTextureManager()
+						, 2048
+						, 1024
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	scoresSceneScores = new BitmapTextureAtlas(this.getTextureManager()
+						, 2048
+						, 1024
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
+	creditsNames = new BitmapTextureAtlas(	this.getTextureManager()
+						, 2048
+						, 2048
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
+	scoresAtlas = new BitmapTextureAtlas(	this.getTextureManager()
+						, 2048
+						, 1024
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
+	tCaptions = new StrokeFont(this.getFontManager()
+				   , creditsCaps
+				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				   , 100
+				   , true
+				   , new Color(1.0f, 0.6f, 0.0f)
+				   , 2
+				   , new Color(1.0f, 0.2f, 0.0f));
+	
+	tScoresSceneCaptions = new StrokeFont(this.getFontManager()
+		   			, scoresSceneCaps
+		   			, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+		   			, 150
+		   			, true
+		   			, new Color(1.0f, 0.6f, 0.0f)
+		   			, 2
+		   			, new Color(1.0f, 0.2f, 0.0f));
+	tScoresSceneScores = new StrokeFont(this.getFontManager()
+		 			, scoresSceneScores
+		 			, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+		 			, 120
+		 			, true
+		 			, new Color(1.0f, 1.0f, 1.0f)
+					, 2
+					, new Color(1.0f, 0.2f, 0.0f));
+	
+	tScores = new StrokeFont(this.getFontManager()
+                		 , scoresAtlas
+                		 , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                		 , 100
+                		 , true
+                		 , new Color(1.0f, 1.0f, 1.0f)
+                		 , 2
+                		 , new Color(1.0f, 0.2f, 0.0f));
+	
+	tDevNames = new StrokeFont(this.getFontManager()
+				   , creditsNames
+				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				   , 100
+				   , true
+				   , new Color(1.0f, 1.0f, 1.0f)
+				   , 2
+				   , new Color(1.0f, 0.2f, 0.0f));
+	
+	pauseLabel = new BitmapTextureAtlas(	this.getTextureManager()
+						, 2048
+						, 256
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
+	pauseResume = new BitmapTextureAtlas(	this.getTextureManager()
+						, 512
+						, 256
+						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
+	tPause = new StrokeFont(this.getFontManager()
+				   , pauseLabel
+				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				   , 165
+				   , true
+				   , new Color(1.0f, 0.6f, 0.0f)
+				   , 2
+				   , new Color(1.0f, 0.2f, 0.0f));
+	
+	tResume = new StrokeFont(this.getFontManager()
+				    , pauseResume
+				    , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				    , 120
+				    , true
+				    , new Color(1.0f, 1.0f, 1.0f)
+				    , 2
+				    , new Color(1.0f, 0.2f, 0.0f));
+	
+	GameOver = new BitmapTextureAtlas(this.getTextureManager()
+					  , 2048
+					  , 256
+					  , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
+	MainMenu = new BitmapTextureAtlas(this.getTextureManager()
+					  , 1024
+					  , 256
+					  , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
+	NewGame = new BitmapTextureAtlas(this.getTextureManager()
+					 , 1024
+					 , 256
+					 , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	
+	tGameOver = new StrokeFont(this.getFontManager()
+				   , GameOver
+				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				   , 165
+				   , true
+				   , new Color(1.0f, 0.6f, 0.0f)
+				   , 2
+				   , new Color(1.0f, 0.2f, 0.0f));
+	
+	tMainMenu = new StrokeFont(this.getFontManager()
+				   , MainMenu
+				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				   , 120
+				   , true
+				   , new Color(1.0f, 1.0f, 1.0f)
+				   , 2
+				   , new Color(1.0f, 0.2f, 0.0f));
+	
+	tNewGame = new StrokeFont(this.getFontManager()
+				  , NewGame
+				  , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+				  , 120
+				  , true
+				  , new Color(1.0f, 1.0f, 1.0f)
+				  , 2
+				  , new Color(1.0f, 0.2f, 0.0f));
+	
+	tScoresSceneCaptions.load();
+	tScoresSceneScores.load();
+	tDevNames.load();
+	tCaptions.load();
+	tPause.load();
+	tResume.load();
+	tGameOver.load();
+	tScores.load();
+	tMainMenu.load();
+	tNewGame.load();
+	
     }
 
     @Override
     protected Scene onCreateScene() {
-	
+	this.mEngine.registerUpdateHandler(new FPSLogger());
 	preLoadScene = new Scene();
 	preLoadScene.setIgnoreUpdate(true);
 	/*preLoadScene.setBackgroundEnabled(true);
 	preLoadScene.setBackground(new Background(Color.GREEN));*/
 	preLoadScene.attachChild(preLoadBackground);
+	preLoadScene.attachChild(spriteStatic);
+	
+	spriteAnim.setWidth(94);
+	spriteAnim.setHeight(44);
+	spriteAnim.animate(150, true);
+	preLoadScene.attachChild(spriteAnim);
+	
+	
 	gameLoaded = false;
 	
 	final IAsyncCallback callback = new IAsyncCallback() {
@@ -548,19 +790,12 @@ public class MainActivity extends SimpleBaseGameActivity {
 	try {
 	    
 	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("saves", 0));
-	    Object[] obj = new Object[3];
-	    obj[0]=MainScene.gameScene.slotMatrix.getNamesForSave();
-	    obj[1]=MainScene.gameScene.getNamesSubmatrix();
-	    obj[2]=Integer.valueOf(MainScene.gameScene.slotMatrix.getScore());
-	    
-	//    oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
-	 //   oos.writeObject(MainScene.gameScene.getNamesSubmatrix());
-	    oos.writeObject(obj);
+	    oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
+	    //oos.writeObject(MainScene.gameScene.savePrison());
+	    //oos.writeObject(MainScene.gameScene.respawn.getElement().getName());
 	    oos.flush();
 	    oos.close();
 	    Log.d("File out", "write");
-	//    for(String str: MainScene.gameScene.getNamesSubmatrix())
-	//	Log.d("File out", str);
 	    
 	} catch(FileNotFoundException e) {
 	    
@@ -573,15 +808,60 @@ public class MainActivity extends SimpleBaseGameActivity {
 	}
     }
 
+    public void savePrison() {
+	
+	try {
+	    
+	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("savesprison", 0));
+	    //oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
+	    oos.writeObject(MainScene.gameScene.savePrisonName());
+	    //oos.writeObject(MainScene.gameScene.respawn.getElement().getName());
+	    oos.flush();
+	    oos.close();
+	    Log.d("File out", "write in prison");
+	    
+	} catch(FileNotFoundException e) {
+	    
+	   e.printStackTrace();
+	   Log.d("File out", "not found");
+	   
+	} catch(IOException e) {
+	    
+	    e.printStackTrace();
+	    Log.d("File out", "IO exception");
+	}
+    }
+    
+    public void saveRespawn() {
+	
+	try {
+	    
+	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("savesrespawn", 0));
+	    //oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
+	    //oos.writeObject(MainScene.gameScene.prison.getElement().getName());
+	    oos.writeObject(MainScene.gameScene.saveRespawnName());
+	    oos.flush();
+	    oos.close();
+	    Log.d("File out", "write in resp " + MainScene.gameScene.respawn.getElement().getName());
+	    
+	} catch(FileNotFoundException e) {
+	    
+	   e.printStackTrace();
+	   Log.d("File out", "not found");
+	   
+	} catch(IOException e) {
+	    
+	    e.printStackTrace();
+	    Log.d("File out", "IO exception");
+	}
+    }
+
     public String[][] loadProgress() throws IOException {
 	
 	try {
 	    
 	    ObjectInputStream ois = new ObjectInputStream(openFileInput("saves"));
-	//    namesMatrix = (String[][]) ois.readObject();
-	    
-	    Object[] obj = (Object[]) ois.readObject();
-	    namesMatrix = (String[][]) obj[0];
+	    namesMatrix = (String[][]) ois.readObject();
 	    //String prisonName = (String) ois.readObject();
 	    //String respawnName = (String) ois.readObject();
 	    Log.d("File in", "read");
@@ -594,54 +874,42 @@ public class MainActivity extends SimpleBaseGameActivity {
 	return namesMatrix;
     }
     
-public int loadScores() throws IOException {
-    int score=0;
+    public String loadPrison() throws IOException {
+	prisonName=null;
 	try {
 	    
-	    ObjectInputStream ois = new ObjectInputStream(openFileInput("saves"));
-	//    namesMatrix = (String[][]) ois.readObject();
-	    
-	    Object[] obj = (Object[]) ois.readObject();
-	    //score = Integer.obj[2];
-	    score = Integer.valueOf(obj[2].toString());
-	    //String prisonName = (String) ois.readObject();
+	    ObjectInputStream ois = new ObjectInputStream(openFileInput("savesprison"));
+	    //namesMatrix = (String[][]) ois.readObject();
+	    prisonName = (String) ois.readObject();
 	    //String respawnName = (String) ois.readObject();
 	    Log.d("File in", "read");
 	    
 	} catch(ClassNotFoundException e) {
+	    
 	    e.printStackTrace();
 	    Log.d("File in", "ClassNotFoundException");
 	}
 	
-	return score;
+	return prisonName;
     }
     
-    public String[] loadPrisonAndRespawn() throws IOException {
-	
+    public String loadRespawn() throws IOException {
+	respawnName=null;
 	try {
 	    
-	    ObjectInputStream ois = new ObjectInputStream(openFileInput("saves"));
-	    Object[] obj = (Object[]) ois.readObject();
-	    subNames = (String[]) obj[1];
+	    ObjectInputStream ois = new ObjectInputStream(openFileInput("savesrespawn"));
+	    //namesMatrix = (String[][]) ois.readObject();
+	    //prisonName = (String) ois.readObject();
+	    respawnName = (String) ois.readObject();
+
+	    Log.d("File in", "read in resp ");
+
 	} catch(ClassNotFoundException e) {
+	    
 	    e.printStackTrace();
 	    Log.d("File in", "ClassNotFoundException");
 	}
 	
-	return subNames;
-    }
-    
-    public Object[] load() throws IOException {
-	
-	try {
-	    
-	    ObjectInputStream ois = new ObjectInputStream(openFileInput("saves"));
-	    obj = (Object[])ois.readObject();
-	} catch(ClassNotFoundException e) {
-	    e.printStackTrace();
-	    Log.d("File in", "ClassNotFoundException");
-	}
-	
-	return obj;
+	return respawnName;
     }
 }
