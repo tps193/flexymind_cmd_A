@@ -174,7 +174,7 @@ public class SlotMatrix {
     }
     
     //инитит загруженную игру
-    public void loadInit() throws IOException {
+    public void loadInit(Object obj, int scores) throws IOException {
 	
 	for (int i = 0; i < ROWS; i++) {
 	    
@@ -183,7 +183,8 @@ public class SlotMatrix {
         	clearSlot(i, j);
             }
         }
-	setMatrix(MainActivity.mainActivity.loadProgress());
+	setMatrix((String[][]) obj);
+	this.score = scores;
 	viewSlots();
 	//update();
     }

@@ -21,6 +21,8 @@ public class GameScene extends Scene {
     
     private PauseScene pauseScene = new PauseScene();
     private GameOverScene gameOverScene = new GameOverScene();
+    private ScoresTable scoresTable = new ScoresTable();
+    
     
     public SlotMatrix slotMatrix;
     private Prison prison;
@@ -31,9 +33,6 @@ public class GameScene extends Scene {
     
     private int putInRow;
     private int putInColum;
-    private boolean backlightOn;
-    
-    private static final int SUBMATRIX_LENGTH = 2;
     
     private static final float CAGE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 136 / 625;
     private static final float CAGE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
@@ -62,6 +61,7 @@ public class GameScene extends Scene {
     private static final float PRISON_POSITION_BOTTOM = PRISON_POSITION_UP + CAGE_HEIGHT;
     private static final float BACKLIGHT_ALPHA = 0.7f;
     private static double OFFSET_ON_MOVING;
+    private static int SUBMATRIX_LENGTH = 2;
     
     private Text scoresText;
     
@@ -249,6 +249,12 @@ public class GameScene extends Scene {
 	return gameOverScene;
     }
     
+    public ScoresTable getScoresTable() {
+        return scoresTable;
+    }
+
+
+
     public Element getMovingElement() {
 	return movingElement;
     }
@@ -285,11 +291,7 @@ public class GameScene extends Scene {
 		     putInColum = SlotMatrix.getPrisonPlaceRow();
 		     putInRow = SlotMatrix.getROWS()+1;
 		     putInColum = SlotMatrix.getCOLUMNS()+1;
-		     if (backlightOn) {
-			 
-			 detachChild(backlight);
-			 setBacklightOn(false);
-		     }
+		     detachChild(backlight);
 		     break;
 		     
 		 } else {
@@ -297,15 +299,10 @@ public class GameScene extends Scene {
 		     putInRow = SlotMatrix.getMilkPointRow();
 		     putInColum = SlotMatrix.getMilkPointColumn();
 		     flg=false;
-		     if (backlightOn) {
-			 
-			 detachChild(backlight);
-			 setBacklightOn(false);
-		     }
+		     detachChild(backlight);
 		 }
 	     }
-	     if (flg) {
-		 
+	     if (flg) { 
 		break;
 	     }
 	 }
@@ -313,24 +310,20 @@ public class GameScene extends Scene {
     
     public void slotBacklight(int i, int j) {
 	
-	if (backlightOn) {
-	    
-	    detachChild(backlight);
-	}
+	detachChild(backlight);
 	
 	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
 	    
-	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j)
+	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
                 	    	 , SlotMatrix.getSlotPositionUp(i)
-                	    	 , SlotMatrix.getSlotWidth()
-                	    	 , SlotMatrix.getSlotHeight()
+                	    	 , SlotMatrix.getSlotWidth() + MainActivity.TEXTURE_WIDTH / 210
+                	    	 , SlotMatrix.getSlotHeight() + MainActivity.TEXTURE_HEIGHT / 220
                 	    	 , MainActivity.mainActivity.storage.getTexture("gfx_empty.png")
                 	    	 , MainActivity.mainActivity.getVertexBufferObjectManager());
      
             backlight.setAlpha(BACKLIGHT_ALPHA);
 	    attachChild(backlight);
 	    backlight.getParent().sortChildren();
-	    backlightOn = true;
 	}
     }
     
@@ -344,7 +337,7 @@ public class GameScene extends Scene {
 	return putInColum;
     } 
     
-    public void setScores(int scores) {
+public void setScores(int scores) {
 	
 	Log.d("scores",""+scores);
 	detachChild(scoresText);
@@ -359,19 +352,23 @@ public class GameScene extends Scene {
 	attachChild(scoresText);
     }
 
-    public boolean isBacklightOn() {
-	
-        return backlightOn;
-    }
-
-    public void setBacklightOn(boolean backlight) {
-	
-        this.backlightOn = backlight;
-    }
-
     public Sprite getBacklight() {
 	
         return backlight;
+    }
+
+    public String savePrisonName() {
+	
+	if (prison.isEmpty()) return null;
+	
+	return prison.getElement().getName();
+    }
+    
+    public String saveRespawnName() {
+	
+	if (respawn.isEmpty()) return null;
+	
+	return respawn.getElement().getName();
     }
     
     public String[] getNamesSubmatrix() {
@@ -399,14 +396,14 @@ public class GameScene extends Scene {
 	respawn.clear();
 	if(newPrison!=null)prison.addElement(new Element(newPrison));
 	if(newRespawn!=null)respawn.addElement(new Element(newRespawn));*/
-	
-	int scores = Integer.valueOf(MainActivity.mainActivity.load()[2].toString());
-	String[] loadedSubMatrix = (String[]) MainActivity.mainActivity.load()[1];
+	Object[] loadedObj = MainActivity.mainActivity.load();
+	int scores = Integer.valueOf(loadedObj[2].toString());
+	String[] loadedSubMatrix = (String[]) loadedObj[1];
 	String loadedPrison = loadedSubMatrix[0];
 	String loadedRepawn = loadedSubMatrix[1];
 	//String loadedPrison = (String)MainActivity.mainActivity.load()[1][0];
 	
-	slotMatrix.loadInit();
+	slotMatrix.loadInit(loadedObj[0],scores);
 	prison.clear();
 	respawn.clear();
 	if(loadedPrison!=null)prison.addElement(new Element(loadedPrison));

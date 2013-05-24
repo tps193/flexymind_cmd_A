@@ -127,6 +127,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     private String prisonName;
     private String respawnName;
    
+    private Object[] objFromLoad;
     
     private static Scene preLoadScene;
     
@@ -224,199 +225,6 @@ public class MainActivity extends SimpleBaseGameActivity {
 	
 	preLoadBackground.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
 	preLoadBackground.setAlpha(0.5f);
-	storage.createAtlas( this.getTextureManager()
-		 	   , this
-		 	   , "game_scene_gfx/"
-		 	   , "gfx_slots.png");
-        textureSlots = storage.getTexture("gfx_slots.png");
-	
-	storage.createAtlas( this.getTextureManager()
-			   , this
-			   , "game_scene_gfx/"
-			   , "gfx_crown.png"
-			   , "gfx_golden_nut.png"
-			   , "gfx_nut.png"
-			   , "gfx_grass.png"
-			   , "gfx_tree.png"
-			   , "gfx_nuts_king.png"
-			   , "gfx_squirrel.png"
-			   , "gfx_cage.png"
-			   , "gfx_empty.png"
-			   , "gfx_pause_icon.png");
-	
-	textureCage = storage.getTexture("gfx_cage.png");
-	texturePauseIcon = storage.getTexture("gfx_pause_icon.png");
-	MusicFactory.setAssetBasePath("sounds/");
-	
-        try {
-                mMusic = MusicFactory.createMusicFromAsset(mEngine.getMusicManager(), this, "main_menu.ogg");
-                mGameMusic = MusicFactory.createMusicFromAsset(mEngine.getMusicManager(), this, "game_background.ogg");
-                mMusic.setLooping(true);
-                mGameMusic.setLooping(true);
-        } catch (final IOException e) {
-                Debug.e("Error", e);
-        }
-        
-        SoundFactory.setAssetBasePath("sounds/");
-        
-        try {
-    		mSound = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "convolution.ogg");
-    		mClick = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "click.ogg");
-    		mGameOver = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "game_over.ogg");
-    		mGameStart = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "game_start.ogg");
-    		mStep = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), this, "general_step.ogg");
-        } catch (final IOException e) {
-    		Debug.e("Error", e);
-        }	
-	
-	creditsCaps = new BitmapTextureAtlas(	this.getTextureManager()
-						, 2048
-						, 1024
-						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	scoresSceneCaps = new BitmapTextureAtlas(this.getTextureManager()
-						, 2048
-						, 1024
-						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	scoresSceneScores = new BitmapTextureAtlas(this.getTextureManager()
-						, 2048
-						, 1024
-						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	
-	creditsNames = new BitmapTextureAtlas(	this.getTextureManager()
-						, 2048
-						, 2048
-						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	
-	scoresAtlas = new BitmapTextureAtlas(	this.getTextureManager()
-						, 2048
-						, 1024
-						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	
-	tCaptions = new StrokeFont(this.getFontManager()
-				   , creditsCaps
-				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-				   , 100
-				   , true
-				   , new Color(1.0f, 0.6f, 0.0f)
-				   , 2
-				   , new Color(1.0f, 0.2f, 0.0f));
-	
-	tScoresSceneCaptions = new StrokeFont(this.getFontManager()
-		   			, scoresSceneCaps
-		   			, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-		   			, 150
-		   			, true
-		   			, new Color(1.0f, 0.6f, 0.0f)
-		   			, 2
-		   			, new Color(1.0f, 0.2f, 0.0f));
-	tScoresSceneScores = new StrokeFont(this.getFontManager()
-		 			, scoresSceneScores
-		 			, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-		 			, 120
-		 			, true
-		 			, new Color(1.0f, 1.0f, 1.0f)
-					, 2
-					, new Color(1.0f, 0.2f, 0.0f));
-	
-	tScores = new StrokeFont(this.getFontManager()
-                		 , scoresAtlas
-                		 , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                		 , 100
-                		 , true
-                		 , new Color(1.0f, 1.0f, 1.0f)
-                		 , 2
-                		 , new Color(1.0f, 0.2f, 0.0f));
-	
-	tDevNames = new StrokeFont(this.getFontManager()
-				   , creditsNames
-				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-				   , 100
-				   , true
-				   , new Color(1.0f, 1.0f, 1.0f)
-				   , 2
-				   , new Color(1.0f, 0.2f, 0.0f));
-	
-	pauseLabel = new BitmapTextureAtlas(	this.getTextureManager()
-						, 2048
-						, 256
-						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	
-	pauseResume = new BitmapTextureAtlas(	this.getTextureManager()
-						, 512
-						, 256
-						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	
-	tPause = new StrokeFont(this.getFontManager()
-				   , pauseLabel
-				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-				   , 165
-				   , true
-				   , new Color(1.0f, 0.6f, 0.0f)
-				   , 2
-				   , new Color(1.0f, 0.2f, 0.0f));
-	
-	tResume = new StrokeFont(this.getFontManager()
-				    , pauseResume
-				    , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-				    , 120
-				    , true
-				    , new Color(1.0f, 1.0f, 1.0f)
-				    , 2
-				    , new Color(1.0f, 0.2f, 0.0f));
-	
-	GameOver = new BitmapTextureAtlas(this.getTextureManager()
-					  , 2048
-					  , 256
-					  , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	
-	MainMenu = new BitmapTextureAtlas(this.getTextureManager()
-					  , 1024
-					  , 256
-					  , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	
-	NewGame = new BitmapTextureAtlas(this.getTextureManager()
-					 , 1024
-					 , 256
-					 , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	
-	tGameOver = new StrokeFont(this.getFontManager()
-				   , GameOver
-				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-				   , 165
-				   , true
-				   , new Color(1.0f, 0.6f, 0.0f)
-				   , 2
-				   , new Color(1.0f, 0.2f, 0.0f));
-	
-	tMainMenu = new StrokeFont(this.getFontManager()
-				   , MainMenu
-				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-				   , 120
-				   , true
-				   , new Color(1.0f, 1.0f, 1.0f)
-				   , 2
-				   , new Color(1.0f, 0.2f, 0.0f));
-	
-	tNewGame = new StrokeFont(this.getFontManager()
-				  , NewGame
-				  , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-				  , 120
-				  , true
-				  , new Color(1.0f, 1.0f, 1.0f)
-				  , 2
-				  , new Color(1.0f, 0.2f, 0.0f));
-	
-	tScoresSceneCaptions.load();
-	tScoresSceneScores.load();
-	tDevNames.load();
-	tCaptions.load();
-	tPause.load();
-	tResume.load();
-	tGameOver.load();
-	tScores.load();
-	tMainMenu.load();
-	tNewGame.load();
-	
     }
 
     @Override
@@ -523,6 +331,16 @@ public class MainActivity extends SimpleBaseGameActivity {
         						, 1024
         						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         	
+        	scoresSceneCaps = new BitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
+        						, 2048
+        						, 1024
+        						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        	
+        	scoresSceneScores = new BitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
+        						, 2048
+        						, 1024
+        						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        		
         	creditsNames = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
         						, 2048
         						, 2048
@@ -542,6 +360,24 @@ public class MainActivity extends SimpleBaseGameActivity {
         				   , 2
         				   , new Color(1.0f, 0.2f, 0.0f));
         	
+        	tScoresSceneCaptions = new StrokeFont	(MainActivity.mainActivity.getFontManager()
+        						, scoresSceneCaps
+        						, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        						, 150
+        						, true
+        						, new Color(1.0f, 0.6f, 0.0f)
+        						, 2
+        						, new Color(1.0f, 0.2f, 0.0f));
+        	
+        	tScoresSceneScores = new StrokeFont(	MainActivity.mainActivity.getFontManager()
+        						, scoresSceneScores
+        						, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        						, 120
+        						, true
+        						, new Color(1.0f, 1.0f, 1.0f)
+        						, 2
+        						, new Color(1.0f, 0.2f, 0.0f));
+
         	tScores = new StrokeFont(MainActivity.mainActivity.getFontManager()
                         		 , scoresAtlas
                         		 , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
@@ -630,6 +466,8 @@ public class MainActivity extends SimpleBaseGameActivity {
         				  , 2
         				  , new Color(1.0f, 0.2f, 0.0f));
         	
+        	tScoresSceneCaptions.load();
+        	tScoresSceneScores.load();
         	tDevNames.load();
         	tCaptions.load();
         	tPause.load();
@@ -785,17 +623,24 @@ public class MainActivity extends SimpleBaseGameActivity {
 	return (xlarge || large);
     }
 
-    public void saveProgress() {
+public void saveProgress() {
 	
 	try {
 	    
 	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("saves", 0));
-	    oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
-	    //oos.writeObject(MainScene.gameScene.savePrison());
-	    //oos.writeObject(MainScene.gameScene.respawn.getElement().getName());
+	    Object[] obj = new Object[3];
+	    obj[0]=MainScene.gameScene.slotMatrix.getNamesForSave();
+	    obj[1]=MainScene.gameScene.getNamesSubmatrix();
+	    obj[2]=Integer.valueOf(MainScene.gameScene.slotMatrix.getScore());
+	    
+	//    oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
+	 //   oos.writeObject(MainScene.gameScene.getNamesSubmatrix());
+	    oos.writeObject(obj);
 	    oos.flush();
 	    oos.close();
 	    Log.d("File out", "write");
+	//    for(String str: MainScene.gameScene.getNamesSubmatrix())
+	//	Log.d("File out", str);
 	    
 	} catch(FileNotFoundException e) {
 	    
@@ -808,108 +653,18 @@ public class MainActivity extends SimpleBaseGameActivity {
 	}
     }
 
-    public void savePrison() {
-	
-	try {
-	    
-	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("savesprison", 0));
-	    //oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
-	    oos.writeObject(MainScene.gameScene.savePrisonName());
-	    //oos.writeObject(MainScene.gameScene.respawn.getElement().getName());
-	    oos.flush();
-	    oos.close();
-	    Log.d("File out", "write in prison");
-	    
-	} catch(FileNotFoundException e) {
-	    
-	   e.printStackTrace();
-	   Log.d("File out", "not found");
-	   
-	} catch(IOException e) {
-	    
-	    e.printStackTrace();
-	    Log.d("File out", "IO exception");
-	}
-    }
-    
-    public void saveRespawn() {
-	
-	try {
-	    
-	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("savesrespawn", 0));
-	    //oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
-	    //oos.writeObject(MainScene.gameScene.prison.getElement().getName());
-	    oos.writeObject(MainScene.gameScene.saveRespawnName());
-	    oos.flush();
-	    oos.close();
-	    Log.d("File out", "write in resp " + MainScene.gameScene.respawn.getElement().getName());
-	    
-	} catch(FileNotFoundException e) {
-	    
-	   e.printStackTrace();
-	   Log.d("File out", "not found");
-	   
-	} catch(IOException e) {
-	    
-	    e.printStackTrace();
-	    Log.d("File out", "IO exception");
-	}
-    }
 
-    public String[][] loadProgress() throws IOException {
-	
+public Object[] load() throws IOException {
+	Object[] obj=null;
 	try {
 	    
 	    ObjectInputStream ois = new ObjectInputStream(openFileInput("saves"));
-	    namesMatrix = (String[][]) ois.readObject();
-	    //String prisonName = (String) ois.readObject();
-	    //String respawnName = (String) ois.readObject();
-	    Log.d("File in", "read");
-	    
+	    obj = (Object[])ois.readObject();
 	} catch(ClassNotFoundException e) {
 	    e.printStackTrace();
 	    Log.d("File in", "ClassNotFoundException");
 	}
 	
-	return namesMatrix;
-    }
-    
-    public String loadPrison() throws IOException {
-	prisonName=null;
-	try {
-	    
-	    ObjectInputStream ois = new ObjectInputStream(openFileInput("savesprison"));
-	    //namesMatrix = (String[][]) ois.readObject();
-	    prisonName = (String) ois.readObject();
-	    //String respawnName = (String) ois.readObject();
-	    Log.d("File in", "read");
-	    
-	} catch(ClassNotFoundException e) {
-	    
-	    e.printStackTrace();
-	    Log.d("File in", "ClassNotFoundException");
-	}
-	
-	return prisonName;
-    }
-    
-    public String loadRespawn() throws IOException {
-	respawnName=null;
-	try {
-	    
-	    ObjectInputStream ois = new ObjectInputStream(openFileInput("savesrespawn"));
-	    //namesMatrix = (String[][]) ois.readObject();
-	    //prisonName = (String) ois.readObject();
-	    respawnName = (String) ois.readObject();
-
-	    Log.d("File in", "read in resp ");
-
-	} catch(ClassNotFoundException e) {
-	    
-	    e.printStackTrace();
-	    Log.d("File in", "ClassNotFoundException");
-	}
-	
-	return respawnName;
+	return obj;
     }
 }
