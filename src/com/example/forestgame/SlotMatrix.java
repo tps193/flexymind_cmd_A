@@ -38,9 +38,9 @@ public class SlotMatrix {
     private final static float BORDER_HEIGHT = 26; 
     
     ParallelEntityModifier entityModifier;
-    float animationDuration = 0.2f;
-    float fromAlpha = 1;
-    float toAlpha = 0;
+    float animationDuration = 0.3f;
+    float fromAlpha = 1.0f;
+    float toAlpha = 0.3f;
     IEaseFunction easeFunction = EaseLinear.getInstance();
     TimerHandler spriteTimerHandler;
     
@@ -411,8 +411,8 @@ public class SlotMatrix {
 
 						  , new MoveModifier(animationDuration
 							  	   , getSlotPositionLeft(fromRow)
-							  	   , getSlotPositionUp(fromCol)
 							  	   , getSlotPositionLeft(toRow)
+							  	   , getSlotPositionUp(fromCol)
 							  	   , getSlotPositionUp(toCol)
 							  	   , easeFunction));
 	
