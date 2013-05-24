@@ -140,7 +140,7 @@ public class Respawn extends GameSlot {
 	slotSprite.setPosition(spriteLeftBorder, spriteUpBorder);
 	      
 	gameScene.moveElement(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() - verticalOffset);
-	column = gameScene.getPutInColum();
+	column = gameScene.getPutInColumn();
 	row = gameScene.getPutInRow(); 
 	
 	Log.d("resp", Integer.toString(row));

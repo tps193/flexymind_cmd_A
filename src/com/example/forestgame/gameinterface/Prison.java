@@ -112,7 +112,7 @@ public class Prison extends GameSlot {
 	slotSprite.setPosition(spriteLeftBorder, spriteUpBorder);
 	      
 	gameScene.moveElement(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() - verticalOffset);
-	column = gameScene.getPutInColum();
+	column = gameScene.getPutInColumn();
 	row = gameScene.getPutInRow(); 
 	
 	Log.d("prison", Integer.toString(row));
