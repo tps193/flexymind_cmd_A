@@ -231,7 +231,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     protected Scene onCreateScene() {
 	this.mEngine.registerUpdateHandler(new FPSLogger());
 	preLoadScene = new Scene();
-	preLoadScene.setIgnoreUpdate(true);
+	//preLoadScene.setIgnoreUpdate(true);
 	/*preLoadScene.setBackgroundEnabled(true);
 	preLoadScene.setBackground(new Background(Color.GREEN));*/
 	preLoadScene.attachChild(preLoadBackground);
