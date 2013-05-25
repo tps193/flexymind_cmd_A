@@ -64,6 +64,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     public static ZoomCamera camera;  //made public modifier camera so that it can be accessed from GameScene
     
     private boolean gameLoaded = false; // flag of game loading state
+    private boolean gameSaved = false; // flag of game saving
     
     public static boolean isMute = false;
     
@@ -608,6 +609,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     @Override
     protected void onDestroy() {
 	
+	saveProgress();
 	super.onDestroy();
 	android.os.Process.killProcess(android.os.Process.myPid());
     }
@@ -624,7 +626,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     }
 
 public void saveProgress() {
-	
+    
+	if (!gameSaved) {
 	try {
 	    
 	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("saves", 0));
@@ -639,6 +642,7 @@ public void saveProgress() {
 	    oos.flush();
 	    oos.close();
 	    Log.d("File out", "write");
+	    gameSaved = true;
 	//    for(String str: MainScene.gameScene.getNamesSubmatrix())
 	//	Log.d("File out", str);
 	    
@@ -651,8 +655,13 @@ public void saveProgress() {
 	    e.printStackTrace();
 	    Log.d("File out", "IO exception");
 	}
+	}
     }
 
+public void progressNotSaved() {
+    
+    gameSaved = false;
+}
 
 public Object[] load() throws IOException {
 	Object[] obj=null;

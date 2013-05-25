@@ -86,6 +86,7 @@ public class PauseScene extends Scene {
 		MainScene.getGameScene().getRespawn().clear();
 		MainScene.getGameScene().getRespawn().generateElement();
 		MainActivity.mainActivity.mClick.play();
+		MainActivity.mainActivity.progressNotSaved();
 		MainScene.showGameScene();
 	    }
 	    return true;

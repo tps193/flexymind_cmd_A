@@ -102,6 +102,7 @@ public class MainMenuScene extends Scene {
 	    MainScene.getGameScene().getPrison().clear();
 	    MainScene.getGameScene().getRespawn().clear();
 	    MainScene.getGameScene().getRespawn().generateElement();
+	    MainActivity.mainActivity.progressNotSaved();
 	    MainScene.showGameScene();
 	}
 	
