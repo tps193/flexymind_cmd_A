@@ -411,10 +411,10 @@ public class SlotMatrix {
 			    					    , easeFunction)
 
 						  , new MoveModifier(animationDuration
-							  	   , getSlotPositionLeft(fromRow)
-							  	   , getSlotPositionLeft(toRow)
-							  	   , getSlotPositionUp(fromCol)
-							  	   , getSlotPositionUp(toCol)
+							  	   , getSlotPositionLeft(fromCol)
+							  	   , getSlotPositionLeft(toCol)
+							  	   , getSlotPositionUp(fromRow)
+							  	   , getSlotPositionUp(toRow)
 							  	   , easeFunction));
 	
 	Slot s = matrix[fromRow][fromCol];
@@ -423,7 +423,7 @@ public class SlotMatrix {
                 							       . getTextureName
                 							       ( s.getElement()));
 
-	final Sprite animationSprite = new Sprite (getSlotPositionLeft(fromCol)
+	final Sprite animationSprite = new Sprite ( getSlotPositionLeft(fromCol)
 					   , getSlotPositionUp(fromRow)
 					   , SLOT_WIDTH
 					   , SLOT_HEIGHT
