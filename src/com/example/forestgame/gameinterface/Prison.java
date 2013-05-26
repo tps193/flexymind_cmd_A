@@ -18,6 +18,8 @@ public class Prison extends GameSlot {
     private final static float PRISON_WIDTH = MainActivity.TEXTURE_WIDTH * 61 / 250;
     private final static float PRISON_HEIGHT = MainActivity.TEXTURE_HEIGHT * 303 / 2000;
     private static final int PRISON_Z_INDEX = 401;
+    private static float touchPointX;
+    private static float touchPointY;
     
     public Prison(GameScene scene) {
 	
@@ -82,40 +84,38 @@ public class Prison extends GameSlot {
     }
     
     protected void gameSlotIsActionUp() {
-	
-	    
-	    gameScene.detachChild(gameScene.getBacklight());
-	    
-	
+
+	gameScene.moveElement(touchPointX, touchPointY - VERTICAL_OFFSET);
+	column = gameScene.getPutInColumn();
+	row = gameScene.getPutInRow(); 
+	Log.d("prison", Integer.toString(row));
+	Log.d("prison", Integer.toString(column));
+        gameScene.detachChild(gameScene.getBacklight());
+
+
 	if (row < SlotMatrix.getROWS() && column <SlotMatrix.getCOLUMNS() 
 		&& gameScene.getSlotMatrix().isSlotEmpty(row, column)) {
-		
+
 	    Log.d("prison", "new");
 	    gameScene.getSlotMatrix().putToSlot(element, row, column);
 	    clear();
-	    
+
 	} else {
-		
+
 	    Log.d("prison","nowhere");
 	    backToGameSlot(element);
 	}
     }
     
     protected void gameSlotIsActionMove(TouchEvent pSceneTouchEvent) {
-	
+
 	Log.d("prison", "move");
-	    
-	float spriteLeftBorder = pSceneTouchEvent.getX() - slotSprite.getWidth() / 2;
-	float verticalOffset = (float)(slotSprite.getHeight() * gameScene.getOffsetCoef());
-	float spriteUpBorder = pSceneTouchEvent.getY() - slotSprite.getHeight() / 2 - verticalOffset;
-	
+
+	touchPointX = pSceneTouchEvent.getX();
+	touchPointY = pSceneTouchEvent.getY();
+	float spriteLeftBorder = touchPointX - slotSprite.getWidth() / 2;
+	float spriteUpBorder = touchPointY - slotSprite.getHeight() / 2 - VERTICAL_OFFSET;
 	slotSprite.setPosition(spriteLeftBorder, spriteUpBorder);
-	      
-	gameScene.moveElement(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() - verticalOffset);
-	column = gameScene.getPutInColum();
-	row = gameScene.getPutInRow(); 
-	
-	Log.d("prison", Integer.toString(row));
-	Log.d("prison", Integer.toString(column));
+	gameScene.backLight(touchPointX, touchPointY);     
     }
 }

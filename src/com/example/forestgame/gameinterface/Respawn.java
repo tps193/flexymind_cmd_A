@@ -18,6 +18,8 @@ public class Respawn extends GameSlot {
     private final static float RESPAWN_WIDTH = MainActivity.TEXTURE_WIDTH * 61 / 250;
     private final static float RESPAWN_HEIGHT = MainActivity.TEXTURE_HEIGHT * 303 / 2000;
     private static final int RESPAWN_Z_INDEX = 401;
+    private static float touchPointX;
+    private static float touchPointY;
     
     public Respawn(GameScene scene) {
 	
@@ -102,7 +104,13 @@ public class Respawn extends GameSlot {
 	Log.d("resp", Integer.toString(row));
 	Log.d("resp", Integer.toString(column));
 	
-	    gameScene.detachChild(gameScene.getBacklight());
+	gameScene.moveElement(touchPointX, touchPointY - VERTICAL_OFFSET);
+	column = gameScene.getPutInColumn();
+	row = gameScene.getPutInRow(); 
+	Log.d("resp", Integer.toString(row));
+	Log.d("resp", Integer.toString(column));
+        gameScene.detachChild(gameScene.getBacklight());
+	
 	
 	if (column == SlotMatrix.getPrisonPlaceColumn() && row  == SlotMatrix.getPrisonPlaceRow() 
 		&& gameScene.getPrison().isEmpty()) {
@@ -130,20 +138,14 @@ public class Respawn extends GameSlot {
     }
     
     protected void gameSlotIsActionMove(TouchEvent pSceneTouchEvent) {
-	
+
 	Log.d("resp", "move");
-	
-	float spriteLeftBorder = pSceneTouchEvent.getX() - slotSprite.getWidth() / 2;
-	float verticalOffset = (float)(slotSprite.getHeight() * gameScene.getOffsetCoef());
-	float spriteUpBorder = pSceneTouchEvent.getY() - slotSprite.getHeight() / 2 - verticalOffset;
-	
+
+	touchPointX = pSceneTouchEvent.getX();
+	touchPointY = pSceneTouchEvent.getY();
+	float spriteLeftBorder = touchPointX - slotSprite.getWidth() / 2;
+	float spriteUpBorder = touchPointY - slotSprite.getHeight() / 2 - VERTICAL_OFFSET;
 	slotSprite.setPosition(spriteLeftBorder, spriteUpBorder);
-	      
-	gameScene.moveElement(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() - verticalOffset);
-	column = gameScene.getPutInColum();
-	row = gameScene.getPutInRow(); 
-	
-	Log.d("resp", Integer.toString(row));
-	Log.d("resp", Integer.toString(column));
+	gameScene.backLight(touchPointX, touchPointY);
     }
 }

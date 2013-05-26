@@ -124,12 +124,6 @@ public class MainActivity extends SimpleBaseGameActivity {
     public Sound mGameStart;
     public Sound mStep;
     
-    private String[][] namesMatrix;
-    private String prisonName;
-    private String respawnName;
-   
-    private Object[] objFromLoad;
-    
     private static Scene preLoadScene;
     
     private Sprite preLoadBackground; /*= new Sprite( 0

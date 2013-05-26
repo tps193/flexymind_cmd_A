@@ -32,7 +32,7 @@ public class GameScene extends Scene {
     private Element movingElement;
     
     private int putInRow;
-    private int putInColum;
+    private int putInColumn;
     
     private static final float CAGE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 136 / 625;
     private static final float CAGE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
@@ -60,8 +60,10 @@ public class GameScene extends Scene {
     private static final float PRISON_POSITION_RIGHT = PRISON_POSITION_LEFT + CAGE_WIDTH;
     private static final float PRISON_POSITION_BOTTOM = PRISON_POSITION_UP + CAGE_HEIGHT;
     private static final float BACKLIGHT_ALPHA = 0.7f;
-    private static double OFFSET_ON_MOVING;
     private static int SUBMATRIX_LENGTH = 2;
+    
+    private float BORDER_WIDTH = SlotMatrix.getSlotPositionLeft(1) - SlotMatrix.getSlotPositionLeft(0) - SlotMatrix.getSlotWidth();
+    private float BORDER_HEIGHT = SlotMatrix.getSlotPositionUp(1) - SlotMatrix.getSlotPositionUp(0) - SlotMatrix.getSlotHeight();
     
     private Text scoresText;
     
@@ -194,16 +196,6 @@ public class GameScene extends Scene {
 	pauseScene.setZIndex(PAUSE_SCENE_Z_INDEX);
 	gameOverScene.setZIndex(GAME_OVER_SCENE_Z_INDEX);
 	
-	//here the test for tablet/phone is needed
-	if (MainActivity.mainActivity.hasLargeScreen()) {
-	    OFFSET_ON_MOVING = 0.2;
-	} else {
-	    OFFSET_ON_MOVING = 0.7;
-	}
-    }
-    
-    public double getOffsetCoef() {
-	return OFFSET_ON_MOVING;
     }
     
     public void show() {
@@ -259,53 +251,42 @@ public class GameScene extends Scene {
 	return movingElement;
     }
 
+    public void backLight(float touchPointX, float touchPointY) {
+
+	int backlightRow = (int) ((touchPointY - SlotMatrix.getSlotPositionUp(0)) / (SlotMatrix.getSlotHeight() + BORDER_HEIGHT));
+	int backlightColumn = (int) ((touchPointX - SlotMatrix.getSlotPositionLeft(0)) / (SlotMatrix.getSlotWidth() + BORDER_WIDTH));
+	slotBacklight(backlightRow, backlightColumn);
+    }
+    
+    
     public void moveElement(float touchPointX, float touchPointY) {
-	
-	 for (int i = 0; i < SlotMatrix.getROWS(); i++) {
-	     
-	     boolean flg=false;
-	     for (int j = 0; j < SlotMatrix.getCOLUMNS(); j++) {
-		   
-		 flg=true;
-		 float slotLeftBorder = SlotMatrix.getSlotPositionLeft(j);
-		 float slotUpperBorder = SlotMatrix.getSlotPositionUp(i);
-		 float slotRightBorder = slotLeftBorder + SlotMatrix.getSlotWidth();
-		 float slotBottomBorder = slotUpperBorder + SlotMatrix.getSlotHeight();
-		 
-		 if (slotLeftBorder <= touchPointX && touchPointX <= slotRightBorder && 
-		     slotUpperBorder <= touchPointY && touchPointY <= slotBottomBorder) {
-		
-		     Log.d("slot x ",Integer.toString(j));
-		     Log.d("slot y ",Integer.toString(i));
-		     putInRow = i;
-		     putInColum = j;
-		     slotBacklight(i,j);
-		     break;
-		     
-		 } else if (PRISON_POSITION_LEFT <= touchPointX && touchPointX <= PRISON_POSITION_RIGHT && 
-			    PRISON_POSITION_UP <= touchPointY && touchPointY <= PRISON_POSITION_BOTTOM) {
-			
-		     Log.d("slotPrison x ",Integer.toString(7));
-		     Log.d("slotPrison y ",Integer.toString(7));
-		     putInRow = SlotMatrix.getPrisonPlaceRow();
-		     putInColum = SlotMatrix.getPrisonPlaceRow();
-		     putInRow = SlotMatrix.getROWS()+1;
-		     putInColum = SlotMatrix.getCOLUMNS()+1;
-		     detachChild(backlight);
-		     break;
-		     
-		 } else {
-		     
-		     putInRow = SlotMatrix.getMilkPointRow();
-		     putInColum = SlotMatrix.getMilkPointColumn();
-		     flg=false;
-		     detachChild(backlight);
-		 }
-	     }
-	     if (flg) { 
-		break;
-	     }
-	 }
+
+	if ((touchPointX >= SlotMatrix.getSlotPositionLeft(0)) && 
+		(touchPointX <= SlotMatrix.getSlotPositionLeft(SlotMatrix.getCOLUMNS()) + SlotMatrix.getSlotWidth()) &&
+	    	(touchPointY >= SlotMatrix.getSlotPositionUp(0) &&
+	    	(touchPointY <= SlotMatrix.getSlotPositionUp(SlotMatrix.getROWS()) + SlotMatrix.getSlotHeight()))) {
+
+	    putInRow = (int) ((touchPointY - SlotMatrix.getSlotPositionUp(0)) / (SlotMatrix.getSlotHeight() + BORDER_HEIGHT));
+	    putInColumn = (int) ((touchPointX - SlotMatrix.getSlotPositionLeft(0)) / (SlotMatrix.getSlotWidth() + BORDER_WIDTH));
+	    Log.d("slot x ",Integer.toString(putInColumn));
+	    Log.d("slot y ",Integer.toString(putInRow));
+
+
+	} else if (PRISON_POSITION_LEFT <= touchPointX && touchPointX <= PRISON_POSITION_RIGHT && 
+		    PRISON_POSITION_UP <= touchPointY && touchPointY <= PRISON_POSITION_BOTTOM) {
+
+	     Log.d("slotPrison x ",Integer.toString(7));
+	     Log.d("slotPrison y ",Integer.toString(7));
+	     putInRow = SlotMatrix.getPrisonPlaceRow();
+	     putInColumn = SlotMatrix.getPrisonPlaceRow();
+	     detachChild(backlight);
+
+	} else {
+
+	    putInRow = SlotMatrix.getMilkPointRow();
+	    putInColumn = SlotMatrix.getMilkPointColumn();
+	    detachChild(backlight);
+	}
     }
     
     public void slotBacklight(int i, int j) {
@@ -332,9 +313,9 @@ public class GameScene extends Scene {
 	return putInRow;
     }  
     
-    public int getPutInColum() {
+    public int getPutInColumn() {
 	
-	return putInColum;
+	return putInColumn;
     } 
     
 public void setScores(int scores) {

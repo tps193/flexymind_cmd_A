@@ -3,7 +3,8 @@ package com.example.forestgame.gameinterface;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
-
+import com.example.forestgame.MainActivity;
+import com.example.forestgame.SlotMatrix;
 import com.example.forestgame.GameScene;
 import com.example.forestgame.element.Element;
 
@@ -19,11 +20,18 @@ public abstract class GameSlot {
     protected int row;
     protected int column;
     
+    protected static float VERTICAL_OFFSET;
+    
     public GameSlot(GameScene scene) {
 	
 	gameScene = scene;
 	element = null;
 	isEmpty = true;
+	if (MainActivity.mainActivity.hasLargeScreen()) {
+	    VERTICAL_OFFSET = (float)(SlotMatrix.getSlotHeight() * 0.4);
+	} else {
+	    VERTICAL_OFFSET = (float)(SlotMatrix.getSlotHeight() * 0.8);
+	}
     }
     
     public void addElement(Element e) {
