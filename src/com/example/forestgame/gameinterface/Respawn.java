@@ -121,7 +121,10 @@ public class Respawn extends GameSlot {
 	    generateElement();
 	    
 	} else if (row < SlotMatrix.getROWS() && column < SlotMatrix.getCOLUMNS() 
-		&& gameScene.getSlotMatrix().isSlotEmpty(row, column)) {
+		&& ((gameScene.getSlotMatrix().isSlotEmpty(row, column) 
+			&& !element.getName().equals("MAGIC_STICK"))
+		|| (!gameScene.getSlotMatrix().isSlotEmpty(row, column)
+			&& element.getName().equals("MAGIC_STICK")))) {
 	    
 	    Log.d("resp", "newSlot");
 	    gameScene.getSlotMatrix().putToSlot(element, row, column);

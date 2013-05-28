@@ -59,11 +59,13 @@ public class SlotMatrix {
 	if (isSlotEmpty(row, col)) {
 	    
 	    addToSlot(element, row, col);
-	    lastEditedSlotRow = row;
-	    lastEditedSlotColumn = col;
-	    MainActivity.mainActivity.mStep.play();
-	    update();
+	} else if (element.getName().equals("MAGIC_STICK")) {
+	    addMagicStickToSlot(row, col);
 	}
+	lastEditedSlotRow = row;
+	lastEditedSlotColumn = col;
+	MainActivity.mainActivity.mStep.play();
+	update();
     }
     
     // has to be used always before using addToSLot(..)
@@ -267,6 +269,22 @@ public class SlotMatrix {
 	    analyzeNeighbor(row, col, row, col+1);
 	}
     }
+    
+    private void addMagicStickToSlot(int row, int column) {
+	
+	Element element = matrix[row][column].getElement();
+	score = score + TableOfElements.getScores(element);
+	clearSlot(row, column);
+	
+	if (element.getName().equals("FORESTER") || element.getName().equals("FLYING_SQUIRREL")) {
+	    
+	    clearSlot(row, column);
+	    element.changeToNextLvl();
+	    addToSlot(element, row, column);
+	    update();
+	} 
+    }
+    
     
     // setting hasSimilarNeighbor and readyForNextLevel flags
     // flag readyForNextLevel doesn't have to be set for every Slot in chain, only for the last edited

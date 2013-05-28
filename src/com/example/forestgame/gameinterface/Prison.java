@@ -93,8 +93,11 @@ public class Prison extends GameSlot {
         gameScene.detachChild(gameScene.getBacklight());
 
 
-	if (row < SlotMatrix.getROWS() && column <SlotMatrix.getCOLUMNS() 
-		&& gameScene.getSlotMatrix().isSlotEmpty(row, column)) {
+        if (row < SlotMatrix.getROWS() && column < SlotMatrix.getCOLUMNS() 
+		&& ((gameScene.getSlotMatrix().isSlotEmpty(row, column) 
+			&& !element.getName().equals("MAGIC_STICK"))
+		|| (!gameScene.getSlotMatrix().isSlotEmpty(row, column)
+			&& element.getName().equals("MAGIC_STICK")))) {
 
 	    Log.d("prison", "new");
 	    gameScene.getSlotMatrix().putToSlot(element, row, column);
