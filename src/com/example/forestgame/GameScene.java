@@ -24,9 +24,9 @@ public class GameScene extends Scene {
     private ScoresTable scoresTable = new ScoresTable();
     
     
-    public SlotMatrix slotMatrix;
+    private SlotMatrix slotMatrix;
     private Prison prison;
-    public Respawn respawn;
+    private Respawn respawn;
     private Sprite backlight;
     
     private Element movingElement;
@@ -181,9 +181,10 @@ public class GameScene extends Scene {
 	registerTouchArea(pauseIcon);
 	registerTouchArea(muteOff);
 	
+	
+	slotMatrix = new SlotMatrix(this);
 	prison = new Prison(this);
 	respawn = new Respawn(this);
-	slotMatrix = new SlotMatrix(this);
 
 	attachChild(pauseScene);
 	attachChild(gameOverScene);

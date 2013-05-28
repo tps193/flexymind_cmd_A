@@ -95,10 +95,12 @@ public class SlotMatrix {
 	    Log.d("GAME", "OVER");
 	    MainScene.showGameOverScene();
 	}
+	TableOfElements.renewAvaliableRandomElements(score);
     }
     
     public void init() {
 	
+	score=0;
 	for (int i = 0; i < ROWS; i++) {
 	    
 	    for (int j = 0; j < COLUMNS; j++) {
@@ -119,7 +121,6 @@ public class SlotMatrix {
 		i--;
 	    }
 	}
-	score=0;
 	gameScene.setScores(score);
     }
     
@@ -156,6 +157,7 @@ public class SlotMatrix {
         }
         init();
         viewSlots();
+        TableOfElements.renewAvaliableRandomElements(score);
     }
     
     // собирает имена

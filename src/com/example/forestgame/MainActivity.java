@@ -296,6 +296,28 @@ public class MainActivity extends SimpleBaseGameActivity {
         			   , "gfx_empty.png"
         			   , "gfx_pause_icon.png");
         	
+        	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
+        			, MainActivity.mainActivity
+        			, "game_scene_gfx/"
+        			, "gfx_forester.png"
+        			, "gfx_drop.png"
+        			, "gfx_flying_squirrel.png"
+        			, "gfx_magic_stick.png"
+        			, "gfx_nuts_imperor.png"
+        			, "gfx_nuts_magnum.png");
+        	
+        	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
+				, MainActivity.mainActivity
+				, "game_scene_gfx/"
+				, "gfx_hut.png"
+				, "gfx_country.png"
+				, "gfx_city.png"
+				, "gfx_megapolis.png"
+				, "gfx_pond.png"
+				, "gfx_swamp.png"
+				, "gfx_lake.png"
+				, "gfx_sea.png");
+        	
         	textureCage = storage.getTexture("gfx_cage.png");
         	texturePauseIcon = storage.getTexture("gfx_pause_icon.png");
         	MusicFactory.setAssetBasePath("sounds/");
@@ -626,9 +648,9 @@ public void saveProgress() {
 	    
 	    ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("saves", 0));
 	    Object[] obj = new Object[3];
-	    obj[0]=MainScene.gameScene.slotMatrix.getNamesForSave();
+	    obj[0]=MainScene.gameScene.getSlotMatrix().getNamesForSave();
 	    obj[1]=MainScene.gameScene.getNamesSubmatrix();
-	    obj[2]=Integer.valueOf(MainScene.gameScene.slotMatrix.getScore());
+	    obj[2]=Integer.valueOf(MainScene.gameScene.getSlotMatrix().getScore());
 	    
 	//    oos.writeObject(MainScene.gameScene.slotMatrix.getNamesForSave());
 	 //   oos.writeObject(MainScene.gameScene.getNamesSubmatrix());
