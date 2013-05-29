@@ -252,12 +252,54 @@ public class GameScene extends Scene {
 	return movingElement;
     }
 
-    public void backLight(float touchPointX, float touchPointY) {
+    public void backLight(float touchPointX, float touchPointY, boolean elementIsMagicStick) {
 
 	int backlightRow = (int) ((touchPointY - SlotMatrix.getSlotPositionUp(0)) / (SlotMatrix.getSlotHeight() + BORDER_HEIGHT));
 	int backlightColumn = (int) ((touchPointX - SlotMatrix.getSlotPositionLeft(0)) / (SlotMatrix.getSlotWidth() + BORDER_WIDTH));
-	slotBacklight(backlightRow, backlightColumn);
+	if (elementIsMagicStick) {
+	    fullSlotBacklight(backlightRow, backlightColumn);
+	} else {
+	    emptySlotBacklight(backlightRow, backlightColumn);
+	}
     }
+    
+    public void emptySlotBacklight(int i, int j) {
+	
+	detachChild(backlight);
+	
+	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
+	    
+	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
+                	    	 , SlotMatrix.getSlotPositionUp(i)
+                	    	 , SlotMatrix.getSlotWidth() + MainActivity.TEXTURE_WIDTH / 210
+                	    	 , SlotMatrix.getSlotHeight() + MainActivity.TEXTURE_HEIGHT / 220
+                	    	 , MainActivity.mainActivity.storage.getTexture("gfx_empty.png")
+                	    	 , MainActivity.mainActivity.getVertexBufferObjectManager());
+     
+            backlight.setAlpha(BACKLIGHT_ALPHA);
+	    attachChild(backlight);
+	    backlight.getParent().sortChildren();
+	}
+    }
+
+    public void fullSlotBacklight(int i, int j) {
+	
+	detachChild(backlight);
+	
+	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
+	    
+	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
+            	    	 , SlotMatrix.getSlotPositionUp(i)
+            	    	 , SlotMatrix.getSlotWidth() + MainActivity.TEXTURE_WIDTH / 210
+            	    	 , SlotMatrix.getSlotHeight() + MainActivity.TEXTURE_HEIGHT / 220
+            	    	 , MainActivity.mainActivity.storage.getTexture("gfx_empty.png")
+            	    	 , MainActivity.mainActivity.getVertexBufferObjectManager());
+ 
+        backlight.setAlpha(BACKLIGHT_ALPHA);
+	attachChild(backlight);
+	backlight.getParent().sortChildren();
+	}
+}
     
     
     public void moveElement(float touchPointX, float touchPointY) {
@@ -287,25 +329,6 @@ public class GameScene extends Scene {
 	    putInRow = SlotMatrix.getMilkPointRow();
 	    putInColumn = SlotMatrix.getMilkPointColumn();
 	    detachChild(backlight);
-	}
-    }
-    
-    public void slotBacklight(int i, int j) {
-	
-	detachChild(backlight);
-	
-	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
-	    
-	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
-                	    	 , SlotMatrix.getSlotPositionUp(i)
-                	    	 , SlotMatrix.getSlotWidth() + MainActivity.TEXTURE_WIDTH / 210
-                	    	 , SlotMatrix.getSlotHeight() + MainActivity.TEXTURE_HEIGHT / 220
-                	    	 , MainActivity.mainActivity.storage.getTexture("gfx_empty.png")
-                	    	 , MainActivity.mainActivity.getVertexBufferObjectManager());
-     
-            backlight.setAlpha(BACKLIGHT_ALPHA);
-	    attachChild(backlight);
-	    backlight.getParent().sortChildren();
 	}
     }
     

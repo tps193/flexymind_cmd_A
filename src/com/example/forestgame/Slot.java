@@ -63,9 +63,12 @@ class Slot {
     
     public boolean isSimilarTo(Element e) {
 	
-	if (this.isEmpty) {
-	    return false; 
+	if (e == null) {
 	    
+	    return false;
+	} else if (this.isEmpty) {
+	    
+	    return false; 
 	} else {
 	    
 	    return (this.element.getName().equals(e.getName()));

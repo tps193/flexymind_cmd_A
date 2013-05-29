@@ -149,6 +149,7 @@ public class Respawn extends GameSlot {
 	float spriteLeftBorder = touchPointX - slotSprite.getWidth() / 2;
 	float spriteUpBorder = touchPointY - slotSprite.getHeight() / 2 - VERTICAL_OFFSET;
 	slotSprite.setPosition(spriteLeftBorder, spriteUpBorder);
-	gameScene.backLight(touchPointX, touchPointY);
+	boolean elementIsMagicStick = element.getName().equals("MAGIC_STICK");
+	gameScene.backLight(touchPointX, touchPointY, elementIsMagicStick);
     }
 }
