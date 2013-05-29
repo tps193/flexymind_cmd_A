@@ -1,6 +1,7 @@
 package com.example.forestgame;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Random;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -58,8 +59,15 @@ public class SlotMatrix {
 	
 	if (isSlotEmpty(row, col)) {
 	    
-	    addToSlot(element, row, col);
+	    if (element.getName().equals("DROP")) {
+		
+		addDropToSlot(row, col);
+	    } else {
+		
+		addToSlot(element, row, col);
+	    }
 	} else if (element.getName().equals("MAGIC_STICK")) {
+	    
 	    addMagicStickToSlot(row, col);
 	}
 	lastEditedSlotRow = row;
@@ -281,10 +289,88 @@ public class SlotMatrix {
 	    clearSlot(row, column);
 	    element.changeToNextLvl();
 	    addToSlot(element, row, column);
-	    update();
 	} 
     }
     
+    private void addDropToSlot(int row, int column) {
+	
+	LinkedList<Slot> slots = new LinkedList<Slot>();
+	if (row != 0) {
+	    if ( !matrix[row-1][column].isEmpty() ) {
+		slots.add(matrix[row-1][column]);
+	    }
+	}
+	if (row != ROWS-1) {
+	    if ( !matrix[row+1][column].isEmpty() ) {
+		slots.add(matrix[row+1][column]);
+	    }
+	}
+	if (column != 0) {
+	    if ( !matrix[row][column-1].isEmpty() ) {
+		slots.add(matrix[row][column-1]);
+	    }
+	}
+	if (column != COLUMNS-1) {
+	    if ( !matrix[row][column+1].isEmpty() ) {
+		slots.add(matrix[row][column+1]);
+	    }
+	}
+	
+	filterSlotsLinkedList(slots);
+	if ( !slots.isEmpty() ) {
+	    
+	    Element element = bestElementToAdd(slots.getFirst().getElement(), slots);
+	    addToSlot(element, row, column);
+	    
+	} else {
+	    
+	    addToSlot( new Element("POND"), row, column);
+	}
+    }
+    
+    private void filterSlotsLinkedList(LinkedList<Slot> slots) {
+	
+	if (slots.isEmpty()){
+	    
+	    return;
+	}
+	
+	for (int i = 0; i < slots.size(); i++) {
+	    for (int j = i + 1; j < slots.size(); j++) {
+		if (slots.get(i).getScore() < slots.get(j).getScore()) {
+		    Slot s = slots.get(i);
+		    slots.set(i, slots.get(j));
+		    slots.set(j, s);
+		}
+	    }
+	}
+	
+	for (int i = 0; i < slots.size()-1; i++) {
+	    Slot s = slots.get(i);
+	    if ( !(s.getHasSimilarNeighbor()) 
+		    || (s.isSimilarTo(slots.get(i+1).getElement()))) {
+		
+		slots.remove(i);
+		i--;
+	    }
+	}
+	if (!slots.getLast().getHasSimilarNeighbor()) {
+	    slots.removeLast();
+	}
+    }
+    
+    private Element bestElementToAdd(Element currentBestElement, LinkedList<Slot> slots) {
+	
+	for (Slot s : slots) {
+		
+	    Element e = s.getElement();
+	    if (TableOfElements.getNextLvl(e).equals(currentBestElement.getName())) {
+	
+		return bestElementToAdd(e, slots);
+	    } 
+	}
+	return currentBestElement;
+    }
     
     // setting hasSimilarNeighbor and readyForNextLevel flags
     // flag readyForNextLevel doesn't have to be set for every Slot in chain, only for the last edited
