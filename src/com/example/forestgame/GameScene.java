@@ -60,6 +60,7 @@ public class GameScene extends Scene {
     private static final float PRISON_POSITION_RIGHT = PRISON_POSITION_LEFT + CAGE_WIDTH;
     private static final float PRISON_POSITION_BOTTOM = PRISON_POSITION_UP + CAGE_HEIGHT;
     private static final float BACKLIGHT_ALPHA = 0.7f;
+    private static final float BACKLIGHT_ALPHA_FULL = 0.4f;
     private static int SUBMATRIX_LENGTH = 2;
     
     private float BORDER_WIDTH = SlotMatrix.getSlotPositionLeft(1) - SlotMatrix.getSlotPositionLeft(0) - SlotMatrix.getSlotWidth();
@@ -286,18 +287,29 @@ public class GameScene extends Scene {
 	
 	detachChild(backlight);
 	
-	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
+	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && !slotMatrix.isSlotEmpty(i, j)) {
 	    
-	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
+	    Log.d("fores",slotMatrix.getElement(i, j));
+	    if (slotMatrix.getElement(i, j).equals("HUT") || slotMatrix.getElement(i, j).equals("COUNTRY") || 
+		    slotMatrix.getElement(i, j).equals("CITY") || slotMatrix.getElement(i, j).equals("MEGAPOLIS") ||
+		    slotMatrix.getElement(i, j).equals("FORESTER") || slotMatrix.getElement(i, j).equals("POND") ||
+		    slotMatrix.getElement(i, j).equals("SWAMP") || slotMatrix.getElement(i, j).equals("LAKE") ||
+		    slotMatrix.getElement(i, j).equals("SEA") || slotMatrix.getElement(i, j).equals("FLYING_SQUIRREL")){
+		Log.d("fores",slotMatrix.getElement(i, j));
+	    
+	       backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
             	    	 , SlotMatrix.getSlotPositionUp(i)
             	    	 , SlotMatrix.getSlotWidth() + MainActivity.TEXTURE_WIDTH / 210
             	    	 , SlotMatrix.getSlotHeight() + MainActivity.TEXTURE_HEIGHT / 220
             	    	 , MainActivity.mainActivity.storage.getTexture("gfx_empty.png")
             	    	 , MainActivity.mainActivity.getVertexBufferObjectManager());
- 
-        backlight.setAlpha(BACKLIGHT_ALPHA);
+	    
+	    
+        backlight.setAlpha(BACKLIGHT_ALPHA_FULL);
 	attachChild(backlight);
 	backlight.getParent().sortChildren();
+	    }
+	    
 	}
 }
     

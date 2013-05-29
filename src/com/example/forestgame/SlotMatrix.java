@@ -170,7 +170,7 @@ public class SlotMatrix {
         TableOfElements.renewAvaliableRandomElements(score);
     }
     
-    // собирает имена
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     public String[][] getNamesForSave() {
 	
 	String[][] namesMatrix = new String[ROWS][COLUMNS];
@@ -185,7 +185,7 @@ public class SlotMatrix {
 	return namesMatrix;
     }
     
-    //инитит загруженную игру
+    //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
     public void loadInit(Object obj, int scores) throws IOException {
 	
 	for (int i = 0; i < ROWS; i++) {
@@ -202,7 +202,7 @@ public class SlotMatrix {
     }
     
     
-    //устанавливает загруженную матрицу
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     private void setMatrix(String[][] namesMatrix) {
 	
         for(int i = 0; i < ROWS; i++) {
@@ -551,7 +551,12 @@ public class SlotMatrix {
 		    					    gameScene.detachChild(animationSprite);
 							}
 						    }));
-    }    
+    }
+    
+    public String getElement(int row, int column){
+	
+	return matrix[row][column].getElement().getName();
+    }
     
     public static int getROWS() {
 	
