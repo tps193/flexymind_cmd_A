@@ -60,7 +60,6 @@ public class GameScene extends Scene {
     private static final float PRISON_POSITION_RIGHT = PRISON_POSITION_LEFT + CAGE_WIDTH;
     private static final float PRISON_POSITION_BOTTOM = PRISON_POSITION_UP + CAGE_HEIGHT;
     private static final float BACKLIGHT_ALPHA = 0.7f;
-    private static final float BACKLIGHT_ALPHA_FULL = 0.4f;
     private static int SUBMATRIX_LENGTH = 2;
     
     private float BORDER_WIDTH = SlotMatrix.getSlotPositionLeft(1) - SlotMatrix.getSlotPositionLeft(0) - SlotMatrix.getSlotWidth();
@@ -305,8 +304,9 @@ public class GameScene extends Scene {
             	    	 , MainActivity.mainActivity.getVertexBufferObjectManager());
 	    
 	    
-        backlight.setAlpha(BACKLIGHT_ALPHA_FULL);
+        backlight.setAlpha(BACKLIGHT_ALPHA);
 	attachChild(backlight);
+	backlight.setZIndex(700);
 	backlight.getParent().sortChildren();
 	    }
 	    
