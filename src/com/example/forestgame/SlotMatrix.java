@@ -204,6 +204,7 @@ public class SlotMatrix {
         	clearSlot(i, j);
             }
         }
+	slotsWithFlyingSquirrels.clear();
 	setMatrix((String[][]) obj);
 	this.score = scores;
 	viewSlots();
@@ -222,6 +223,9 @@ public class SlotMatrix {
         	
         	else { matrix[i][j] = new Slot();
         	    addToSlot(new Element(namesMatrix[i][j]), i, j);
+        	    if (namesMatrix[i][j].equals("FLYING_SQUIRREL")) {
+        		slotsWithFlyingSquirrels.add(new SlotWithFlyingSquirrel(matrix[i][j], i, j));
+        	    }
         	}
             }
         } 
@@ -292,6 +296,31 @@ public class SlotMatrix {
 	Element element = matrix[row][column].getElement();
 	score = score + TableOfElements.getScores(element);
 		
+	if (row > 0) {
+	    
+	    if (matrix[row-1][column].isSimilarTo(element)) {
+		matrix[row-1][column].reduceNeighbor();
+	    }
+	}
+	if (row < ROWS-1) {
+		    
+	    if (matrix[row+1][column].isSimilarTo(element)) {
+		matrix[row+1][column].reduceNeighbor();
+	    }
+	}
+	if (column > 0) {
+		    
+	    if (matrix[row][column-1].isSimilarTo(element)) {
+		matrix[row][column-1].reduceNeighbor();
+	    }
+	}
+	if (column < COLUMNS-1) {
+		    
+	    if (matrix[row][column+1].isSimilarTo(element)) {
+		matrix[row][column+1].reduceNeighbor();
+	    }
+	}
+	
 	if (element.getName().equals("FORESTER")) {
 	    
 	    element.changeToNextLvl();
@@ -310,30 +339,6 @@ public class SlotMatrix {
 	    addToSlot(element, row, column);
 	} else {
 	    
-	    if (row > 0) {
-		    
-		if (matrix[row-1][column].isSimilarTo(element)) {
-		    matrix[row-1][column].reduceNeighbor();
-		}
-	    }
-	    if (row < ROWS-1) {
-		    
-		if (matrix[row+1][column].isSimilarTo(element)) {
-		    matrix[row+1][column].reduceNeighbor();
-		}
-	    }
-	    if (column > 0) {
-		    
-		if (matrix[row][column-1].isSimilarTo(element)) {
-		    matrix[row][column-1].reduceNeighbor();
-		}
-	    }
-	    if (column < COLUMNS-1) {
-		    
-		if (matrix[row][column+1].isSimilarTo(element)) {
-		    matrix[row][column+1].reduceNeighbor();
-		}
-	    }
 	    clearSlot(row, column);
 	}
 	
