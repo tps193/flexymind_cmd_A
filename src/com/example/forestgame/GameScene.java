@@ -14,6 +14,7 @@ import org.andengine.input.touch.TouchEvent;
 import android.util.Log;
 
 import com.example.forestgame.element.Element;
+import com.example.forestgame.element.TableOfElements;
 import com.example.forestgame.gameinterface.Prison;
 import com.example.forestgame.gameinterface.Respawn;
 
@@ -66,6 +67,11 @@ public class GameScene extends Scene {
     private float BORDER_HEIGHT = SlotMatrix.getSlotPositionUp(1) - SlotMatrix.getSlotPositionUp(0) - SlotMatrix.getSlotHeight();
     
     private Text scoresText;
+    
+    private Sprite helpPart1;
+    private Sprite helpPart2;
+    private Sprite helpPart3;
+    private boolean helpIsShown;
     
     private Sprite background = new Sprite( 0
 	                              , 0
@@ -180,6 +186,7 @@ public class GameScene extends Scene {
 	muteOn.setVisible(true);
 	registerTouchArea(pauseIcon);
 	registerTouchArea(muteOff);
+	helpIsShown = false;
 	
 	
 	slotMatrix = new SlotMatrix(this);
@@ -414,5 +421,51 @@ public void setScores(int scores) {
 	if(loadedPrison!=null)prison.addElement(new Element(loadedPrison));
 	if(loadedRepawn!=null)respawn.addElement(new Element(loadedRepawn));
 	setScores(scores);
+    }
+    
+    public void attachHelpForElement(Element element) {
+	
+	if (helpIsShown) {
+	    
+	    detachHelpForElement();
+	}
+	helpPart1 = new Sprite( MainActivity.TEXTURE_WIDTH*210/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+		    , MainActivity.TEXTURE_WIDTH/8
+		    , MainActivity.TEXTURE_HEIGHT/13
+		    , MainActivity.mainActivity.storage.getTexture(
+			    TableOfElements.getTextureName(element))
+		    , MainActivity.mainActivity.getVertexBufferObjectManager());
+	
+	helpPart2 = new Sprite( MainActivity.TEXTURE_WIDTH*500/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+		    , MainActivity.TEXTURE_WIDTH/6
+		    , MainActivity.TEXTURE_HEIGHT/13
+		    , MainActivity.mainActivity.storage.getTexture("gfx_hint_arrow_X3.png")
+		    , MainActivity.mainActivity.getVertexBufferObjectManager());
+	
+	helpPart3 = new Sprite( MainActivity.TEXTURE_WIDTH*850/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+		    , MainActivity.TEXTURE_WIDTH/8
+		    , MainActivity.TEXTURE_HEIGHT/13
+		    , MainActivity.mainActivity.storage.getTexture(
+			    TableOfElements.getNextLevelTextureName(element))
+		    , MainActivity.mainActivity.getVertexBufferObjectManager());
+	
+	attachChild(helpPart1);
+	attachChild(helpPart2);
+	attachChild(helpPart3);
+	helpIsShown = true;
+    }
+    
+    public void detachHelpForElement() {
+	
+	if (helpIsShown) {
+	    
+	    detachChild(helpPart1);
+	    detachChild(helpPart2);
+	    detachChild(helpPart3);
+	}
+	helpIsShown = false;
     }
 }

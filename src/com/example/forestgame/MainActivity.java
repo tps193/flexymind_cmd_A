@@ -304,7 +304,8 @@ public class MainActivity extends SimpleBaseGameActivity {
         			, "gfx_flying_squirrel.png"
         			, "gfx_magic_stick.png"
         			, "gfx_nuts_imperor.png"
-        			, "gfx_nuts_magnum.png");
+        			, "gfx_nuts_magnum.png"
+        			, "gfx_hint_arrow_X3.png");
         	
         	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
 				, MainActivity.mainActivity

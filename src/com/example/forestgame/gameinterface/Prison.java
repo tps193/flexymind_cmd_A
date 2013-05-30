@@ -78,13 +78,15 @@ public class Prison extends GameSlot {
     
     protected void gameSlotIsActionDown() {
 	
+	gameScene.attachHelpForElement(element);
 	Log.d("prison", "touch");
 	row = SlotMatrix.getPrisonPlaceRow();
 	column = SlotMatrix.getPrisonPlaceColumn();
     }
     
     protected void gameSlotIsActionUp() {
-
+	
+	gameScene.detachHelpForElement();
 	gameScene.moveElement(touchPointX, touchPointY - VERTICAL_OFFSET);
 	column = gameScene.getPutInColumn();
 	row = gameScene.getPutInRow(); 

@@ -10,6 +10,7 @@ import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
@@ -47,7 +48,8 @@ public class SlotMatrix {
     IEaseFunction easeFunction = EaseLinear.getInstance();
     TimerHandler spriteTimerHandler;
     
-    private static final Random randomGenerator = new Random(); 
+    private static final Random randomGenerator = new Random();
+    
     
     public SlotMatrix(GameScene scene) {
 	
@@ -238,25 +240,49 @@ public class SlotMatrix {
 	    
 	    for (int j = 0; j < COLUMNS; j++) {
 
-		Slot slot = matrix[i][j];
+		final Slot slot = matrix[i][j];
 		gameScene.detachChild(slot.getSprite());
+		gameScene.unregisterTouchArea(slot.getSprite());
                 if (!slot.isEmpty()) {
                     
-                   TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(   TableOfElements
-                                                                                                . getTextureName
-                                                                                                ( slot.getElement()));
+                   TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(
+                	   TableOfElements. getTextureName(slot.getElement()));
 
-                   slot.setSprite(new Sprite (getSlotPositionLeft(j)
+                   Sprite slotSprite = new Sprite (getSlotPositionLeft(j)
                                            , getSlotPositionUp(i)
                                            , SLOT_WIDTH
                                            , SLOT_HEIGHT
                                            , slotTexture
-                                           , MainActivity.mainActivity.getVertexBufferObjectManager()));
+                                           , MainActivity.mainActivity.getVertexBufferObjectManager()) {
+                       
+                       	@Override
+       			public boolean onAreaTouched( TouchEvent pSceneTouchEvent
+       			    			, float pTouchAreaLocalX
+       			    			, float pTouchAreaLocalY) {
+                       	    if (pSceneTouchEvent.isActionDown()) {
+       			
+                       		slotIsActionDown(slot.getElement());
+       			
+                       	    } else if (pSceneTouchEvent.isActionUp()) {
+       			    
+                       		slotIsActionUp();
+       			    
+                       	    } else if (pSceneTouchEvent.isActionMove()) {
+       			    
+                       		
+       			
+                       	    }
+                       	    return true;
+                       	}
+                   };
+                   
+                   slot.setSprite(slotSprite);
 
                    gameScene.attachChild(slot.getSprite());
+                   gameScene.registerTouchArea(slotSprite);
 		   slot.getSprite().setZIndex(300);
 		   slot.getSprite().getParent().sortChildren();
-                }
+                } 
 	    }
 	}
     }
@@ -265,6 +291,7 @@ public class SlotMatrix {
     private void clearSlot(int row, int col) {
 	
 	 Slot s = matrix[row][col];
+	 gameScene.unregisterTouchArea(s.getSprite());
 	 gameScene.detachChild(s.getSprite());
 	 matrix[row][col] = new Slot();
     }
@@ -689,5 +716,15 @@ public class SlotMatrix {
     public static int getMilkPointColumn() {
 	
 	return COLUMNS + 20;
+    }
+    
+    private void slotIsActionDown(Element element) {
+	
+	gameScene.attachHelpForElement(element);
+    }
+    
+    private void slotIsActionUp() {
+	
+	gameScene.detachHelpForElement();
     }
 }

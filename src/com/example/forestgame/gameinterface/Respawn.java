@@ -91,6 +91,7 @@ public class Respawn extends GameSlot {
     
     protected void gameSlotIsActionDown() {
 	
+	gameScene.attachHelpForElement(element);
 	row = SlotMatrix.getRespawnPlaceRow();
 	column = SlotMatrix.getRespawnPlaceColumn();
 	Log.d("resp", "touch");
@@ -100,6 +101,7 @@ public class Respawn extends GameSlot {
     
     protected void gameSlotIsActionUp() {
 	
+	gameScene.detachHelpForElement();
 	Log.d("resp", "no touch");
 	Log.d("resp", Integer.toString(row));
 	Log.d("resp", Integer.toString(column));
@@ -143,7 +145,6 @@ public class Respawn extends GameSlot {
     protected void gameSlotIsActionMove(TouchEvent pSceneTouchEvent) {
 
 	Log.d("resp", "move");
-
 	touchPointX = pSceneTouchEvent.getX();
 	touchPointY = pSceneTouchEvent.getY();
 	float spriteLeftBorder = touchPointX - slotSprite.getWidth() / 2;
