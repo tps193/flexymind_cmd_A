@@ -2,7 +2,6 @@ package com.example.forestgame;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,9 +9,10 @@ import java.io.IOException;
 
 import org.andengine.entity.text.Text;
 
-import android.os.Environment;
+import android.app.Activity;
+import android.content.Context;
 
-public class ScoresTable {
+public class ScoresTable extends Activity {
 
     private static final float HIGHSCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 1 / 5;
     private static final float HIGHSCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT / 6;
@@ -20,28 +20,31 @@ public class ScoresTable {
     private static final float SCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT / 3;
 
     private final int NUMBER_OF_SCORES = 6;
-    private final String FILEPATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/TheNutsKing";
-    private final String FILENAME = "/scores.dat";
     private long[] scores = new long[NUMBER_OF_SCORES];
     
     private Text scoresText;
     private Text caption;
+    
+    Context fileContext;
 
-    public void createFile() {
-	File f = new File(FILEPATH);
-	if (!f.exists())
-	    try {
-		f.mkdirs();
-		f = new File(FILEPATH + FILENAME);
-		f.createNewFile();
-	    } catch (IOException e) {
-		e.printStackTrace();
-	    }
-    }
+//    public void createFile() {
+    
+//		try {
+//		    FileOutputStream fout = MainActivity.mainActivity.getApplicationContext().openFileOutput("scores",0);
+//		    fout.close();
+//		} 
+//		catch (FileNotFoundException e) {
+//	    	    e.printStackTrace();
+//		}
+//		catch (IOException e) {
+//		    e.printStackTrace();
+//		}
+		
+//	}
 
     public void init() {
 	try {
-	    FileInputStream fin = new FileInputStream(FILEPATH + FILENAME);
+	    FileInputStream fin = MainActivity.mainActivity.getApplicationContext().openFileInput("scores");
 	    DataInputStream din = new DataInputStream(fin);
 	    for (int i = 0; i < scores.length - 1; i++) {
 		scores[i] = din.readLong();
@@ -77,7 +80,7 @@ public class ScoresTable {
 
     public void save() {
 	try {
-	    FileOutputStream fout = new FileOutputStream(FILEPATH + FILENAME);
+	    FileOutputStream fout = MainActivity.mainActivity.getApplicationContext().openFileOutput("scores",Context.MODE_PRIVATE);
 	    DataOutputStream dos = new DataOutputStream(fout);
 	    for (int i = 0; i < scores.length - 1; i++) {
 		dos.writeLong(scores[i]);
@@ -106,7 +109,7 @@ public class ScoresTable {
     }
     
     public void saveResult(long result){
-	createFile();
+//	createFile();
 	init();
 	scores[NUMBER_OF_SCORES - 1] = result;
 	sort();

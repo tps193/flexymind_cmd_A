@@ -523,7 +523,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	
 	preLoadScene.detachChild(preLoadBackground);
 	preLoadScene = null;
-	//удаляем текстуру прелоадера
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	//MainActivity.mainActivity.getTextureManager().unloadTexture();
 	
 	mainScene.showMainMenuScene();
