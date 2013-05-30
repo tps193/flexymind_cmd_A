@@ -36,7 +36,9 @@ public class SlotMatrix {
     private final static int FIRST_SLOT_POSITION_LEFT = 96;
     private final static int FIRST_SLOT_POSITION_UP = 218;
     private final static float BORDER_WIDTH = 24;
-    private final static float BORDER_HEIGHT = 26; 
+    private final static float BORDER_HEIGHT = 26;
+    
+    private LinkedList<SlotWithFlyingSquirrel> slotsWithFlyingSquirrels = new LinkedList<SlotWithFlyingSquirrel>();
     
     ParallelEntityModifier entityModifier;
     float animationDuration = 0.3f;
@@ -44,6 +46,8 @@ public class SlotMatrix {
     float toAlpha = 0.3f;
     IEaseFunction easeFunction = EaseLinear.getInstance();
     TimerHandler spriteTimerHandler;
+    
+    private static final Random randomGenerator = new Random(); 
     
     public SlotMatrix(GameScene scene) {
 	
@@ -62,6 +66,9 @@ public class SlotMatrix {
 	    if (element.getName().equals("DROP")) {
 		
 		addDropToSlot(row, col);
+	    } else if (element.getName().equals("FLYING_SQUIRREL")) {
+		    
+		addFlyingSquirrelToSLot(row, col);
 	    } else {
 		
 		addToSlot(element, row, col);
@@ -69,7 +76,7 @@ public class SlotMatrix {
 	} else if (element.getName().equals("MAGIC_STICK")) {
 	    
 	    addMagicStickToSlot(row, col);
-	}
+	} 
 	lastEditedSlotRow = row;
 	lastEditedSlotColumn = col;
 	MainActivity.mainActivity.mStep.play();
@@ -87,7 +94,6 @@ public class SlotMatrix {
 	
 	checkSimilarElements();
 	gameScene.setScores(getScore());
-	viewSlots();
 	
 	filledSlots = 0;
 	for (int i = 0; i < ROWS; i++) {
@@ -100,12 +106,15 @@ public class SlotMatrix {
 		}
 	    }
 	}
+	moveFlyingSquirrels();
+	viewSlots();
 	if (filledSlots == ROWS*COLUMNS) {
 	    
 	    Log.d("GAME", "OVER");
 	    MainScene.showGameOverScene();
+	} else {
+	    TableOfElements.renewAvaliableRandomElements(score);
 	}
-	TableOfElements.renewAvaliableRandomElements(score);
     }
     
     public void init() {
@@ -282,38 +291,53 @@ public class SlotMatrix {
 	
 	Element element = matrix[row][column].getElement();
 	score = score + TableOfElements.getScores(element);
-	clearSlot(row, column);
-	
-	if (row > 0) {
-	    
-	    if (matrix[row-1][column].isSimilarTo(element)) {
-		matrix[row-1][column].reduceNeighbor();
-	    }
-	}
-	if (row < ROWS-1) {
-	    
-	    if (matrix[row+1][column].isSimilarTo(element)) {
-		matrix[row+1][column].reduceNeighbor();
-	    }
-	}
-	if (column > 0) {
-	    
-	    if (matrix[row][column-1].isSimilarTo(element)) {
-		matrix[row][column-1].reduceNeighbor();
-	    }
-	}
-	if (column < COLUMNS-1) {
-	    
-	    if (matrix[row][column+1].isSimilarTo(element)) {
-		matrix[row][column+1].reduceNeighbor();
-	    }
-	}
-	
-	if (element.getName().equals("FORESTER") || element.getName().equals("FLYING_SQUIRREL")) {
+		
+	if (element.getName().equals("FORESTER")) {
 	    
 	    element.changeToNextLvl();
+	    clearSlot(row, column);
 	    addToSlot(element, row, column);
-	} 
+	} else if (element.getName().equals("FLYING_SQUIRREL")) {
+	    
+	    for (SlotWithFlyingSquirrel slotWFS : slotsWithFlyingSquirrels) {
+		if (slotWFS.getSlot().equals(matrix[row][column])) {
+		    slotsWithFlyingSquirrels.remove(slotWFS);
+		    break;
+		}
+	    }
+	    element.changeToNextLvl();
+	    clearSlot(row, column);
+	    addToSlot(element, row, column);
+	} else {
+	    
+	    if (row > 0) {
+		    
+		if (matrix[row-1][column].isSimilarTo(element)) {
+		    matrix[row-1][column].reduceNeighbor();
+		}
+	    }
+	    if (row < ROWS-1) {
+		    
+		if (matrix[row+1][column].isSimilarTo(element)) {
+		    matrix[row+1][column].reduceNeighbor();
+		}
+	    }
+	    if (column > 0) {
+		    
+		if (matrix[row][column-1].isSimilarTo(element)) {
+		    matrix[row][column-1].reduceNeighbor();
+		}
+	    }
+	    if (column < COLUMNS-1) {
+		    
+		if (matrix[row][column+1].isSimilarTo(element)) {
+		    matrix[row][column+1].reduceNeighbor();
+		}
+	    }
+	    clearSlot(row, column);
+	}
+	
+	
     }
     
     private void addDropToSlot(int row, int column) {
@@ -394,6 +418,49 @@ public class SlotMatrix {
 	    } 
 	}
 	return currentBestElement;
+    }
+    
+    private void addFlyingSquirrelToSLot(int row, int column) {
+	
+	Slot slot = matrix[row][column];
+	slot.addElement(new Element("FLYING_SQUIRREL"));
+	slotsWithFlyingSquirrels.add(new SlotWithFlyingSquirrel(slot, row, column));
+    }
+    
+    private void moveFlyingSquirrels() {
+	
+	int numberFS = slotsWithFlyingSquirrels.size();
+	for (SlotWithFlyingSquirrel slotWFS : slotsWithFlyingSquirrels) {
+	    
+	    disappearFlyingSquirrel(slotWFS);
+	}
+	slotsWithFlyingSquirrels.clear();
+	for (int i = 0; i < numberFS; i++) {
+	    
+	    appearFlyingSquirrel();
+	}
+    }
+    
+    private void disappearFlyingSquirrel(SlotWithFlyingSquirrel slotWFS) {
+	
+	clearSlot(slotWFS.getRow(), slotWFS.getColumn());
+    }
+    
+    private void appearFlyingSquirrel(){
+	
+	int r = randomGenerator.nextInt(ROWS*COLUMNS - filledSlots);
+	for (int row = 0; row < ROWS; row++) {
+	    for (int col = 0; col < COLUMNS; col++) {
+		if (matrix[row][col].isEmpty()) {
+		    if (r == 0) {
+			addFlyingSquirrelToSLot(row, col);
+			return;
+		    } else {
+			r--;
+		    }
+		}
+	    }
+	}
     }
     
     // setting hasSimilarNeighbor and readyForNextLevel flags
