@@ -284,9 +284,33 @@ public class SlotMatrix {
 	score = score + TableOfElements.getScores(element);
 	clearSlot(row, column);
 	
+	if (row > 0) {
+	    
+	    if (matrix[row-1][column].isSimilarTo(element)) {
+		matrix[row-1][column].reduceNeighbor();
+	    }
+	}
+	if (row < ROWS-1) {
+	    
+	    if (matrix[row+1][column].isSimilarTo(element)) {
+		matrix[row+1][column].reduceNeighbor();
+	    }
+	}
+	if (column > 0) {
+	    
+	    if (matrix[row][column-1].isSimilarTo(element)) {
+		matrix[row][column-1].reduceNeighbor();
+	    }
+	}
+	if (column < COLUMNS-1) {
+	    
+	    if (matrix[row][column+1].isSimilarTo(element)) {
+		matrix[row][column+1].reduceNeighbor();
+	    }
+	}
+	
 	if (element.getName().equals("FORESTER") || element.getName().equals("FLYING_SQUIRREL")) {
 	    
-	    clearSlot(row, column);
 	    element.changeToNextLvl();
 	    addToSlot(element, row, column);
 	} 
@@ -347,8 +371,8 @@ public class SlotMatrix {
 	
 	for (int i = 0; i < slots.size()-1; i++) {
 	    Slot s = slots.get(i);
-	    if ( !(s.getHasSimilarNeighbor()) 
-		    || (s.isSimilarTo(slots.get(i+1).getElement()))) {
+	    if ( !(s.getHasSimilarNeighbor() 
+		    || s.isSimilarTo(slots.get(i+1).getElement()))) {
 		
 		slots.remove(i);
 		i--;
