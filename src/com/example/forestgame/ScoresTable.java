@@ -9,10 +9,9 @@ import java.io.IOException;
 
 import org.andengine.entity.text.Text;
 
-import android.app.Activity;
 import android.content.Context;
 
-public class ScoresTable extends Activity {
+public class ScoresTable {
 
     private static final float HIGHSCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 1 / 5;
     private static final float HIGHSCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT / 6;
