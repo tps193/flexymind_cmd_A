@@ -44,8 +44,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 
     public static int CAMERA_WIDTH;
     public static int CAMERA_HEIGHT;
-    private static float DISPLAY_WIDTH;
-    private static float DISPLAY_HEIGHT;
+    public static float DISPLAY_WIDTH;
+    public static float DISPLAY_HEIGHT;
     public final static float TEXTURE_WIDTH = 1250;
     public final static float TEXTURE_HEIGHT = 2000;
     private float RATIO_WIDTH;

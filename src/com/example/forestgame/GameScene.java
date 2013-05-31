@@ -309,29 +309,18 @@ public class GameScene extends Scene {
 	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && !slotMatrix.isSlotEmpty(i, j)) {
 	    
 	    Log.d("fores",slotMatrix.getElement(i, j));
-	    if (slotMatrix.getElement(i, j).equals("HUT") || slotMatrix.getElement(i, j).equals("COUNTRY") || 
-		    slotMatrix.getElement(i, j).equals("CITY") || slotMatrix.getElement(i, j).equals("MEGAPOLIS") ||
-		    slotMatrix.getElement(i, j).equals("FORESTER") || slotMatrix.getElement(i, j).equals("POND") ||
-		    slotMatrix.getElement(i, j).equals("SWAMP") || slotMatrix.getElement(i, j).equals("LAKE") ||
-		    slotMatrix.getElement(i, j).equals("SEA") || slotMatrix.getElement(i, j).equals("FLYING_SQUIRREL")){
-		Log.d("fores",slotMatrix.getElement(i, j));
-	    
-	       backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
+	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
             	    	 , SlotMatrix.getSlotPositionUp(i)
             	    	 , SlotMatrix.getSlotWidth() + MainActivity.TEXTURE_WIDTH / 210
             	    	 , SlotMatrix.getSlotHeight() + MainActivity.TEXTURE_HEIGHT / 220
             	    	 , MainActivity.mainActivity.storage.getTexture("gfx_empty.png")
             	    	 , MainActivity.mainActivity.getVertexBufferObjectManager());
-	    
-	    
-        backlight.setAlpha(BACKLIGHT_ALPHA);
-	attachChild(backlight);
-	backlight.setZIndex(700);
-	backlight.getParent().sortChildren();
-	    }
-	    
+	    backlight.setAlpha(BACKLIGHT_ALPHA);
+	    attachChild(backlight);
+	    backlight.setZIndex(700);
+	    backlight.getParent().sortChildren();
 	}
-}
+    }
     
     
     public void moveElement(float touchPointX, float touchPointY) {
