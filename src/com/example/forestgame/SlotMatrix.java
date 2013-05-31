@@ -15,6 +15,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.example.forestgame.element.Element;
@@ -40,6 +41,8 @@ public class SlotMatrix {
     private final static float BORDER_HEIGHT = 26;
     
     private LinkedList<SlotWithFlyingSquirrel> slotsWithFlyingSquirrels = new LinkedList<SlotWithFlyingSquirrel>();
+    private LinkedList<SlotWithForester> slotsWithForesters = new LinkedList<SlotWithForester>();
+    private LinkedList<SlotPosition> lastEditedSlots = new LinkedList<SlotPosition>();
     
     ParallelEntityModifier entityModifier;
     float animationDuration = 0.3f;
@@ -65,7 +68,10 @@ public class SlotMatrix {
 	
 	if (isSlotEmpty(row, col)) {
 	    
-	    if (element.getName().equals("DROP")) {
+	    if (element.getName().equals("FORESTER")) {
+		
+		addForesterToSlot(row, col);
+	    } else if (element.getName().equals("DROP")) {
 		
 		addDropToSlot(row, col);
 	    } else if (element.getName().equals("FLYING_SQUIRREL")) {
@@ -79,8 +85,7 @@ public class SlotMatrix {
 	    
 	    addMagicStickToSlot(row, col);
 	} 
-	lastEditedSlotRow = row;
-	lastEditedSlotColumn = col;
+	lastEditedSlots.add(new SlotPosition(row, col));
 	MainActivity.mainActivity.mStep.play();
 	update();
     }
@@ -92,11 +97,20 @@ public class SlotMatrix {
 	return matrix[row][col].isEmpty();
     }
     
-    private void update() {
+    @SuppressLint("NewApi")
+	private void update() {
 	
-	checkSimilarElements();
+	moveForesters();
+	moveFlyingSquirrels();
+	while (!lastEditedSlots.isEmpty()) {
+	    
+	    SlotPosition s = lastEditedSlots.pollFirst();
+	    lastEditedSlotRow = s.getRow();
+	    lastEditedSlotColumn = s.getColumn();
+	    checkSimilarElements();
+	}
+	viewSlots();
 	gameScene.setScores(getScore());
-	
 	filledSlots = 0;
 	for (int i = 0; i < ROWS; i++) {
 	    
@@ -108,13 +122,12 @@ public class SlotMatrix {
 		}
 	    }
 	}
-	moveFlyingSquirrels();
-	viewSlots();
 	if (filledSlots == ROWS*COLUMNS) {
 	    
 	    Log.d("GAME", "OVER");
 	    MainScene.showGameOverScene();
 	} else {
+	    
 	    TableOfElements.renewAvaliableRandomElements(score);
 	}
     }
@@ -136,9 +149,17 @@ public class SlotMatrix {
 	    int col = (int) (random.nextDouble() * COLUMNS);
 	    if (isSlotEmpty(row, col)) {
 		
-		addToSlot(TableOfElements.getRandomElement(), row, col); //Not putToSlot(..) 
-								     //because of the update() method
+		Element element = TableOfElements.getRandomElement();
+		if (element.getName().equals("FORESTER")) {
+		    
+		    addForesterToSlot(row, col);
+		} else {
+		    
+		    addToSlot(element, row, col);
+		}
+								     
 	    } else {
+		
 		i--;
 	    }
 	}
@@ -207,6 +228,7 @@ public class SlotMatrix {
             }
         }
 	slotsWithFlyingSquirrels.clear();
+	slotsWithForesters.clear();
 	setMatrix((String[][]) obj);
 	this.score = scores;
 	viewSlots();
@@ -221,12 +243,19 @@ public class SlotMatrix {
             
             for(int j = 0; j < COLUMNS; j++) {
         	
-        	if(namesMatrix[i][j] == null) matrix[i][j] = new Slot();
-        	
-        	else { matrix[i][j] = new Slot();
+        	if(namesMatrix[i][j] == null) {
+        	    
+        	    matrix[i][j] = new Slot();
+        	} else { 
+        	    
+        	    matrix[i][j] = new Slot();
         	    addToSlot(new Element(namesMatrix[i][j]), i, j);
-        	    if (namesMatrix[i][j].equals("FLYING_SQUIRREL")) {
-        		slotsWithFlyingSquirrels.add(new SlotWithFlyingSquirrel(matrix[i][j], i, j));
+        	    if (namesMatrix[i][j].equals("FORESTER")) {
+        		
+        		slotsWithForesters.add(new SlotWithForester(i, j));
+        	    } else if (namesMatrix[i][j].equals("FLYING_SQUIRREL")) {
+        		
+        		slotsWithFlyingSquirrels.add(new SlotWithFlyingSquirrel(i, j));
         	    }
         	}
             }
@@ -323,40 +352,13 @@ public class SlotMatrix {
 	Element element = matrix[row][column].getElement();
 	score = score + TableOfElements.getScores(element);
 		
-	if (row > 0) {
-	    
-	    if (matrix[row-1][column].isSimilarTo(element)) {
-		matrix[row-1][column].reduceNeighbor();
-	    }
-	}
-	if (row < ROWS-1) {
-		    
-	    if (matrix[row+1][column].isSimilarTo(element)) {
-		matrix[row+1][column].reduceNeighbor();
-	    }
-	}
-	if (column > 0) {
-		    
-	    if (matrix[row][column-1].isSimilarTo(element)) {
-		matrix[row][column-1].reduceNeighbor();
-	    }
-	}
-	if (column < COLUMNS-1) {
-		    
-	    if (matrix[row][column+1].isSimilarTo(element)) {
-		matrix[row][column+1].reduceNeighbor();
-	    }
-	}
-	
 	if (element.getName().equals("FORESTER")) {
 	    
-	    element.changeToNextLvl();
-	    clearSlot(row, column);
-	    addToSlot(element, row, column);
+	    catchForester(row, column);
 	} else if (element.getName().equals("FLYING_SQUIRREL")) {
 	    
 	    for (SlotWithFlyingSquirrel slotWFS : slotsWithFlyingSquirrels) {
-		if (slotWFS.getSlot().equals(matrix[row][column])) {
+		if (matrix[slotWFS.getRow()][slotWFS.getColumn()].equals(matrix[row][column])) {
 		    slotsWithFlyingSquirrels.remove(slotWFS);
 		    break;
 		}
@@ -366,6 +368,30 @@ public class SlotMatrix {
 	    addToSlot(element, row, column);
 	} else {
 	    
+	    if (row > 0) {
+		    
+		if (matrix[row-1][column].isSimilarTo(element)) {
+		    matrix[row-1][column].reduceNeighbor();
+		}
+	    }
+	    if (row < ROWS-1) {
+			    
+		if (matrix[row+1][column].isSimilarTo(element)) {
+		    matrix[row+1][column].reduceNeighbor();
+		}
+	    }
+	    if (column > 0) {
+			    
+		if (matrix[row][column-1].isSimilarTo(element)) {
+		    matrix[row][column-1].reduceNeighbor();
+		}
+	    }
+	    if (column < COLUMNS-1) {
+			    
+		if (matrix[row][column+1].isSimilarTo(element)) {
+		    matrix[row][column+1].reduceNeighbor();
+		}
+	    }
 	    clearSlot(row, column);
 	}
 	
@@ -456,7 +482,7 @@ public class SlotMatrix {
 	
 	Slot slot = matrix[row][column];
 	slot.addElement(new Element("FLYING_SQUIRREL"));
-	slotsWithFlyingSquirrels.add(new SlotWithFlyingSquirrel(slot, row, column));
+	slotsWithFlyingSquirrels.add(new SlotWithFlyingSquirrel(row, column));
     }
     
     private void moveFlyingSquirrels() {
@@ -495,6 +521,134 @@ public class SlotMatrix {
 	}
     }
     
+    private void addForesterToSlot(int row, int column) {
+	
+	Slot slot = matrix[row][column];
+	slot.addElement(new Element("FORESTER"));
+	slotsWithForesters.add(new SlotWithForester(row, column));
+    }
+    
+    private void catchForester(int row, int column) {
+	
+	Slot slot = matrix[row][column];
+	for (SlotWithForester slotWF : slotsWithForesters) {
+	    if (matrix[slotWF.getRow()][slotWF.getColumn()].equals(slot)) {
+		slotsWithForesters.remove(slotWF);
+		break;
+	    }
+	}
+	transformForesterIntoNextLevel(row, column);
+    }
+    
+   
+    private void moveForesters() {
+	
+	if (slotsWithForesters.isEmpty()) {
+	    
+	    return;
+	}
+	for (SlotWithForester slotWF : slotsWithForesters) {
+	    
+	    slotWF.setHasAlreadyMoved(false);
+	}
+	LinkedList<SlotWithForester> newList = new LinkedList<SlotWithForester>(); 
+		
+	boolean oneHasMoved = true;
+	while (oneHasMoved) {
+	    
+	    oneHasMoved = false;
+	    for (SlotWithForester slotWF : slotsWithForesters) {
+		
+		if (!slotWF.getHasAlreadyMoved()) {
+		    
+		    boolean hasMoved = foresterTriesToMove(slotWF);
+		    if (hasMoved) {
+			    
+			newList.add(slotWF);
+			oneHasMoved = true;
+		    }
+		}
+	    }
+	}
+	
+	for (SlotWithForester slotWF : slotsWithForesters) {
+	    
+	    if (!slotWF.getHasAlreadyMoved()) {
+		
+		transformForesterIntoNextLevel(slotWF.getRow(), slotWF.getColumn());
+	    }
+	}
+	
+	slotsWithForesters.clear();
+	for (SlotWithForester slotWF : newList) {
+	    
+	    slotsWithForesters.add(slotWF);
+	}
+    }
+    
+    private void transformForesterIntoNextLevel(int row, int column) {
+	
+	Element element = matrix[row][column].getElement();
+	element.changeToNextLvl();
+	clearSlot(row, column);
+	addToSlot(element, row, column);
+    }
+    
+    private boolean foresterTriesToMove(SlotWithForester slotWF) {
+	
+	int row = slotWF.getRow();
+	int column = slotWF.getColumn();
+	LinkedList<SlotWithForester> possibleSlots = new LinkedList<SlotWithForester>();
+	if (row != 0) {
+	    if (matrix[row-1][column].isEmpty()) {
+		
+		possibleSlots.add(new SlotWithForester(row-1, column));
+	    }
+	}
+	if (row != ROWS-1) {
+	    if (matrix[row+1][column].isEmpty()) {
+		
+		possibleSlots.add(new SlotWithForester(row+1, column));
+	    }
+	}
+	if (column != 0) {
+	    if (matrix[row][column-1].isEmpty()) {
+		
+		possibleSlots.add(new SlotWithForester(row, column));
+	    }
+	}
+	if (column != COLUMNS-1) {
+	    if (matrix[row][column+1].isEmpty()) {
+		
+		possibleSlots.add(new SlotWithForester(row, column+1));
+	    }
+	}
+	
+	if (possibleSlots.isEmpty()) {
+	    
+	    return false;
+	} else {
+	    
+	    SlotWithForester newSlotWF = possibleSlots.get(
+		    randomGenerator.nextInt(possibleSlots.size()));
+	    clearSlot(row, column);
+	    foresterGraphicalMoving(row, column, newSlotWF.getRow(), newSlotWF.getColumn());
+	    slotWF.foresterMoveTo(newSlotWF.getRow(), newSlotWF.getColumn());
+	    matrix[slotWF.getRow()][slotWF.getColumn()].addElement(new Element("FORESTER"));
+	    return true;
+	}
+    }
+    
+    
+    
+    private void foresterGraphicalMoving( int fromRow
+	    				, int fromColumn
+	    				, int toRow
+	    				, int toColumn) {
+	
+	
+    }
+    
     // setting hasSimilarNeighbor and readyForNextLevel flags
     // flag readyForNextLevel doesn't have to be set for every Slot in chain, only for the last edited
     private void analyzeNeighbor( int thisRow
@@ -527,47 +681,47 @@ public class SlotMatrix {
     // checking if the last added element is the third (or more) and has to get next level 
     private void checkSimilarElements() {
 	
-	int curentRow = lastEditedSlotRow;
-	int curentCol = lastEditedSlotColumn;
+	int currentRow = lastEditedSlotRow;
+	int currentCol = lastEditedSlotColumn;
 	
-	if (matrix[curentRow][curentCol].getReadyForNextLevel()) {
+	if (matrix[currentRow][currentCol].getReadyForNextLevel()) {
 	    
-	    Slot slot = matrix[curentRow][curentCol];
+	    Slot slot = matrix[currentRow][currentCol];
 	    Element element = slot.getElement();
-	    clearSlot(curentRow, curentCol);
-	    gameScene.detachChild(matrix[curentRow][curentCol].getSprite());
+	    clearSlot(currentRow, currentCol);
+	    gameScene.detachChild(matrix[currentRow][currentCol].getSprite());
 	    
-	    if (curentRow > 0) {
+	    if (currentRow > 0) {
 		
-		if (matrix[curentRow-1][curentCol].isSimilarTo(element)) {
+		if (matrix[currentRow-1][currentCol].isSimilarTo(element)) {
 		    
-		    collectSimilarElements(curentRow, curentCol, curentRow-1, curentCol, element);
+		    collectSimilarElements(currentRow, currentCol, currentRow-1, currentCol, element);
 		}
 	    }
-	    if (curentRow < ROWS-1) {
+	    if (currentRow < ROWS-1) {
 		
-		if (matrix[curentRow+1][curentCol].isSimilarTo(element)) {
+		if (matrix[currentRow+1][currentCol].isSimilarTo(element)) {
 		    
-		    collectSimilarElements(curentRow, curentCol, curentRow+1, curentCol, element);
+		    collectSimilarElements(currentRow, currentCol, currentRow+1, currentCol, element);
 		}
 	    }
-	    if (curentCol > 0) {
+	    if (currentCol > 0) {
 		
-		if (matrix[curentRow][curentCol-1].isSimilarTo(element)) {
+		if (matrix[currentRow][currentCol-1].isSimilarTo(element)) {
 		    
-		    collectSimilarElements(curentRow, curentCol, curentRow, curentCol-1, element);
+		    collectSimilarElements(currentRow, currentCol, currentRow, currentCol-1, element);
 		}
 	    }
-	    if (curentCol < COLUMNS-1) {
+	    if (currentCol < COLUMNS-1) {
 		
-		if (matrix[curentRow][curentCol+1].isSimilarTo(element)) {
+		if (matrix[currentRow][currentCol+1].isSimilarTo(element)) {
 		    
-		    collectSimilarElements(curentRow, curentCol, curentRow, curentCol+1, element);
+		    collectSimilarElements(currentRow, currentCol, currentRow, currentCol+1, element);
 		}
 	    }
 	    element.changeToNextLvl();
-	    addToSlot(element, curentRow, curentCol);
-	    update();
+	    addToSlot(element, currentRow, currentCol);
+	    lastEditedSlots.addFirst(new SlotPosition(currentRow, currentCol));
 	}
     }
     
@@ -726,5 +880,27 @@ public class SlotMatrix {
     private void slotIsActionUp() {
 	
 	gameScene.detachHelpForElement();
+    }
+    
+    private class SlotPosition {
+	
+	private int row;
+	private int column;
+	
+	SlotPosition(int row, int column) {
+	    
+	    this.row = row;
+	    this.column = column;
+	}
+	
+	int getRow() {
+	    
+	    return row;
+	}
+	
+	int getColumn() {
+	    
+	    return column;
+	}
     }
 }

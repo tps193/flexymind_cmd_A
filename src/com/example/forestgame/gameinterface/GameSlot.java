@@ -20,6 +20,7 @@ public abstract class GameSlot {
     protected int row;
     protected int column;
     
+    
     protected static float VERTICAL_OFFSET;
     
     public GameSlot(GameScene scene) {
@@ -39,6 +40,7 @@ public abstract class GameSlot {
 	element = e;
 	isEmpty = false;
 	show();
+	
     }
     
     public Element getElement() {
