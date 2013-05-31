@@ -93,5 +93,16 @@ class Slot {
     public Sprite getSprite() {
 
 	return slotSprite;
-    }    
+    }
+    
+    public void reduceNeighbor() {
+	
+	if (readyForNextLevel) {
+	    
+	    readyForNextLevel = false;
+	} else {
+	    
+	    hasSimilarNeighbor = false;
+	}
+    }
 }

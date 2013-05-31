@@ -14,6 +14,7 @@ import org.andengine.input.touch.TouchEvent;
 import android.util.Log;
 
 import com.example.forestgame.element.Element;
+import com.example.forestgame.element.TableOfElements;
 import com.example.forestgame.gameinterface.Prison;
 import com.example.forestgame.gameinterface.Respawn;
 
@@ -66,6 +67,24 @@ public class GameScene extends Scene {
     private float BORDER_HEIGHT = SlotMatrix.getSlotPositionUp(1) - SlotMatrix.getSlotPositionUp(0) - SlotMatrix.getSlotHeight();
     
     private Text scoresText;
+    
+    private Sprite helpPart1;
+    private Sprite helpPart2;
+    private Sprite helpPart3;
+    private Sprite helpPart4;
+    private boolean helpIsShown;
+    private String helpTextureName1;
+    private String helpTextureName2;
+    private String helpTextureName3;
+    private String helpTextureName4;
+    
+    private static String helpTextureX3 = "gfx_hint_arrow_X3.png";
+    private static String helpTextureShadow = "gfx_shadow.png";
+    private static String helpTextureQuestionWithCrown = "gfx_questionCrown.png";
+    private static String helpTextureQuestion = "gfx_question.png";
+    private static String helpTextureTwoQuestions = "gfx_2_questions.png";
+    private static String helpTextureArrow = "gfx_hint_arrow.png";
+    
     
     private Sprite background = new Sprite( 0
 	                              , 0
@@ -180,6 +199,7 @@ public class GameScene extends Scene {
 	muteOn.setVisible(true);
 	registerTouchArea(pauseIcon);
 	registerTouchArea(muteOff);
+	helpIsShown = false;
 	
 	
 	slotMatrix = new SlotMatrix(this);
@@ -426,5 +446,121 @@ public void setScores(int scores) {
 	if(loadedPrison!=null)prison.addElement(new Element(loadedPrison));
 	if(loadedRepawn!=null)respawn.addElement(new Element(loadedRepawn));
 	setScores(scores);
+    }
+    
+    public void attachHelpForElement(Element element) {
+	
+	if (helpIsShown) {
+	    
+	    detachHelpForElement();
+	}
+	if (element.getName().equals("FORESTER")) {
+	    
+	    makeHelpForForester();
+	} else if (element.getName().equals("DROP")) {
+	    
+	    makeHelpForDrop();
+	} else if (element.getName().equals("FLYING_SQUIRREL")) {
+	    
+	    makeHelpForFlyingSquirrel();
+	} else if (element.getName().equals("MAGIC_STICK")) {
+	    
+	    makeHelpForMagicStick();
+	} else {   
+	    
+	    helpTextureName1 = TableOfElements.getTextureName(element);
+	    helpTextureName2 = helpTextureX3;
+	    helpTextureName3 = TableOfElements.getNextLevelTextureName(element);
+	}    
+	attachHelpSprites();
+	
+	
+    }
+    
+    public void detachHelpForElement() {
+	
+	if (helpIsShown) {
+	    
+	    detachChild(helpPart1);
+	    detachChild(helpPart2);
+	    detachChild(helpPart3);
+	    if (helpTextureName4 != null) {
+		
+		detachChild(helpPart4);
+	    }
+	}
+	helpIsShown = false;
+	helpTextureName4 = null;
+    }
+    
+    private void makeHelpForDrop() {
+	
+	helpTextureName1 = TableOfElements.getTextureName(new Element("DROP"));
+	helpTextureName2 = helpTextureTwoQuestions;
+	helpTextureName3 = helpTextureArrow;
+	helpTextureName4 = helpTextureQuestionWithCrown;
+    }
+    
+    private void makeHelpForFlyingSquirrel() {
+	
+	helpTextureName1 = TableOfElements.getTextureName(new Element("MAGIC_STICK"));
+	helpTextureName2 = TableOfElements.getTextureName(new Element("FLYING_SQUIRREL"));
+	helpTextureName3 = helpTextureArrow;
+	helpTextureName4 = TableOfElements.getTextureName(new Element("SQUIRREL"));
+    }
+    
+    private void makeHelpForForester() {
+	
+	helpTextureName1 = TableOfElements.getTextureName(new Element("MAGIC_STICK"));
+	helpTextureName2 = TableOfElements.getTextureName(new Element("FORESTER"));
+	helpTextureName3 = helpTextureArrow;
+	helpTextureName4 = TableOfElements.getTextureName(new Element("HUT"));
+    }
+    private void makeHelpForMagicStick() {
+	
+	helpTextureName1 = TableOfElements.getTextureName(new Element("MAGIC_STICK"));
+	helpTextureName2 = helpTextureQuestion;
+	helpTextureName3 = helpTextureArrow;
+	helpTextureName4 = helpTextureShadow;
+    }
+    
+    private void attachHelpSprites() {
+	
+	helpPart1 = new Sprite( MainActivity.TEXTURE_WIDTH*200/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+		    , MainActivity.TEXTURE_WIDTH/8
+		    , MainActivity.TEXTURE_HEIGHT/13
+		    , MainActivity.mainActivity.storage.getTexture(helpTextureName1)
+		    , MainActivity.mainActivity.getVertexBufferObjectManager());
+	
+	helpPart2 = new Sprite( MainActivity.TEXTURE_WIDTH*500/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+		    , MainActivity.TEXTURE_WIDTH/8
+		    , MainActivity.TEXTURE_HEIGHT/13
+		    , MainActivity.mainActivity.storage.getTexture(helpTextureName2)
+		    , MainActivity.mainActivity.getVertexBufferObjectManager());
+	
+	helpPart3 = new Sprite( MainActivity.TEXTURE_WIDTH*800/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+		    , MainActivity.TEXTURE_WIDTH/8
+		    , MainActivity.TEXTURE_HEIGHT/13
+		    , MainActivity.mainActivity.storage.getTexture(helpTextureName3)
+		    , MainActivity.mainActivity.getVertexBufferObjectManager());
+	
+	attachChild(helpPart1);
+	attachChild(helpPart2);
+	attachChild(helpPart3);
+	
+	if (helpTextureName4 != null) {
+	    
+	    helpPart4 = new Sprite( MainActivity.TEXTURE_WIDTH*1100/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+		    , MainActivity.TEXTURE_WIDTH/8
+		    , MainActivity.TEXTURE_HEIGHT/13
+		    , MainActivity.mainActivity.storage.getTexture(helpTextureName4)
+		    , MainActivity.mainActivity.getVertexBufferObjectManager());
+	    attachChild(helpPart4);
+	}
+	helpIsShown = true;
     }
 }

@@ -304,7 +304,11 @@ public class MainActivity extends SimpleBaseGameActivity {
         			, "gfx_flying_squirrel.png"
         			, "gfx_magic_stick.png"
         			, "gfx_nuts_imperor.png"
-        			, "gfx_nuts_magnum.png");
+        			, "gfx_nuts_magnum.png"
+        			, "gfx_hint_arrow_X3.png"
+        			, "gfx_shadow.png"
+        			, "gfx_questionCrown.png"
+        			, "gfx_hint_arrow.png");
         	
         	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
 				, MainActivity.mainActivity
@@ -316,7 +320,9 @@ public class MainActivity extends SimpleBaseGameActivity {
 				, "gfx_pond.png"
 				, "gfx_swamp.png"
 				, "gfx_lake.png"
-				, "gfx_sea.png");
+				, "gfx_sea.png"
+				, "gfx_question.png"
+				, "gfx_2_questions.png");
         	
         	textureCage = storage.getTexture("gfx_cage.png");
         	texturePauseIcon = storage.getTexture("gfx_pause_icon.png");
