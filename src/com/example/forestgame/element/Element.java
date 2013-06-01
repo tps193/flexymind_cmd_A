@@ -22,10 +22,4 @@ public class Element {
 	name = TableOfElements.getNextLvl(this);
 	return this;
     }
-    
-    public Element changeToLvl(int lvl) {
-	
-	name = TableOfElements.getElementOfLvl(lvl);
-	return this;
-    }
 }

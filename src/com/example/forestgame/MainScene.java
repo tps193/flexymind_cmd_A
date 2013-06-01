@@ -128,7 +128,7 @@ public class MainScene extends Scene {
 	helpScene.show();
 	gameScene.getPauseScene().hide();
 	gameScene.getGameOverScene().hide();
-	gameState = GameState.SHOW_SCORES;
+	gameState = GameState.SHOW_HINTS;
     }
     
     @Override

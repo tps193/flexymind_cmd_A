@@ -91,8 +91,9 @@ public class HelpScene extends Scene {
     private static final float NEXT_DELTA_UP = MainActivity.TEXTURE_HEIGHT * 50 /2000;
     ////////////
     private static final int CARD_ON_LIST = 5;
-    private static final int LIST_COUNT[] = {1, 0};
-    private static final int ROOT_COUNT = 1;
+    private static final int LIST_COUNT[] = {1, 0, 0};
+    private static final int ROOT_COUNT = 2;
+    private static final int SPECIAL_ROOT = 3;
     private int listNumber = 0;
     private int rootNumber = 0;
     private Element el;
@@ -287,7 +288,7 @@ public class HelpScene extends Scene {
 		hud.unregisterTouchArea(arrowUp);
 	    }
 	    
-	    el.changeToLvl(listNumber * CARD_ON_LIST);
+	    el = new Element(TableOfElements.getElementOfLvl(FIRST_ELEMENT_OF_ROOT[rootNumber], listNumber * CARD_ON_LIST));
 	    
 	    detachAllElementHint();
 	    attachAllElementHint(this);

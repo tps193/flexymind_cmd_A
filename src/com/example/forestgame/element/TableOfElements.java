@@ -139,8 +139,15 @@ public class TableOfElements {
 	}
     }
     
-    public static String getElementOfLvl(int lvl) {
+    public static String getElementOfLvl(String firstElName, int lvl) {
 	
-	return ARRAY_OF_ELEMENTS[lvl].name;
+	String name = firstElName;
+	Element temp = new Element(firstElName);
+	for(int i = 0; i < lvl; i++) {
+	    
+	    temp = new Element(getNextLvl(temp));
+	    name = temp.getName();
+	}
+	return name;
     }
 }

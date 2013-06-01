@@ -14,6 +14,9 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
+
+import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.util.Log;
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
@@ -40,6 +43,7 @@ public class SlotMatrix {
     private LinkedList<SlotWithFlyingSquirrel> slotsWithFlyingSquirrels = new LinkedList<SlotWithFlyingSquirrel>();
     private LinkedList<SlotWithForester> slotsWithForesters = new LinkedList<SlotWithForester>();
     private LinkedList<SlotPosition> lastEditedSlots = new LinkedList<SlotPosition>();
+    
     
     ParallelEntityModifier entityModifier;
     float animationDuration = 0.4f;
@@ -70,6 +74,7 @@ public class SlotMatrix {
 	    if (element.getName().equals("FORESTER")) {
 		
 		addForesterToSlot(row, col);
+		MainActivity.mainActivity.mStep.play();
 	    } else if (element.getName().equals("DROP")) {
 		
 		addDropToSlot(row, col);
@@ -103,6 +108,7 @@ public class SlotMatrix {
 
     private void update() {
 	
+	
 	checkSimilarElements();
 	viewSlots();
 	moveForesters();
@@ -115,6 +121,7 @@ public class SlotMatrix {
 	    lastEditedSlotColumn = s.getColumn();
 	    checkSimilarElements();
 	}
+	
 	viewSlots();
 	gameScene.setScores(getScore());
 	filledSlots = 0;
@@ -333,6 +340,7 @@ public class SlotMatrix {
     
     // putting Element into Slot and changing flags if needed
     private void addToSlot(Element element, int row, int col) {
+	
 	
 	matrix[row][col].addElement(element);
 	if (row > 0) {
@@ -664,6 +672,8 @@ public class SlotMatrix {
 	addToSlot(element, row, column);
 	graphicalMoving(row, column, row, column);
 	lastEditedSlots.add(new SlotPosition(row, column));
+	MainActivity.mainActivity.mSound.play();
+	
     }
     
     private boolean foresterTriesToMove(SlotWithForester slotWF) {
@@ -1014,4 +1024,6 @@ public class SlotMatrix {
 	    return column;
 	}
     }
+    
+    
 }
