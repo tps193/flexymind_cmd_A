@@ -1,4 +1,4 @@
-/*package com.example.forestgame;
+package com.example.forestgame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +97,8 @@ public class HelpScene extends Scene {
     private int rootNumber = 0;
     private Element el;
     private static final String FIRST_ELEMENT_OF_ROOT[] = { "GRASS"
-    							  , "GOLDEN_NUT"
+    							  , "HUT"
+    							  , "POND"
     };
     
     private List<HelpCard> arrayHelpCard = new ArrayList<HelpCard>();
@@ -519,4 +520,3 @@ public class HelpScene extends Scene {
 	}
     }
 }
-*/

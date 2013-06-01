@@ -138,4 +138,9 @@ public class TableOfElements {
 	    avaliableRandomElements = 6;
 	}
     }
+    
+    public static String getElementOfLvl(int lvl) {
+	
+	return ARRAY_OF_ELEMENTS[lvl].name;
+    }
 }

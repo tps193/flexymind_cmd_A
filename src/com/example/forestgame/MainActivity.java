@@ -85,6 +85,12 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion texturePauseIcon;
     public TextureRegion textureMuteOff;
     public TextureRegion textureMuteOn;
+    public TextureRegion textureHelp;
+    public TextureRegion textureArrow;
+    public TextureRegion textureArrowLeft;
+    public TextureRegion textureArrowRight;
+    public TextureRegion textureArrowUp;
+    public TextureRegion textureArrowDown;
     public AtlasStorage storage;
     public StrokeFont tDevNames;
     public StrokeFont tScoresSceneCaptions;
@@ -261,7 +267,13 @@ public class MainActivity extends SimpleBaseGameActivity {
         			   , "menu_exit.png"
         			   , "menu_exit_light.png"
         			   , "mute_on.png"
-        			   , "mute_off.png");
+        			   , "mute_off.png"
+        			   , "gfx_help_icon.png"
+        			   , "arrow_left.png"
+        			   , "arrow_right.png"
+        			   , "arrow_up.png"
+        			   , "arrow_down.png");
+		   
 
         	textureTitle = storage.getTexture("main_menu_title.png");
         	texturePlay = storage.getTexture("menu_play.png");
@@ -271,6 +283,11 @@ public class MainActivity extends SimpleBaseGameActivity {
         	textureExit = storage.getTexture("menu_exit.png");
         	textureMuteOn = storage.getTexture("mute_on.png");
         	textureMuteOff = storage.getTexture("mute_off.png");
+        	textureHelp = storage.getTexture("gfx_help_icon.png");
+        	textureArrowLeft = storage.getTexture("arrow_left.png");
+        	textureArrowRight = storage.getTexture("arrow_right.png");
+        	textureArrowUp = storage.getTexture("arrow_up.png");
+        	textureArrowDown = storage.getTexture("arrow_down.png");
         	
         	/*storage.createAtlas( MainActivity.mainActivity.getTextureManager()
         	           	   , MainActivity.mainActivity
@@ -311,6 +328,8 @@ public class MainActivity extends SimpleBaseGameActivity {
         			, "gfx_shadow.png"
         			, "gfx_questionCrown.png"
         			, "gfx_hint_arrow.png");
+        	
+        	textureArrow = storage.getTexture("gfx_hint_arrow.png");
         	
         	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
 				, MainActivity.mainActivity

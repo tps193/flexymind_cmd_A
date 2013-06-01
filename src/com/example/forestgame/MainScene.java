@@ -7,13 +7,14 @@ import android.view.KeyEvent;
 
 public class MainScene extends Scene {
     
-    public enum GameState { MAIN_MENU, GAME_RUNNING, SHOW_SCORES, SHOW_CREDITS, PAUSE, GAME_OVER };
+    public enum GameState { MAIN_MENU, GAME_RUNNING, SHOW_SCORES, SHOW_CREDITS, PAUSE, GAME_OVER, SHOW_HINTS };
     public static GameState gameState;
     
     private static MainMenuScene mainMenuScene = new MainMenuScene();
     public static GameScene gameScene = new GameScene();
     private static CreditsScene creditsScene = new CreditsScene();
     private static ScoresScene scoresScene = new ScoresScene();
+    public static HelpScene helpScene = new HelpScene();
     
     public MainScene() {
 	
@@ -21,6 +22,8 @@ public class MainScene extends Scene {
 	attachChild(gameScene);
 	attachChild(scoresScene);
 	attachChild(creditsScene);
+	attachChild(helpScene);
+	MainActivity.camera.setHUD(helpScene.hud);
 	showMainMenuScene();
     }
     
@@ -40,6 +43,10 @@ public class MainScene extends Scene {
 	return mainMenuScene;
     }
     
+    public static HelpScene getHelpScene() {
+	return helpScene;
+    }
+    
     public static void showMainMenuScene() {
 	
 	mainMenuScene.show();
@@ -48,6 +55,7 @@ public class MainScene extends Scene {
 	creditsScene.hide();
 	gameScene.getPauseScene().hide();
 	gameScene.getGameOverScene().hide();
+	helpScene.hide();
 	gameState = GameState.MAIN_MENU;
     }
     
@@ -59,6 +67,7 @@ public class MainScene extends Scene {
 	creditsScene.hide();
 	gameScene.getPauseScene().hide();
 	gameScene.getGameOverScene().hide();
+	helpScene.hide();
 	gameState = GameState.GAME_RUNNING;
     }
     
@@ -70,6 +79,7 @@ public class MainScene extends Scene {
 	creditsScene.show();
 	gameScene.getPauseScene().hide();
 	gameScene.getGameOverScene().hide();
+	helpScene.hide();
 	gameState = GameState.SHOW_CREDITS;
     }
     
@@ -81,6 +91,7 @@ public class MainScene extends Scene {
 	creditsScene.hide();
 	gameScene.getPauseScene().hide();
 	gameScene.getGameOverScene().hide();
+	helpScene.hide();
 	gameState = GameState.SHOW_SCORES;
     }
     
@@ -92,6 +103,7 @@ public class MainScene extends Scene {
 	creditsScene.hide();
 	gameScene.getPauseScene().show();
 	gameScene.getGameOverScene().hide();
+	helpScene.hide();
 	gameState = GameState.PAUSE;
     }
     
@@ -103,7 +115,20 @@ public class MainScene extends Scene {
 	creditsScene.hide();
 	gameScene.getGameOverScene().show();
 	gameScene.getPauseScene().hide();
+	helpScene.hide();
 	gameState = GameState.GAME_OVER;
+    }
+    
+    public static void showHelpScene() {
+	  
+	mainMenuScene.hide();
+	gameScene.hide();
+	scoresScene.hide();
+	creditsScene.hide();
+	helpScene.show();
+	gameScene.getPauseScene().hide();
+	gameScene.getGameOverScene().hide();
+	gameState = GameState.SHOW_SCORES;
     }
     
     @Override
@@ -134,6 +159,10 @@ public class MainScene extends Scene {
 	case GAME_OVER:
 	    gameScene.getGameOverScene().onSceneTouchEvent(pSceneTouchEvent);
 	    break;
+	
+	case SHOW_HINTS:
+	    helpScene.onSceneTouchEvent(pSceneTouchEvent);
+	    break;
 	}
 	return super.onSceneTouchEvent(pSceneTouchEvent);
     }
@@ -163,6 +192,10 @@ public class MainScene extends Scene {
 	    break;
 	    
 	case GAME_OVER:
+	    showMainMenuScene();
+	    break;
+	
+	case SHOW_HINTS:
 	    showMainMenuScene();
 	    break;
 	}

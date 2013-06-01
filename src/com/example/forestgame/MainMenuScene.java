@@ -52,6 +52,11 @@ public class MainMenuScene extends Scene {
     public static final float MUTEON_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1842 / 2000;
     public static final float MUTEON_WIDTH = MainActivity.TEXTURE_WIDTH * 13 / 250;
     public static final float MUTEON_HEIGHT = MainActivity.TEXTURE_HEIGHT * 116 / 2000;
+    
+    public static final float HELP_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 35 / 625;
+    public static final float HELP_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1798 / 2000;
+    public static final float HELP_WIDTH = MainActivity.TEXTURE_WIDTH * 30 / 250;
+    public static final float HELP_HEIGHT = MainActivity.TEXTURE_HEIGHT * 160 / 2000;
 
     
     private Sprite background = new Sprite( 0
@@ -93,6 +98,40 @@ public class MainMenuScene extends Scene {
 		return true;
 	    }
 	};
+	
+	private Sprite helpIcon = new Sprite( HELP_POSITION_LEFT
+					, HELP_POSITION_UP
+					, HELP_WIDTH
+					, HELP_HEIGHT
+					, MainActivity.mainActivity.textureHelp
+					, MainActivity.mainActivity.getVertexBufferObjectManager()) {
+		
+		  @Override
+		  public boolean onAreaTouched( TouchEvent pSceneTouchEvent
+		            , float pTouchAreaLocalX
+		            , float pTouchAreaLocalY) {
+		
+		        if (pSceneTouchEvent.isActionDown()) {
+		
+		            Log.d("Help", "touch");
+		            applyTouchEffects(helpIcon);
+		
+		        } else if (pSceneTouchEvent.isActionUp()) {
+		
+		            Log.d("Help", "no touch");
+		            applyUntouchEffects(helpIcon);
+		            helpIconCLick();
+		        }
+		    return true;
+		    }
+		  };
+		  
+	private void helpIconCLick() {
+	
+	    MainActivity.mainActivity.mClick.play();
+	    MainScene.showHelpScene();
+	      
+	}
 
 	private void buttonPlayPress() {
 	    MainActivity.mainActivity.mClick.play();
@@ -306,6 +345,7 @@ public class MainMenuScene extends Scene {
 	attachChild(buttonExit);
 	attachChild(muteOff);
 	attachChild(muteOn);
+	attachChild(helpIcon);
 	muteOn.setVisible(true);
 	registerTouchArea(buttonPlay);
 	registerTouchArea(buttonResume);
@@ -313,6 +353,7 @@ public class MainMenuScene extends Scene {
 	registerTouchArea(buttonCredits);
 	registerTouchArea(buttonExit);
 	registerTouchArea(muteOff);
+	registerTouchArea(helpIcon);
 	setTouchAreaBindingOnActionDownEnabled(true);
 	setTouchAreaBindingOnActionMoveEnabled(true);
 	

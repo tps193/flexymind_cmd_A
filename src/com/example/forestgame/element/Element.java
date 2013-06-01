@@ -1,6 +1,6 @@
 package com.example.forestgame.element;
 
-import com.example.forestgame.MainActivity;
+
 
 public class Element {
 
@@ -17,9 +17,15 @@ public class Element {
     }
 
     // Conversion several elements into one of higher level.
-    public void changeToNextLvl() {
+    public Element changeToNextLvl() {
 
 	name = TableOfElements.getNextLvl(this);
-	MainActivity.mainActivity.mSound.play();
+	return this;
+    }
+    
+    public Element changeToLvl(int lvl) {
+	
+	name = TableOfElements.getElementOfLvl(lvl);
+	return this;
     }
 }

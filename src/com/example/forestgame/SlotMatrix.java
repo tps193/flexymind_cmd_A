@@ -823,6 +823,7 @@ public class SlotMatrix {
 		}
 	    }
 	    element.changeToNextLvl();
+	    MainActivity.mainActivity.mSound.play();
 	    addToSlot(element, currentRow, currentCol);
 	    lastEditedSlotRow = currentRow;
 	    lastEditedSlotColumn = currentCol;
