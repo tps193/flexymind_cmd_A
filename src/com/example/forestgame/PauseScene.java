@@ -52,7 +52,8 @@ public class PauseScene extends Scene {
 	    } else if (pSceneTouchEvent.isActionUp()) {
 
 		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-		MainActivity.mainActivity.mClick.play();	
+		MainActivity.mainActivity.mClick.play();
+		MainActivity.mainActivity.saveProgress();
 		MainScene.showGameScene();	
 		
 	    }

@@ -123,6 +123,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     public Sound mGameOver;
     public Sound mGameStart;
     public Sound mStep;
+    public Sound mDrop;
+    public Sound mMagic;
     
     private static Scene preLoadScene;
     
@@ -345,6 +347,8 @@ public class MainActivity extends SimpleBaseGameActivity {
             		mGameOver = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), MainActivity.mainActivity, "game_over.ogg");
             		mGameStart = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), MainActivity.mainActivity, "game_start.ogg");
             		mStep = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), MainActivity.mainActivity, "general_step.ogg");
+            		mDrop = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), MainActivity.mainActivity, "drop.ogg");
+            		mMagic = SoundFactory.createSoundFromAsset(mEngine.getSoundManager(), MainActivity.mainActivity, "magic.ogg");
                 } catch (final IOException e) {
             		Debug.e("Error", e);
                 }	
@@ -541,9 +545,11 @@ public class MainActivity extends SimpleBaseGameActivity {
     {
         super.onPause();
         if (this.isGameLoaded()) {
+            
             MainActivity.mainActivity.mMusic.pause();
             MainActivity.mainActivity.mGameStart.pause();
             MainActivity.mainActivity.mGameMusic.pause();
+            saveProgress();
         }
     }
 
@@ -579,6 +585,7 @@ public class MainActivity extends SimpleBaseGameActivity {
         	    MainActivity.mainActivity.mGameMusic.play();
         	    break;
             }
+            progressNotSaved();
         }
     }
     
@@ -612,6 +619,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	MainActivity.mainActivity.mGameStart.setVolume(0);
 	MainActivity.mainActivity.mSound.setVolume(0);
 	MainActivity.mainActivity.mStep.setVolume(0);
+	MainActivity.mainActivity.mDrop.setVolume(0);
+	MainActivity.mainActivity.mMagic.setVolume(0);
 	MainActivity.isMute = !MainActivity.isMute;
     }
     
@@ -625,13 +634,14 @@ public class MainActivity extends SimpleBaseGameActivity {
 	MainActivity.mainActivity.mGameStart.setVolume(1);
 	MainActivity.mainActivity.mSound.setVolume(1);
 	MainActivity.mainActivity.mStep.setVolume(1);
+	MainActivity.mainActivity.mDrop.setVolume(1);
+	MainActivity.mainActivity.mMagic.setVolume(1);
 	MainActivity.isMute = !MainActivity.isMute;
     }
     
     @Override
     protected void onDestroy() {
 	
-	saveProgress();
 	super.onDestroy();
 	android.os.Process.killProcess(android.os.Process.myPid());
     }

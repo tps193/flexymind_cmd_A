@@ -14,10 +14,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
-
-import android.annotation.SuppressLint;
 import android.util.Log;
-
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
 
@@ -45,11 +42,13 @@ public class SlotMatrix {
     private LinkedList<SlotPosition> lastEditedSlots = new LinkedList<SlotPosition>();
     
     ParallelEntityModifier entityModifier;
-    float animationDuration = 0.3f;
+    float animationDuration = 0.4f;
     float fromAlpha = 1.0f;
     float toAlpha = 0.3f;
     IEaseFunction easeFunction = EaseLinear.getInstance();
     TimerHandler spriteTimerHandler;
+    float disappearAlpha = 0.0f;
+    float appearAlpha = 1.0f;
     
     private static final Random randomGenerator = new Random();
     
@@ -74,19 +73,23 @@ public class SlotMatrix {
 	    } else if (element.getName().equals("DROP")) {
 		
 		addDropToSlot(row, col);
+		MainActivity.mainActivity.mDrop.play(); 
 	    } else if (element.getName().equals("FLYING_SQUIRREL")) {
 		    
 		addFlyingSquirrelToSLot(row, col);
 	    } else {
 		
 		addToSlot(element, row, col);
+		MainActivity.mainActivity.mStep.play();
 	    }
 	} else if (element.getName().equals("MAGIC_STICK")) {
 	    
 	    addMagicStickToSlot(row, col);
-	} 
-	lastEditedSlots.add(new SlotPosition(row, col));
-	MainActivity.mainActivity.mStep.play();
+	    MainActivity.mainActivity.mMagic.play();
+	}
+	
+	lastEditedSlotRow = row;
+	lastEditedSlotColumn = col;
 	update();
     }
     
@@ -97,14 +100,17 @@ public class SlotMatrix {
 	return matrix[row][col].isEmpty();
     }
     
-    @SuppressLint("NewApi")
-	private void update() {
+
+    private void update() {
 	
+	checkSimilarElements();
+	viewSlots();
 	moveForesters();
-	moveFlyingSquirrels();
+        moveFlyingSquirrels();
 	while (!lastEditedSlots.isEmpty()) {
 	    
-	    SlotPosition s = lastEditedSlots.pollFirst();
+	    SlotPosition s = lastEditedSlots.getFirst();
+	    lastEditedSlots.removeFirst();
 	    lastEditedSlotRow = s.getRow();
 	    lastEditedSlotColumn = s.getColumn();
 	    checkSimilarElements();
@@ -197,12 +203,13 @@ public class SlotMatrix {
         	clearSlot(i, j);
             }
         }
-        init();
+	TableOfElements.renewAvaliableRandomElements(score);
+	slotsWithFlyingSquirrels.clear();
+	slotsWithForesters.clear();
+	init();
         viewSlots();
-        TableOfElements.renewAvaliableRandomElements(score);
     }
     
-    // �������� �����
     public String[][] getNamesForSave() {
 	
 	String[][] namesMatrix = new String[ROWS][COLUMNS];
@@ -217,7 +224,7 @@ public class SlotMatrix {
 	return namesMatrix;
     }
     
-    //������ ����������� ����
+    
     public void loadInit(Object obj, int scores) throws IOException {
 	
 	for (int i = 0; i < ROWS; i++) {
@@ -232,11 +239,10 @@ public class SlotMatrix {
 	setMatrix((String[][]) obj);
 	this.score = scores;
 	viewSlots();
-	//update();
+	
     }
     
     
-    //������������� ����������� �������
     private void setMatrix(String[][] namesMatrix) {
 	
         for(int i = 0; i < ROWS; i++) {
@@ -501,7 +507,40 @@ public class SlotMatrix {
     
     private void disappearFlyingSquirrel(SlotWithFlyingSquirrel slotWFS) {
 	
+	int row = slotWFS.getRow();
+	int col = slotWFS.getColumn();
 	clearSlot(slotWFS.getRow(), slotWFS.getColumn());
+	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration/2
+			, appearAlpha
+			, disappearAlpha
+			, easeFunction));
+
+
+	TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(
+					TableOfElements.getTextureName(new Element("FLYING_SQUIRREL")));
+
+	final Sprite animationSprite = new Sprite ( getSlotPositionLeft(col)
+							, getSlotPositionUp(row)
+							, SLOT_WIDTH
+							, SLOT_HEIGHT
+							, slotTexture
+							, MainActivity.mainActivity.getVertexBufferObjectManager());
+
+	gameScene.attachChild(animationSprite);
+
+	animationSprite.registerEntityModifier(entityModifier);
+
+	MainActivity.mainActivity.getEngine().registerUpdateHandler(
+		spriteTimerHandler = new TimerHandler(animationDuration
+							, false
+							, new ITimerCallback() {
+
+		    @Override
+		    public void onTimePassed(TimerHandler pTimerHandler) {
+			// TODO Auto-generated method stub
+			gameScene.detachChild(animationSprite);
+		    }
+		}));
     }
     
     private void appearFlyingSquirrel(){
@@ -512,6 +551,37 @@ public class SlotMatrix {
 		if (matrix[row][col].isEmpty()) {
 		    if (r == 0) {
 			addFlyingSquirrelToSLot(row, col);
+			entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration/2
+				    						, disappearAlpha
+				    						, appearAlpha
+				    						, easeFunction));
+
+			TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(
+							TableOfElements.getTextureName(new Element("FLYING_SQUIRREL")));
+
+			final Sprite animationSprite = new Sprite ( getSlotPositionLeft(col)
+								, getSlotPositionUp(row)
+								, SLOT_WIDTH
+								, SLOT_HEIGHT
+								, slotTexture
+								, MainActivity.mainActivity.getVertexBufferObjectManager());
+
+			gameScene.attachChild(animationSprite);
+
+			animationSprite.registerEntityModifier(entityModifier);
+
+			MainActivity.mainActivity.getEngine().registerUpdateHandler(
+				spriteTimerHandler = new TimerHandler(animationDuration
+									, false
+									, new ITimerCallback() {
+
+				    @Override
+				    public void onTimePassed(TimerHandler pTimerHandler) {
+					// TODO Auto-generated method stub
+					gameScene.detachChild(animationSprite);
+				    }
+				}));
+			
 			return;
 		    } else {
 			r--;
@@ -592,6 +662,8 @@ public class SlotMatrix {
 	element.changeToNextLvl();
 	clearSlot(row, column);
 	addToSlot(element, row, column);
+	graphicalMoving(row, column, row, column);
+	lastEditedSlots.add(new SlotPosition(row, column));
     }
     
     private boolean foresterTriesToMove(SlotWithForester slotWF) {
@@ -614,7 +686,7 @@ public class SlotMatrix {
 	if (column != 0) {
 	    if (matrix[row][column-1].isEmpty()) {
 		
-		possibleSlots.add(new SlotWithForester(row, column));
+		possibleSlots.add(new SlotWithForester(row, column-1));
 	    }
 	}
 	if (column != COLUMNS-1) {
@@ -634,7 +706,7 @@ public class SlotMatrix {
 	    clearSlot(row, column);
 	    foresterGraphicalMoving(row, column, newSlotWF.getRow(), newSlotWF.getColumn());
 	    slotWF.foresterMoveTo(newSlotWF.getRow(), newSlotWF.getColumn());
-	    matrix[slotWF.getRow()][slotWF.getColumn()].addElement(new Element("FORESTER"));
+	    matrix[newSlotWF.getRow()][newSlotWF.getColumn()].addElement(new Element("FORESTER"));
 	    return true;
 	}
     }
@@ -646,7 +718,38 @@ public class SlotMatrix {
 	    				, int toRow
 	    				, int toColumn) {
 	
-	
+	entityModifier = new ParallelEntityModifier(new MoveModifier(animationDuration
+							, getSlotPositionLeft(fromColumn)
+							, getSlotPositionLeft(toColumn)
+							, getSlotPositionUp(fromRow)
+							, getSlotPositionUp(toRow)
+							, easeFunction));
+
+	TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(
+					TableOfElements.getTextureName(new Element("FORESTER")));
+
+	final Sprite animationSprite = new Sprite ( getSlotPositionLeft(fromColumn)
+						, getSlotPositionUp(fromRow)
+						, SLOT_WIDTH
+						, SLOT_HEIGHT
+						, slotTexture
+						, MainActivity.mainActivity.getVertexBufferObjectManager());
+
+	gameScene.attachChild(animationSprite);
+
+	animationSprite.registerEntityModifier(entityModifier);
+
+	MainActivity.mainActivity.getEngine().registerUpdateHandler(
+					spriteTimerHandler = new TimerHandler(animationDuration
+					, false
+					, new ITimerCallback() {
+
+					    @Override
+					    public void onTimePassed(TimerHandler pTimerHandler) {
+						// TODO Auto-generated method stub
+						gameScene.detachChild(animationSprite);
+					    }
+					}));
     }
     
     // setting hasSimilarNeighbor and readyForNextLevel flags
@@ -721,7 +824,9 @@ public class SlotMatrix {
 	    }
 	    element.changeToNextLvl();
 	    addToSlot(element, currentRow, currentCol);
-	    lastEditedSlots.addFirst(new SlotPosition(currentRow, currentCol));
+	    lastEditedSlotRow = currentRow;
+	    lastEditedSlotColumn = currentCol;
+	    checkSimilarElements();
 	}
     }
     
@@ -892,12 +997,12 @@ public class SlotMatrix {
 	private int row;
 	private int column;
 	
-	SlotPosition(int row, int column) {
+	public SlotPosition(int row, int column) {
 	    
 	    this.row = row;
 	    this.column = column;
 	}
-	
+
 	int getRow() {
 	    
 	    return row;
