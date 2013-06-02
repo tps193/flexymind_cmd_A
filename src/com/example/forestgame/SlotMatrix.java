@@ -15,9 +15,8 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
-import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.util.Log;
+
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
 
@@ -108,21 +107,11 @@ public class SlotMatrix {
 
     private void update() {
 	
-	
-	checkSimilarElements();
 	viewSlots();
 	moveForesters();
-        moveFlyingSquirrels();
-	while (!lastEditedSlots.isEmpty()) {
-	    
-	    SlotPosition s = lastEditedSlots.getFirst();
-	    lastEditedSlots.removeFirst();
-	    lastEditedSlotRow = s.getRow();
-	    lastEditedSlotColumn = s.getColumn();
-	    checkSimilarElements();
-	}
+	moveFlyingSquirrels();
+	checkSimilarElements();
 	
-	viewSlots();
 	gameScene.setScores(getScore());
 	filledSlots = 0;
 	for (int i = 0; i < ROWS; i++) {
@@ -143,6 +132,28 @@ public class SlotMatrix {
 	    
 	    TableOfElements.renewAvaliableRandomElements(score);
 	}
+	
+	MainActivity.mainActivity.getEngine().registerUpdateHandler(new TimerHandler(animationDuration
+		, false
+		, new ITimerCallback() {
+
+		    @Override
+		    public void onTimePassed(TimerHandler pTimerHandler) {
+			// TODO Auto-generated method stub
+			while (!lastEditedSlots.isEmpty()) {
+			    
+			    SlotPosition s = lastEditedSlots.getFirst();
+			    lastEditedSlots.removeFirst();
+			    lastEditedSlotRow = s.getRow();
+			    lastEditedSlotColumn = s.getColumn();
+			    checkSimilarElements();
+			}
+			
+			viewSlots();
+			
+		    }
+		}));
+	
     }
     
     public void init() {
@@ -518,7 +529,7 @@ public class SlotMatrix {
 	int row = slotWFS.getRow();
 	int col = slotWFS.getColumn();
 	clearSlot(slotWFS.getRow(), slotWFS.getColumn());
-	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration/2
+	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration
 			, appearAlpha
 			, disappearAlpha
 			, easeFunction));
@@ -655,13 +666,14 @@ public class SlotMatrix {
 		
 		transformForesterIntoNextLevel(slotWF.getRow(), slotWF.getColumn());
 	    }
-	}
+	}	
 	
 	slotsWithForesters.clear();
 	for (SlotWithForester slotWF : newList) {
 	    
 	    slotsWithForesters.add(slotWF);
-	}
+	}	
+	
     }
     
     private void transformForesterIntoNextLevel(int row, int column) {
@@ -715,7 +727,11 @@ public class SlotMatrix {
 		    randomGenerator.nextInt(possibleSlots.size()));
 	    clearSlot(row, column);
 	    foresterGraphicalMoving(row, column, newSlotWF.getRow(), newSlotWF.getColumn());
+	    
 	    slotWF.foresterMoveTo(newSlotWF.getRow(), newSlotWF.getColumn());
+	    
+	    
+	    
 	    matrix[newSlotWF.getRow()][newSlotWF.getColumn()].addElement(new Element("FORESTER"));
 	    return true;
 	}

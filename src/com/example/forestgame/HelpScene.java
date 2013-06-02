@@ -11,12 +11,11 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.util.color.Color;
+
+import android.util.Log;
 
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
-
-import android.util.Log;
 
 public class HelpScene extends Scene {
     

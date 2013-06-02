@@ -1,5 +1,6 @@
 package com.example.forestgame;
 
+
 public class SlotWithForester {
     
     private int column;
