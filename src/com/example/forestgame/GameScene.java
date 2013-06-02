@@ -124,10 +124,33 @@ public class GameScene extends Scene {
 	    this.setAlpha(0.5f);
 	} else if (pSceneTouchEvent.isActionUp()) {
 	    
+	    if (    (pTouchAreaLocalX > 0) 
+	                 && (pTouchAreaLocalX < PAUSE_WIDTH)
+	                 && (pTouchAreaLocalY > 0)
+	                 && (pTouchAreaLocalY < PAUSE_HEIGHT)) {
+	    
 	    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER);
+	    this.setAlpha(1.0f);
 	    MainActivity.mainActivity.mClick.play();
 	    MainScene.showInGamePause();
-	    this.setAlpha(1.0f);
+	    
+	    
+	    } else {
+		this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER);
+		    this.setAlpha(1.0f);
+	    }
+	    
+	} else if (pSceneTouchEvent.isActionMove()) {
+	    if (    !((pTouchAreaLocalX > 0) 
+	                 && (pTouchAreaLocalX < PAUSE_WIDTH)
+	                 && (pTouchAreaLocalY > 0)
+	                 && (pTouchAreaLocalY < PAUSE_HEIGHT))) {
+		this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER);
+		    this.setAlpha(1.0f);
+	    } else {
+		this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER);
+		    this.setAlpha(0.5f);
+	    }
 	}
 	return true;
 	}
@@ -153,11 +176,34 @@ public class GameScene extends Scene {
 		this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
 
 	    } else if (pSceneTouchEvent.isActionUp()) {
+		
+		if (    (pTouchAreaLocalX > 0) 
+	                 && (pTouchAreaLocalX < MainMenuScene.MUTE_WIDTH)
+	                 && (pTouchAreaLocalY > 0)
+	                 && (pTouchAreaLocalY < MainMenuScene.MUTE_HEIGHT)) {
 
 		Log.d("MuteOff", "no touch");
 		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
 		this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
 		muteIconCLick();
+		
+		} else {
+			Log.d("MuteOff", "no touch outside");
+			this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+			this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    }
+		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < MainMenuScene.MUTE_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < MainMenuScene.MUTE_HEIGHT))) {
+			this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+			this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    } else {
+			this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+			this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+		    }
 	    }
 	    return true;
 	}

@@ -122,16 +122,16 @@ public class PauseScene extends Scene {
    
     
     private Sprite muteOff = new Sprite( MainMenuScene.MUTE_POSITION_LEFT
-	    			       , MainMenuScene.MUTE_POSITION_UP
-	    			       , MainMenuScene.MUTE_WIDTH
-	    			       , MainMenuScene.MUTE_HEIGHT
-	    			       , MainActivity.mainActivity.textureMuteOff
-	    			       , MainActivity.mainActivity.getVertexBufferObjectManager()) {
+		       , MainMenuScene.MUTE_POSITION_UP
+		       , MainMenuScene.MUTE_WIDTH
+		       , MainMenuScene.MUTE_HEIGHT
+		       , MainActivity.mainActivity.textureMuteOff
+		       , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 
 	@Override
 	public boolean onAreaTouched( TouchEvent pSceneTouchEvent
-		, float pTouchAreaLocalX
-		, float pTouchAreaLocalY) {
+				, float pTouchAreaLocalX
+				, float pTouchAreaLocalY) {
 
 	    if (pSceneTouchEvent.isActionDown()) {
 
@@ -141,10 +141,33 @@ public class PauseScene extends Scene {
 
 	    } else if (pSceneTouchEvent.isActionUp()) {
 
-		Log.d("MuteOff", "no touch");
-		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-		this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
-		muteIconCLick();
+		if (    (pTouchAreaLocalX > 0) 
+			&& (pTouchAreaLocalX < MainMenuScene.MUTE_WIDTH)
+			&& (pTouchAreaLocalY > 0)
+			&& (pTouchAreaLocalY < MainMenuScene.MUTE_HEIGHT)) {
+
+		    Log.d("MuteOff", "no touch");
+		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    muteIconCLick();
+
+		} else {
+		    Log.d("MuteOff", "no touch outside");
+		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		}
+
+	    } else if (pSceneTouchEvent.isActionMove()) {
+		if (    !((pTouchAreaLocalX > 0) 
+			&& (pTouchAreaLocalX < MainMenuScene.MUTE_WIDTH)
+			&& (pTouchAreaLocalY > 0)
+			&& (pTouchAreaLocalY < MainMenuScene.MUTE_HEIGHT))) {
+		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		} else {
+		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+		}
 	    }
 	    return true;
 	}
@@ -188,8 +211,6 @@ public class PauseScene extends Scene {
 	registerTouchArea(resume);
 	registerTouchArea(mainMenu);
 	registerTouchArea(muteOff);
-	//setTouchAreaBindingOnActionDownEnabled(true);
-	//setTouchAreaBindingOnActionMoveEnabled(true);
 	
     }
     

@@ -91,10 +91,30 @@ public class MainMenuScene extends Scene {
 		    
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
-		    Log.d("ButtonPlay", "no touch");
-		    applyUntouchEffects(buttonPlay);
-		    buttonPlayPress();
+		    if (    (pTouchAreaLocalX > 0) 
+	                 && (pTouchAreaLocalX < BUTTON_PLAY_WIDTH)
+	                 && (pTouchAreaLocalY > 0)
+	                 && (pTouchAreaLocalY < BUTTON_PLAY_HEIGHT)) {
+		    
+			Log.d("ButtonPlay", "no touch");
+			applyUntouchEffects(buttonPlay);
+			buttonPlayPress();
+		    } else {
+			Log.d("ButtonPlay", "no touch outside");
+			applyUntouchEffects(buttonPlay);
+		    }
+		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < BUTTON_PLAY_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < BUTTON_PLAY_HEIGHT))) {
+			applyUntouchEffects(buttonPlay);
+		    } else {
+			applyTouchEffects(buttonPlay);
+		    }
 		}
+		
 		return true;
 	    }
 	};
@@ -117,10 +137,30 @@ public class MainMenuScene extends Scene {
 		            applyTouchEffects(helpIcon);
 		
 		        } else if (pSceneTouchEvent.isActionUp()) {
+		            
+		            if (    (pTouchAreaLocalX > 0) 
+			                 && (pTouchAreaLocalX < HELP_WIDTH)
+			                 && (pTouchAreaLocalY > 0)
+			                 && (pTouchAreaLocalY < HELP_HEIGHT)) {
 		
 		            Log.d("Help", "no touch");
 		            applyUntouchEffects(helpIcon);
 		            helpIconCLick();
+		            
+		            } else {
+				Log.d("Help", "no touch outside");
+				applyUntouchEffects(helpIcon);
+			    }
+			    
+			} else if (pSceneTouchEvent.isActionMove()) {
+			    if (    !((pTouchAreaLocalX > 0) 
+			                 && (pTouchAreaLocalX < HELP_WIDTH)
+			                 && (pTouchAreaLocalY > 0)
+			                 && (pTouchAreaLocalY < HELP_HEIGHT))) {
+				applyUntouchEffects(helpIcon);
+			    } else {
+				applyTouchEffects(helpIcon);
+			    }
 		        }
 		    return true;
 		    }
@@ -163,6 +203,12 @@ public class MainMenuScene extends Scene {
 		    applyTouchEffects(buttonResume);
 
 		} else if (pSceneTouchEvent.isActionUp()) {
+		    
+		    if (    (pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < BUTTON_RESUME_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < BUTTON_RESUME_HEIGHT)) {
+		    
 		    MainActivity.mainActivity.mClick.play();
 		    Log.d("ButtonResume", "no touch");
 		    applyUntouchEffects(buttonResume);
@@ -172,6 +218,22 @@ public class MainMenuScene extends Scene {
 		    } catch(IOException e) {
 			
 		    }
+		    
+		 } else {
+			Log.d("ButtonResume", "no touch outside");
+			applyUntouchEffects(buttonResume);
+		    }
+		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < BUTTON_RESUME_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < BUTTON_RESUME_HEIGHT))) {
+			applyUntouchEffects(buttonResume);
+		    } else {
+			applyTouchEffects(buttonResume);
+		    }
+		    
 		}
 		return true;
 	    }
@@ -195,9 +257,30 @@ public class MainMenuScene extends Scene {
 		    
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
+		    if (    (pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < BUTTON_SCORES_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < BUTTON_SCORES_HEIGHT)) {
+		    
 		    Log.d("ButtonScores", "no touch");
 		    applyUntouchEffects(buttonScores);
 		    buttonScoresClick();
+		    
+		    } else {
+			Log.d("ButtonScores", "no touch outside");
+			applyUntouchEffects(buttonScores);
+		    }
+		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < BUTTON_SCORES_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < BUTTON_SCORES_HEIGHT))) {
+			applyUntouchEffects(buttonScores);
+		    } else {
+			applyTouchEffects(buttonScores);
+		    }
+		    
 		}
 		return true;
 	    }
@@ -228,9 +311,30 @@ public class MainMenuScene extends Scene {
 		    
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
+		    if (    (pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < BUTTON_CREDITS_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < BUTTON_CREDITS_HEIGHT)) {
+		    
 		    Log.d("ButtonCredits", "no touch");
 		    applyUntouchEffects(buttonCredits);
 		    buttonCreditsClick();
+		    
+		} else {
+			Log.d("ButtonCredits", "no touch outside");
+			applyUntouchEffects(buttonCredits);
+		    }
+		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < BUTTON_CREDITS_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < BUTTON_CREDITS_HEIGHT))) {
+			applyUntouchEffects(buttonCredits);
+		    } else {
+			applyTouchEffects(buttonCredits);
+		    }
+		    
 		}
 		return true;
 	    }
@@ -261,9 +365,29 @@ public class MainMenuScene extends Scene {
 		    
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
+		    if (    (pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < BUTTON_EXIT_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < BUTTON_EXIT_HEIGHT)) {
+		    
 		    Log.d("ButtonExit", "no touch");
 		    applyUntouchEffects(buttonExit);
 		    buttonExitCLick();
+		    
+		    } else {
+			Log.d("ButtonExit", "no touch outside");
+			applyUntouchEffects(buttonExit);
+		    }
+		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < BUTTON_EXIT_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < BUTTON_EXIT_HEIGHT))) {
+			applyUntouchEffects(buttonExit);
+		    } else {
+			applyTouchEffects(buttonExit);
+		    }
 		}
 		return true;
 	    }
@@ -298,10 +422,31 @@ public class MainMenuScene extends Scene {
 		    applyTouchEffects(muteOff);
 
 		} else if (pSceneTouchEvent.isActionUp()) {
+		    
+		    if (    (pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < MUTE_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < MUTE_HEIGHT)) {
 
 		    Log.d("MuteOff", "no touch");
 		    applyUntouchEffects(muteOff);
 		    muteIconCLick();
+		    
+		} else {
+			Log.d("MuteOff", "no touch outside");
+			applyUntouchEffects(muteOff);
+		    }
+		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < MUTE_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < MUTE_HEIGHT))) {
+			applyUntouchEffects(muteOff);
+		    } else {
+			applyTouchEffects(muteOff);
+		    }
+		    
 		}
 		return true;
 	    }
