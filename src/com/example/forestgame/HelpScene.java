@@ -90,8 +90,8 @@ public class HelpScene extends Scene {
     private static final float NEXT_DELTA_UP = MainActivity.TEXTURE_HEIGHT * 50 /2000;
     ////////////
     private static final int CARD_ON_LIST = 5;
-    private static final int LIST_COUNT[] = {1, 0, 0};
-    private static final int ROOT_COUNT = 2;
+    private static final int LIST_COUNT[] = {1, 0, 0, 0};
+    private static final int ROOT_COUNT = 3;
     private static final int SPECIAL_ROOT = 3;
     private int listNumber = 0;
     private int rootNumber = 0;
@@ -145,6 +145,11 @@ public class HelpScene extends Scene {
 	    MainActivity.mainActivity.mClick.play();
 	    
 	    rootNumber--;
+	    
+	    if (rootNumber < 0) {
+		
+		rootNumber = 0;
+	    }
 	    
 	    arrowRight.setVisible(true);
 	    hud.registerTouchArea(arrowRight);
@@ -206,6 +211,11 @@ public class HelpScene extends Scene {
 	    
 	    rootNumber++;
 	    
+	    if (rootNumber > ROOT_COUNT) {
+		
+		rootNumber = ROOT_COUNT;
+	    }
+	    
 	    arrowLeft.setVisible(true);
 	    hud.registerTouchArea(arrowLeft);
 	    
@@ -214,6 +224,7 @@ public class HelpScene extends Scene {
 		arrowDown.setVisible(false);
 		hud.unregisterTouchArea(arrowDown);
 	    }
+	    
 	    else {
 		
 		arrowDown.setVisible(true);
@@ -227,9 +238,17 @@ public class HelpScene extends Scene {
 	    }
 	    
 	    listNumber = 0;
-	    el = new Element(FIRST_ELEMENT_OF_ROOT[rootNumber]);
 	    detachAllElementHint();
-	    attachAllElementHint(this);
+	    
+	    if (rootNumber == SPECIAL_ROOT) {
+		
+		attachAllSpecialElementHint(this);
+	    }
+	    else {
+		
+		el = new Element(FIRST_ELEMENT_OF_ROOT[rootNumber]);
+		attachAllElementHint(this);
+	    }
 	}
     
 	
@@ -265,6 +284,11 @@ public class HelpScene extends Scene {
 	    MainActivity.mainActivity.mClick.play();
 	    
 	    listNumber--;
+	    
+	    if (listNumber < 0) {
+		
+		listNumber = 0;
+	    }
 	    
 	    arrowDown.setVisible(true);
 	    hud.registerTouchArea(arrowDown);
@@ -327,6 +351,11 @@ public class HelpScene extends Scene {
 	    MainActivity.mainActivity.mClick.play();
 	    
 	    listNumber++;
+	    
+	    if (listNumber > LIST_COUNT[rootNumber]) {
+		
+		listNumber = 0;
+	    }
 	    
 	    arrowUp.setVisible(true);
 	    hud.registerTouchArea(arrowUp);
@@ -399,10 +428,16 @@ public class HelpScene extends Scene {
 	
 	for(int i = 0; i < CARD_ON_LIST; i++) {
 	    
-	    attachElementHint(helpScene, RECTANGLE_POSITION_LEFT, RECTANGLE_POSITION_UP + i * RECTANGLES_INTERVAL, el, i);
-	    String temp = el.getName();
+	    attachElementHint(helpScene
+		    	    , RECTANGLE_POSITION_LEFT
+		    	    , RECTANGLE_POSITION_UP + i * RECTANGLES_INTERVAL
+		    	    , GameScene.helpTextureX3
+		    	    , null
+		    	    , TableOfElements.getTextureName(el)
+		    	    , TableOfElements.getNextLevelTextureName(el)
+		    	    , i);
 	    el.changeToNextLvl();
-	    if (temp.equals(el.getName())) return;
+	    if (TableOfElements.getTextureName(el).equals(TableOfElements.getNextLevelTextureName(el))) return;
 	}
     }
     
@@ -414,59 +449,128 @@ public class HelpScene extends Scene {
 	}	
     }
 
-    private void attachElementHint(HelpScene helpScene, float x, float y, Element el, int number) {	
+    private void attachAllSpecialElementHint(HelpScene helpScene) {
 	
-	Element element = new Element(el.getName());
+	attachElementHint(helpScene
+	    	    , RECTANGLE_POSITION_LEFT
+	    	    , RECTANGLE_POSITION_UP + 0 * RECTANGLES_INTERVAL
+	    	    , GameScene.helpTextureArrow
+	    	    , TableOfElements.getTextureName(new Element("MAGIC_STICK"))
+	    	    , TableOfElements.getTextureName(new Element("FORESTER"))
+	    	    , TableOfElements.getTextureName(new Element("HUT"))
+	    	    , 0);
+	
+	attachElementHint(helpScene
+	    	    , RECTANGLE_POSITION_LEFT
+	    	    , RECTANGLE_POSITION_UP + 1 * RECTANGLES_INTERVAL
+	    	    , GameScene.helpTextureArrow
+	    	    , TableOfElements.getTextureName(new Element("DROP"))
+	    	    , GameScene.helpTextureTwoQuestions
+	    	    , GameScene.helpTextureQuestionWithCrown
+	    	    , 1);
+	
+	attachElementHint(helpScene
+	    	    , RECTANGLE_POSITION_LEFT
+	    	    , RECTANGLE_POSITION_UP + 2 * RECTANGLES_INTERVAL
+	    	    , GameScene.helpTextureArrow
+	    	    , TableOfElements.getTextureName(new Element("MAGIC_STICK"))
+	    	    , TableOfElements.getTextureName(new Element("FLYING_SQUIRREL"))
+	    	    , TableOfElements.getTextureName(new Element("SQUIRREL"))
+	    	    , 2);
+	
+	attachElementHint(helpScene
+	    	    , RECTANGLE_POSITION_LEFT
+	    	    , RECTANGLE_POSITION_UP + 3 * RECTANGLES_INTERVAL
+	    	    , GameScene.helpTextureArrow
+	    	    , TableOfElements.getTextureName(new Element("MAGIC_STICK"))
+	    	    , GameScene.helpTextureQuestion
+	    	    , GameScene.helpTextureShadow
+	    	    , 3);
+    }
+    
+    private void attachElementHint(HelpScene helpScene
+	    			 , float x
+	    			 , float y
+	    			 , String helpTextureArrow
+	    			 , String helpTextureName1
+	    			 , String helpTextureName2
+	    			 , String helpTextureName3
+	    			 , int number) {
+	
+	Sprite arrowSprite;
+	Sprite name1Sprite;
+	Sprite name2Sprite;
+	Sprite name3Sprite;
+	Rectangle rect;
+	
+	if (helpTextureArrow != null) {
+	    
+	    arrowSprite = new Sprite(x + ARROW_DELTA_LEFT
+		    		   , y + ARROW_DELTA_UP
+		    		   , ARROW_WIDTH
+		    		   , ARROW_HEIGHT
+		    		   , MainActivity.mainActivity.storage.getTexture(helpTextureArrow)
+		    		   , MainActivity.mainActivity.getVertexBufferObjectManager());
+	}
+	else {
+	    
+	    arrowSprite = null;
+	}
+	
+	if (helpTextureName1 != null) {
+	    
+	    name1Sprite = new Sprite(x + ELEMENT_MARGIN_LEFT
+		    		   , y + ELEMENT_MARGIN_TOP
+		    		   , ELEMENT_WIDTH
+		    		   , ELEMENT_HEIGHT
+		    		   , MainActivity.mainActivity.storage.getTexture(helpTextureName1)
+		    		   , MainActivity.mainActivity.getVertexBufferObjectManager());
+	}
+	else {
+	    
+	    name1Sprite = null;
+	}
+	
+	if (helpTextureName2 != null) {
+	    
+	    name2Sprite = new Sprite(x + THIRD_DELTA_LEFT
+		    		   , y + ELEMENT_MARGIN_TOP
+		    		   , ELEMENT_WIDTH
+		    		   , ELEMENT_HEIGHT
+		    		   , MainActivity.mainActivity.storage.getTexture(helpTextureName2)
+		    		   , MainActivity.mainActivity.getVertexBufferObjectManager());
+	}
+	else {
+	    
+	    name2Sprite = null;
+	}
+	
+	if (helpTextureName3 != null) {
+	    
+	    name3Sprite = new Sprite(x + NEXT_DELTA_LEFT
+				   , y + NEXT_DELTA_UP
+				   , ELEMENT_WIDTH
+				   , ELEMENT_HEIGHT
+				   , MainActivity.mainActivity.storage.getTexture(helpTextureName3)
+				   , MainActivity.mainActivity.getVertexBufferObjectManager());
+	}
+	else {
+	    
+	    name3Sprite = null;
+	}
+	
+	rect = new Rectangle(x
+		   		     , y
+		   		     , RECTANGLE_WIDTH
+		   		     , RECTANGLE_HEIGHT
+		   		     , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
 	arrayHelpCard.add(new HelpCard(helpScene
-				     , new Sprite(x + ARROW_DELTA_LEFT
-						, y + ARROW_DELTA_UP
-						, ARROW_WIDTH
-						, ARROW_HEIGHT
-						, MainActivity.mainActivity.storage.getTexture("gfx_hint_arrow.png")
-						, MainActivity.mainActivity.getVertexBufferObjectManager())
-	
-				     , new Sprite(x + ELEMENT_MARGIN_LEFT
-						, y + ELEMENT_MARGIN_TOP
-						, ELEMENT_WIDTH
-						, ELEMENT_HEIGHT
-						, MainActivity.mainActivity.storage.getTexture(TableOfElements
-                                                        				     . getTextureName
-                                                        				     ( element))
-						, MainActivity.mainActivity.getVertexBufferObjectManager())
-	
-				     , new Sprite(x + SECOND_DELTA_LEFT
-						, y + SECOND_DELTA_UP
-						, ELEMENT_WIDTH
-						, ELEMENT_HEIGHT
-						, MainActivity.mainActivity.storage.getTexture(TableOfElements
-                   				     					     . getTextureName
-                   				     					     ( element))
-						, MainActivity.mainActivity.getVertexBufferObjectManager())
-	
-				     , new Sprite(x + THIRD_DELTA_LEFT
-						, y + THIRD_DELTA_UP
-						, ELEMENT_WIDTH
-						, ELEMENT_HEIGHT
-						, MainActivity.mainActivity.storage.getTexture(TableOfElements
-                   				     					     . getTextureName
-                   				     					     ( element))
-						, MainActivity.mainActivity.getVertexBufferObjectManager())
-	
-				     , new Sprite(x + NEXT_DELTA_LEFT
-						, y + NEXT_DELTA_UP
-						, ELEMENT_WIDTH
-						, ELEMENT_HEIGHT
-						, MainActivity.mainActivity.storage.getTexture(TableOfElements
-                   				     					     . getTextureName
-                   				     					     ( element.changeToNextLvl()))
-						, MainActivity.mainActivity.getVertexBufferObjectManager())
-	
-				     , new Rectangle(x
-						   , y
-						   , RECTANGLE_WIDTH
-						   , RECTANGLE_HEIGHT
-						   , MainActivity.mainActivity.getVertexBufferObjectManager())));
+				     , arrowSprite
+				     , name1Sprite
+				     , name2Sprite
+				     , name3Sprite
+				     , rect));
 	
 	arrayHelpCard.get(number).attachHelpCard();
     }
@@ -479,44 +583,83 @@ public class HelpScene extends Scene {
     
     private static class HelpCard {
 	
-	private Sprite arrow;
-	private Sprite firstElement;
-	private Sprite secondElement;
-	private Sprite thirdElement;
-	private Sprite nextElement;
+	private Sprite helpTextureArrow;
+	private Sprite helpTextureName1;
+	private Sprite helpTextureName2;
+	private Sprite helpTextureName3;
 	private Rectangle rect;
 	private HelpScene helpScene;
 	
-	private HelpCard(HelpScene helpScene, Sprite arrow, Sprite firstElement, Sprite secondElement, Sprite thirdElement, Sprite nextElement, Rectangle rect) {
+	private HelpCard(HelpScene helpScene
+		       , Sprite helpTextureArrow
+		       , Sprite helpTextureName1
+		       , Sprite helpTextureName2
+		       , Sprite helpTextureName3
+		       , Rectangle rect) {
 	    
 	    this.helpScene = helpScene;
-	    this.arrow = arrow;
-	    this.firstElement = firstElement;
-	    this.secondElement = secondElement;
-	    this.thirdElement = thirdElement;
-	    this.nextElement = nextElement;
+	    this.helpTextureArrow = helpTextureArrow;
+	    this.helpTextureName1 = helpTextureName1;
+	    this.helpTextureName2 = helpTextureName2;
+	    this.helpTextureName3 = helpTextureName3;
 	    this.rect = rect;
 	}
 	
 	private void attachHelpCard() {
+	   
+	    if (rect != null) {
+		
+		helpScene.attachChild(rect);
+		rect.setColor(1.0f, 0.82f, 0.43f);
+	    }
+
+	    if (helpTextureArrow != null) {
+		
+		helpScene.attachChild(helpTextureArrow);
+	    }
 	    
-	    helpScene.attachChild(rect);
-	    rect.setColor(1.0f, 0.82f, 0.43f);
-	    helpScene.attachChild(arrow);
-	    helpScene.attachChild(firstElement);
-	    helpScene.attachChild(secondElement);
-	    helpScene.attachChild(thirdElement);
-	    helpScene.attachChild(nextElement);
+	    if (helpTextureName1 != null) {
+		
+		helpScene.attachChild(helpTextureName1);
+	    }
+
+	    if (helpTextureName2 != null) {
+	
+		helpScene.attachChild(helpTextureName2);
+	    }
+
+	    if (helpTextureName3 != null) {
+	
+		helpScene.attachChild(helpTextureName3);
+	    }
 	}
 	
 	private void detachHelpCard() {
 	    
-	    helpScene.detachChild(rect);
-	    helpScene.detachChild(arrow);
-	    helpScene.detachChild(firstElement);
-	    helpScene.detachChild(secondElement);
-	    helpScene.detachChild(thirdElement);
-	    helpScene.detachChild(nextElement);
+	    if (rect != null) {
+		
+		helpScene.detachChild(rect);
+	    }
+
+	    if (helpTextureArrow != null) {
+		
+		helpScene.detachChild(helpTextureArrow);
+	    }
+	    
+	    if (helpTextureName1 != null) {
+		
+		helpScene.detachChild(helpTextureName1);
+	    }
+
+	    if (helpTextureName2 != null) {
+	
+		helpScene.detachChild(helpTextureName2);
+	    }
+
+	    if (helpTextureName3 != null) {
+	
+		helpScene.detachChild(helpTextureName3);
+	    }
 	}
     }
 }

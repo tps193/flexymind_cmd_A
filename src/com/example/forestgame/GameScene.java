@@ -78,12 +78,12 @@ public class GameScene extends Scene {
     private String helpTextureName3;
     private String helpTextureName4;
     
-    private static String helpTextureX3 = "gfx_hint_arrow_X3.png";
-    private static String helpTextureShadow = "gfx_shadow.png";
-    private static String helpTextureQuestionWithCrown = "gfx_questionCrown.png";
-    private static String helpTextureQuestion = "gfx_question.png";
-    private static String helpTextureTwoQuestions = "gfx_2_questions.png";
-    private static String helpTextureArrow = "gfx_hint_arrow.png";
+    public static String helpTextureX3 = "gfx_hint_arrow_X3.png";
+    public static String helpTextureShadow = "gfx_shadow.png";
+    public static String helpTextureQuestionWithCrown = "gfx_questionCrown.png";
+    public static String helpTextureQuestion = "gfx_question.png";
+    public static String helpTextureTwoQuestions = "gfx_2_questions.png";
+    public static String helpTextureArrow = "gfx_hint_arrow.png";
     
     
     private Sprite background = new Sprite( 0
