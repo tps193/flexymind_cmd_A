@@ -55,6 +55,8 @@ public class SlotMatrix {
     float disappearAlpha = 0.0f;
     float appearAlpha = 1.0f;
     
+    private int currentScore;
+    
     private static final Random randomGenerator = new Random();
     
     
@@ -111,7 +113,10 @@ public class SlotMatrix {
 	
 	disappearFlyingSquirrels();
 	viewSlots();
+	currentScore = 0;
 	checkSimilarElements();
+	score = score + currentScore;
+	showScoreToast(lastEditedSlotRow, lastEditedSlotColumn, currentScore);
 	moveForesters();
 	appearFlyingSquirrels();
 	
@@ -149,7 +154,10 @@ public class SlotMatrix {
 			    lastEditedSlots.removeFirst();
 			    lastEditedSlotRow = s.getRow();
 			    lastEditedSlotColumn = s.getColumn();
+			    currentScore = 0;
 			    checkSimilarElements();
+			    score = score + currentScore;
+			    showScoreToast(lastEditedSlotRow, lastEditedSlotColumn, currentScore);
 			    
 			}
 			
@@ -483,7 +491,7 @@ public class SlotMatrix {
 	}
     }
     
-    private void filterSlotsLinkedList(LinkedList<Slot> slots) {
+    public void filterSlotsLinkedList(LinkedList<Slot> slots) {
 	
 	if (slots.isEmpty()){
 	    
@@ -514,7 +522,7 @@ public class SlotMatrix {
 	}
     }
     
-    private Element bestElementToAdd(Element currentBestElement, LinkedList<Slot> slots) {
+    public Element bestElementToAdd(Element currentBestElement, LinkedList<Slot> slots) {
 	
 	for (Slot s : slots) {
 		
@@ -846,12 +854,11 @@ public class SlotMatrix {
 	
 	int currentRow = lastEditedSlotRow;
 	int currentCol = lastEditedSlotColumn;
-	
 	if (matrix[currentRow][currentCol].getReadyForNextLevel()) {
 	    
 	    Slot slot = matrix[currentRow][currentCol];
 	    Element element = slot.getElement();
-	    score = score + matrix[currentRow][currentCol].getScore();
+	    currentScore = currentScore + matrix[currentRow][currentCol].getScore();
 	    clearSlot(currentRow, currentCol);
 	    gameScene.detachChild(matrix[currentRow][currentCol].getSprite());
 	    
@@ -904,7 +911,7 @@ public class SlotMatrix {
 		       , fromRow
 		       , fromCol);
 	
-	score = score + matrix[fromRow][fromCol].getScore();
+	currentScore = currentScore + matrix[fromRow][fromCol].getScore();
  	clearSlot(fromRow, fromCol);
  	
 	if (fromRow > 0) {
@@ -1082,5 +1089,9 @@ public class SlotMatrix {
 	return matrix[row][col];
     }
     
+    private void showScoreToast(int row, int col, int showScore) {
+	
+	
+    }
     
 }

@@ -2,21 +2,14 @@ package com.example.forestgame;
 
 import java.io.IOException;
 import java.util.LinkedList;
-
 import javax.microedition.khronos.opengles.GL10;
-
 import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.modifier.LoopEntityModifier;
-import org.andengine.entity.modifier.RotationByModifier;
-import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
-
 import android.util.Log;
-
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
 import com.example.forestgame.gameinterface.Prison;
@@ -427,7 +420,7 @@ public class GameScene extends Scene {
 		}
 	    }
 	}
-	if (row != slotMatrix.getROWS()-1) {
+	if (row != SlotMatrix.getROWS()-1) {
 	    if (!slotMatrix.isSlotEmpty(row+1, column)) {
 		Slot slot = slotMatrix.getSlot(row+1, column);
 		if (slot.getElement().getName().equals(elementName)) {
@@ -451,7 +444,7 @@ public class GameScene extends Scene {
 		}
 	    }
 	}
-	if (column != slotMatrix.getCOLUMNS()-1) {
+	if (column != SlotMatrix.getCOLUMNS()-1) {
 	    if (!slotMatrix.isSlotEmpty(row, column+1)) {
 		Slot slot = slotMatrix.getSlot(row, column+1);
 		if (slot.getElement().getName().equals(elementName)) {
@@ -478,7 +471,52 @@ public class GameScene extends Scene {
     
     private void outlineNeightborsForDropAdd(int row, int column) {
 	
-	
+	LinkedList<Slot> slots = new LinkedList<Slot>();
+	if (row != 0) {
+	    if (!slotMatrix.isSlotEmpty(row-1, column)) {
+		if (!slotMatrix.getElement(row-1, column).equals("FORESTER")  
+		|| (!slotMatrix.getElement(row-1, column).equals("FLYING_SQUIRREL"))) {
+		    
+		    slots.add(slotMatrix.getSlot(row-1, column)); 
+		}
+	    }
+	}
+	if (row != SlotMatrix.getROWS()-1) {
+	    if (!slotMatrix.isSlotEmpty(row+1, column)) {
+		if (!slotMatrix.getElement(row+1, column).equals("FORESTER")  
+		|| (!slotMatrix.getElement(row+1, column).equals("FLYING_SQUIRREL"))) {
+			    
+		    slots.add(slotMatrix.getSlot(row+1, column)); 
+		}
+	    }
+	}
+	if (column != 0) {
+	    if (!slotMatrix.isSlotEmpty(row, column-1)) {
+		if (!slotMatrix.getElement(row, column-1).equals("FORESTER")  
+		|| (!slotMatrix.getElement(row, column-1).equals("FLYING_SQUIRREL"))) {
+			    
+		    slots.add(slotMatrix.getSlot(row, column-1)); 
+		}
+	    }
+	}
+	if (column != SlotMatrix.getCOLUMNS()-1) {
+	    if (!slotMatrix.isSlotEmpty(row, column+1)) {
+		if (!slotMatrix.getElement(row, column+1).equals("FORESTER")  
+		|| (!slotMatrix.getElement(row, column+1).equals("FLYING_SQUIRREL"))) {
+			    
+		    slots.add(slotMatrix.getSlot(row, column+1)); 
+		}
+	    }
+	}
+	slotMatrix.filterSlotsLinkedList(slots);
+	if ( !slots.isEmpty() ) {
+	    
+	    Element element = slotMatrix.bestElementToAdd(slots.getFirst().getElement(), slots);
+	    outlineNeighborsForCombo(row, column, element.getName());
+	} else {
+	    
+	    outlineNeighborsForCombo(row, column, "POND");
+	}
     }
     
     
