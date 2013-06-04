@@ -1,6 +1,9 @@
 package com.example.forestgame;
 
 
+import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.RotationByModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
 
 import com.example.forestgame.element.Element;
@@ -13,6 +16,13 @@ class Slot {
     private boolean readyForNextLevel; // has more than 1 similar neighbor
     private Element element;
     private Sprite slotSprite;
+    
+    private static float rotationDuration = 0.3f;
+    private LoopEntityModifier rotationModifier = new LoopEntityModifier(
+							new SequenceEntityModifier(
+								new RotationByModifier(rotationDuration/4, 5)
+								, new RotationByModifier(rotationDuration/2, -10)
+								, new RotationByModifier(rotationDuration/4, 5)));
     
     public Slot() {
 	
@@ -104,5 +114,16 @@ class Slot {
 	    
 	    hasSimilarNeighbor = false;
 	}
+    }
+    
+    public void addEntityModifier() {
+	
+	slotSprite.registerEntityModifier(rotationModifier);
+    }
+    
+    public void removeEntityModifier() {
+	
+	slotSprite.unregisterEntityModifier(rotationModifier);
+	//slotSprite.clearEntityModifiers();
     }
 }

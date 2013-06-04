@@ -1,10 +1,14 @@
 package com.example.forestgame;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.RotationByModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
@@ -84,6 +88,12 @@ public class GameScene extends Scene {
     public static String helpTextureQuestion = "gfx_question.png";
     public static String helpTextureTwoQuestions = "gfx_2_questions.png";
     public static String helpTextureArrow = "gfx_hint_arrow.png";
+    
+    
+    private int backlightRow;
+    private int backlightColumn;
+    private LinkedList<Slot> slotsForCombo = new LinkedList<Slot>();
+    
     
     
     private Sprite background = new Sprite( 0
@@ -318,20 +328,34 @@ public class GameScene extends Scene {
 	return movingElement;
     }
 
-    public void backLight(float touchPointX, float touchPointY, boolean elementIsMagicStick) {
+    public void backLight(float touchPointX, float touchPointY, String elementName) {
 
-	int backlightRow = (int) ((touchPointY - SlotMatrix.getSlotPositionUp(0)) / (SlotMatrix.getSlotHeight() + BORDER_HEIGHT));
-	int backlightColumn = (int) ((touchPointX - SlotMatrix.getSlotPositionLeft(0)) / (SlotMatrix.getSlotWidth() + BORDER_WIDTH));
-	if (elementIsMagicStick) {
-	    fullSlotBacklight(backlightRow, backlightColumn);
-	} else {
-	    emptySlotBacklight(backlightRow, backlightColumn);
+	
+	int newBacklightRow = (int) ((touchPointY - SlotMatrix.getSlotPositionUp(0)) / (SlotMatrix.getSlotHeight() + BORDER_HEIGHT));
+	int newBacklightColumn = (int) ((touchPointX - SlotMatrix.getSlotPositionLeft(0)) / (SlotMatrix.getSlotWidth() + BORDER_WIDTH));
+	if ((backlightRow != newBacklightRow) || (backlightColumn != newBacklightColumn)) {
+	    
+	    for (Slot slot : slotsForCombo) {
+		
+		slot.removeEntityModifier();
+	    }
+	    slotsForCombo.clear();
+	    detachChild(backlight);
+	    backlightRow = newBacklightRow;
+	    backlightColumn = newBacklightColumn;
+	    if (elementName.equals("MAGIC_STICK")) {
+		
+		fullSlotBacklight(backlightRow, backlightColumn);
+	    } else {
+		
+		emptySlotBacklight(backlightRow, backlightColumn, elementName);
+	    }
 	}
     }
     
-    public void emptySlotBacklight(int i, int j) {
-	
-	detachChild(backlight);
+    
+    
+    private void emptySlotBacklight(int i, int j, String elementName) {
 	
 	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
 	    
@@ -345,12 +369,20 @@ public class GameScene extends Scene {
             backlight.setAlpha(BACKLIGHT_ALPHA);
 	    attachChild(backlight);
 	    backlight.getParent().sortChildren();
+	    if ((elementName.equals("FORESTER")) || (elementName.equals("FLYING_SQUIRREL"))) {
+		
+		return;
+	    } else if (!elementName.equals("DROP")) {
+		    
+		outlineNeighborsForCombo(i, j, elementName);
+	    } else {
+		    
+		outlineNeightborsForDropAdd(i, j);
+	    }
 	}
     }
 
-    public void fullSlotBacklight(int i, int j) {
-	
-	detachChild(backlight);
+    private void fullSlotBacklight(int i, int j) {
 	
 	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && !slotMatrix.isSlotEmpty(i, j)) {
 	    
@@ -365,7 +397,88 @@ public class GameScene extends Scene {
 	    attachChild(backlight);
 	    backlight.setZIndex(700);
 	    backlight.getParent().sortChildren();
+	    
+	    if (slotMatrix.getElement(i, j).equals("FORESTER")) {
+		    
+		outlineNeighborsForCombo(i, j, "HUT");
+	    } else if (slotMatrix.getElement(i, j).equals("FLYING_SQUIRREL")) {
+		    
+		outlineNeighborsForCombo(i, j, "SQUIRREL");
+	    }
+	    slotsForCombo.add(slotMatrix.getSlot(i, j));
+	    slotMatrix.getSlot(i, j).addEntityModifier();
+	    
 	}
+    }
+    
+    private void outlineNeighborsForCombo(int row, int column, String elementName) {
+	
+	int forCombo = 0;
+	LinkedList<Slot> list = new LinkedList<Slot>();
+	if (row != 0) {
+	    if (!slotMatrix.isSlotEmpty(row-1, column)) {
+		Slot slot = slotMatrix.getSlot(row-1, column);
+		if (slot.getElement().getName().equals(elementName)) {
+		    forCombo++;
+		    if (slot.getHasSimilarNeighbor()) {
+			forCombo++;
+		    }
+		    list.add(slot);
+		}
+	    }
+	}
+	if (row != slotMatrix.getROWS()-1) {
+	    if (!slotMatrix.isSlotEmpty(row+1, column)) {
+		Slot slot = slotMatrix.getSlot(row+1, column);
+		if (slot.getElement().getName().equals(elementName)) {
+		    forCombo++;
+		    if (slot.getHasSimilarNeighbor()) {
+			forCombo++;
+		    }
+		    list.add(slot);
+		}
+	    }
+	}
+	if (column != 0) {
+	    if (!slotMatrix.isSlotEmpty(row, column-1)) {
+		Slot slot = slotMatrix.getSlot(row, column-1);
+		if (slot.getElement().getName().equals(elementName)) {
+		    forCombo++;
+		    if (slot.getHasSimilarNeighbor()) {
+			forCombo++;
+		    }
+		    list.add(slot);
+		}
+	    }
+	}
+	if (column != slotMatrix.getCOLUMNS()-1) {
+	    if (!slotMatrix.isSlotEmpty(row, column+1)) {
+		Slot slot = slotMatrix.getSlot(row, column+1);
+		if (slot.getElement().getName().equals(elementName)) {
+		    forCombo++;
+		    if (slot.getHasSimilarNeighbor()) {
+			forCombo++;
+		    }
+		    list.add(slot);
+		}
+	    }
+	}
+	if (forCombo >= 2) {
+	    
+	    for (Slot slot : list) {
+		
+		slot.addEntityModifier();
+		slotsForCombo.add(slot);
+	    }
+	    outlineNeighborsForCombo(row, column, TableOfElements.getNextLvl(new Element(elementName)));
+	    
+	}
+	
+    }
+    
+    private void outlineNeightborsForDropAdd(int row, int column) {
+	
+	
     }
     
     

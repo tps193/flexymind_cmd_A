@@ -123,7 +123,6 @@ public class Prison extends GameSlot {
 	float spriteLeftBorder = touchPointX - slotSprite.getWidth() / 2;
 	float spriteUpBorder = touchPointY - slotSprite.getHeight() / 2 - VERTICAL_OFFSET;
 	slotSprite.setPosition(spriteLeftBorder, spriteUpBorder);
-	boolean elementIsMagicStick = element.getName().equals("MAGIC_STICK");
-	gameScene.backLight(touchPointX, touchPointY, elementIsMagicStick);     
+	gameScene.backLight(touchPointX, touchPointY, element.getName());     
     }
 }

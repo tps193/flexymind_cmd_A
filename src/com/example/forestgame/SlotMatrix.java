@@ -1077,5 +1077,10 @@ public class SlotMatrix {
 	}
     }
     
+    public Slot getSlot(int row, int col) {
+	
+	return matrix[row][col];
+    }
+    
     
 }
