@@ -415,6 +415,9 @@ public class GameScene extends Scene {
 		    forCombo++;
 		    if (slot.getHasSimilarNeighbor()) {
 			forCombo++;
+			tryToFindMoreNeighbors(list, row-2, column, elementName);
+			tryToFindMoreNeighbors(list, row-1, column-1, elementName);
+			tryToFindMoreNeighbors(list, row-1, column+1, elementName);
 		    }
 		    list.add(slot);
 		}
@@ -427,6 +430,9 @@ public class GameScene extends Scene {
 		    forCombo++;
 		    if (slot.getHasSimilarNeighbor()) {
 			forCombo++;
+			tryToFindMoreNeighbors(list, row+2, column, elementName);
+			tryToFindMoreNeighbors(list, row+1, column-1, elementName);
+			tryToFindMoreNeighbors(list, row+1, column+1, elementName);
 		    }
 		    list.add(slot);
 		}
@@ -439,6 +445,9 @@ public class GameScene extends Scene {
 		    forCombo++;
 		    if (slot.getHasSimilarNeighbor()) {
 			forCombo++;
+			tryToFindMoreNeighbors(list, row, column-2, elementName);
+			tryToFindMoreNeighbors(list, row-1, column-1, elementName);
+			tryToFindMoreNeighbors(list, row+1, column-1, elementName);
 		    }
 		    list.add(slot);
 		}
@@ -451,6 +460,9 @@ public class GameScene extends Scene {
 		    forCombo++;
 		    if (slot.getHasSimilarNeighbor()) {
 			forCombo++;
+			tryToFindMoreNeighbors(list, row, column+2, elementName);
+			tryToFindMoreNeighbors(list, row-1, column+1, elementName);
+			tryToFindMoreNeighbors(list, row+1, column+1, elementName);
 		    }
 		    list.add(slot);
 		}
@@ -467,6 +479,19 @@ public class GameScene extends Scene {
 	    
 	}
 	
+    }
+    
+    private void tryToFindMoreNeighbors(LinkedList<Slot> list, int row, int col, String elementName) {
+	
+	if ((row >= 0) && (row < SlotMatrix.getROWS()) && (col >=0) && (col < SlotMatrix.getCOLUMNS())) {
+	    if (!slotMatrix.isSlotEmpty(row, col)) {
+		if (slotMatrix.getElement(row, col).equals(elementName)) {
+		    if (!list.contains(slotMatrix.getSlot(row, col))) {
+			list.add(slotMatrix.getSlot(row, col));
+		    }
+		}
+	    }
+	}
     }
     
     private void outlineNeightborsForDropAdd(int row, int column) {
