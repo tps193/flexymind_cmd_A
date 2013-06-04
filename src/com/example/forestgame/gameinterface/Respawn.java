@@ -94,6 +94,7 @@ public class Respawn extends GameSlot {
 	gameScene.attachHelpForElement(element);
 	row = SlotMatrix.getRespawnPlaceRow();
 	column = SlotMatrix.getRespawnPlaceColumn();
+	slotSprite.registerEntityModifier(rotationModifier);
 	Log.d("resp", "touch");
 	Log.d("resp", Integer.toString(row));
 	Log.d("resp", Integer.toString(column));
@@ -102,6 +103,7 @@ public class Respawn extends GameSlot {
     protected void gameSlotIsActionUp() {
 	
 	gameScene.detachHelpForElement();
+	slotSprite.unregisterEntityModifier(rotationModifier);
 	Log.d("resp", "no touch");
 	Log.d("resp", Integer.toString(row));
 	Log.d("resp", Integer.toString(column));

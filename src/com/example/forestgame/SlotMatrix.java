@@ -9,6 +9,8 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
+import org.andengine.entity.modifier.RotationByModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -778,7 +780,10 @@ public class SlotMatrix {
 							, getSlotPositionLeft(toColumn)
 							, getSlotPositionUp(fromRow)
 							, getSlotPositionUp(toRow)
-							, easeFunction));
+							, easeFunction)
+						, new SequenceEntityModifier(new RotationByModifier(animationDuration/4, 10)
+									   , new RotationByModifier(animationDuration/2, -20)
+									   , new RotationByModifier(animationDuration/4, 10)));
 
 	TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(
 					TableOfElements.getTextureName(new Element("FORESTER")));
@@ -846,6 +851,7 @@ public class SlotMatrix {
 	    
 	    Slot slot = matrix[currentRow][currentCol];
 	    Element element = slot.getElement();
+	    score = score + matrix[currentRow][currentCol].getScore();
 	    clearSlot(currentRow, currentCol);
 	    gameScene.detachChild(matrix[currentRow][currentCol].getSprite());
 	    
@@ -877,7 +883,6 @@ public class SlotMatrix {
 		    collectSimilarElements(currentRow, currentCol, currentRow, currentCol+1, element);
 		}
 	    }
-	    score = score + matrix[currentRow][currentCol].getScore();
 	    element.changeToNextLvl();
 	    MainActivity.mainActivity.mSound.play();
 	    addToSlot(element, currentRow, currentCol);
@@ -961,6 +966,7 @@ public class SlotMatrix {
 							  	   , getSlotPositionUp(fromRow)
 							  	   , getSlotPositionUp(toRow)
 							  	   , easeFunction));
+						  				
 	
 	Slot s = matrix[fromRow][fromCol];
 	

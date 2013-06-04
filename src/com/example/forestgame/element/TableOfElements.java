@@ -5,7 +5,7 @@ import java.util.Random;
 public class TableOfElements {
     
     private static final Random randomGenerator = new Random();
-    private static int avaliableRandomElements = 4;
+    private static int avaliableRandomElements = 5;
     
     private static class ElementInfo {
 

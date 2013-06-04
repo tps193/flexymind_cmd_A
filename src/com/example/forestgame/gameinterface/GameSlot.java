@@ -1,5 +1,8 @@
 package com.example.forestgame.gameinterface;
 
+import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.RotationByModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -19,6 +22,13 @@ public abstract class GameSlot {
     
     protected int row;
     protected int column;
+    protected float animationDuration = 0.3f;
+    
+    protected LoopEntityModifier rotationModifier = new LoopEntityModifier(
+	    						new SequenceEntityModifier(
+	    							new RotationByModifier(animationDuration/4, 5)
+	    							, new RotationByModifier(animationDuration/2, -10)
+	    							, new RotationByModifier(animationDuration/4, 5)));
     
     
     protected static float VERTICAL_OFFSET;

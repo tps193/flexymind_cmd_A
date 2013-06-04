@@ -82,11 +82,13 @@ public class Prison extends GameSlot {
 	Log.d("prison", "touch");
 	row = SlotMatrix.getPrisonPlaceRow();
 	column = SlotMatrix.getPrisonPlaceColumn();
+	slotSprite.registerEntityModifier(rotationModifier);
     }
     
     protected void gameSlotIsActionUp() {
 	
 	gameScene.detachHelpForElement();
+	slotSprite.unregisterEntityModifier(rotationModifier);
 	gameScene.moveElement(touchPointX, touchPointY - VERTICAL_OFFSET);
 	column = gameScene.getPutInColumn();
 	row = gameScene.getPutInRow(); 
