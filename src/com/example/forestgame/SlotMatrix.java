@@ -81,6 +81,8 @@ public class SlotMatrix {
 	    } else if (element.getName().equals("DROP")) {
 		
 		addDropToSlot(row, col);
+		lastEditedSlotRow = row;
+		lastEditedSlotColumn = col;
 		MainActivity.mainActivity.mDrop.play(); 
 	    } else if (element.getName().equals("FLYING_SQUIRREL")) {
 		    
@@ -89,9 +91,10 @@ public class SlotMatrix {
 		
 		addToSlot(element, row, col);
 		MainActivity.mainActivity.mStep.play();
+		lastEditedSlotRow = row;
+		lastEditedSlotColumn = col;
 	    }
-	    lastEditedSlotRow = row;
-	    lastEditedSlotColumn = col;
+	    
 	} else if (element.getName().equals("MAGIC_STICK")) {
 	    
 	    addMagicStickToSlot(row, col);
@@ -441,7 +444,7 @@ public class SlotMatrix {
     
     private void addDropToSlot(int row, int column) {
 	
-	LinkedList<Slot> slots = new LinkedList<Slot>();
+	/*LinkedList<Slot> slots = new LinkedList<Slot>();
 	if (row != 0) {
 	    if ( !matrix[row-1][column].isEmpty() ) {
 		if (!matrix[row-1][column].getElement().getName().equals("FORESTER")  
@@ -488,7 +491,8 @@ public class SlotMatrix {
 	} else {
 	    
 	    addToSlot( new Element("POND"), row, column);
-	}
+	}*/
+	addToSlot(gameScene.getBestElementForDropAdd(), row, column);
     }
     
     public void filterSlotsLinkedList(LinkedList<Slot> slots) {

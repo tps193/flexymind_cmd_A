@@ -86,6 +86,7 @@ public class GameScene extends Scene {
     private int backlightRow;
     private int backlightColumn;
     private LinkedList<Slot> slotsForCombo = new LinkedList<Slot>();
+    private Element bestElementForDropAdd;
     
     
     
@@ -500,7 +501,7 @@ public class GameScene extends Scene {
 	if (row != 0) {
 	    if (!slotMatrix.isSlotEmpty(row-1, column)) {
 		if (!slotMatrix.getElement(row-1, column).equals("FORESTER")  
-		|| (!slotMatrix.getElement(row-1, column).equals("FLYING_SQUIRREL"))) {
+		&& (!slotMatrix.getElement(row-1, column).equals("FLYING_SQUIRREL"))) {
 		    
 		    slots.add(slotMatrix.getSlot(row-1, column)); 
 		}
@@ -509,7 +510,7 @@ public class GameScene extends Scene {
 	if (row != SlotMatrix.getROWS()-1) {
 	    if (!slotMatrix.isSlotEmpty(row+1, column)) {
 		if (!slotMatrix.getElement(row+1, column).equals("FORESTER")  
-		|| (!slotMatrix.getElement(row+1, column).equals("FLYING_SQUIRREL"))) {
+		&& (!slotMatrix.getElement(row+1, column).equals("FLYING_SQUIRREL"))) {
 			    
 		    slots.add(slotMatrix.getSlot(row+1, column)); 
 		}
@@ -518,7 +519,7 @@ public class GameScene extends Scene {
 	if (column != 0) {
 	    if (!slotMatrix.isSlotEmpty(row, column-1)) {
 		if (!slotMatrix.getElement(row, column-1).equals("FORESTER")  
-		|| (!slotMatrix.getElement(row, column-1).equals("FLYING_SQUIRREL"))) {
+		&& (!slotMatrix.getElement(row, column-1).equals("FLYING_SQUIRREL"))) {
 			    
 		    slots.add(slotMatrix.getSlot(row, column-1)); 
 		}
@@ -527,7 +528,7 @@ public class GameScene extends Scene {
 	if (column != SlotMatrix.getCOLUMNS()-1) {
 	    if (!slotMatrix.isSlotEmpty(row, column+1)) {
 		if (!slotMatrix.getElement(row, column+1).equals("FORESTER")  
-		|| (!slotMatrix.getElement(row, column+1).equals("FLYING_SQUIRREL"))) {
+		&& (!slotMatrix.getElement(row, column+1).equals("FLYING_SQUIRREL"))) {
 			    
 		    slots.add(slotMatrix.getSlot(row, column+1)); 
 		}
@@ -536,14 +537,19 @@ public class GameScene extends Scene {
 	slotMatrix.filterSlotsLinkedList(slots);
 	if ( !slots.isEmpty() ) {
 	    
-	    Element element = slotMatrix.bestElementToAdd(slots.getFirst().getElement(), slots);
-	    outlineNeighborsForCombo(row, column, element.getName());
+	    bestElementForDropAdd = slotMatrix.bestElementToAdd(slots.getFirst().getElement(), slots);
+	    outlineNeighborsForCombo(row, column, bestElementForDropAdd.getName());
 	} else {
 	    
+	    bestElementForDropAdd = new Element("POND");
 	    outlineNeighborsForCombo(row, column, "POND");
 	}
     }
     
+    public Element getBestElementForDropAdd() {
+	
+	return bestElementForDropAdd;
+    }
     
     public void moveElement(float touchPointX, float touchPointY) {
 
