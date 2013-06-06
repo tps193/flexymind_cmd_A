@@ -192,8 +192,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     @Override
     protected void onCreateResources() {
 	
-	loadSettings();
-	Log.d("mute", "loaded");
+	//loadSettings();
 	
 	storage = new AtlasStorage();
 	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
@@ -377,6 +376,11 @@ public class MainActivity extends SimpleBaseGameActivity {
                 } catch (final IOException e) {
             		Debug.e("Error", e);
                 }	
+                
+                loadSettings();
+                if(isMute) {
+                    muteSounds();
+                }
         	
         	creditsCaps = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
         						, 2048
