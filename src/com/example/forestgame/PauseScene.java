@@ -185,9 +185,11 @@ public class PauseScene extends Scene {
 	if (!MainActivity.isMute) {
 	    MainActivity.mainActivity.muteSounds();
 	    muteOn.setVisible(false);
+	    MainActivity.mainActivity.saveSettings();
 	} else {
 	    MainActivity.mainActivity.unmuteSounds();
 	    muteOn.setVisible(true);
+	    MainActivity.mainActivity.saveSettings();
 	}
     }
     
