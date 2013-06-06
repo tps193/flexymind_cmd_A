@@ -464,17 +464,15 @@ public class MainMenuScene extends Scene {
 
 	    if (!MainActivity.isMute) {
 		
-		MainActivity.mainActivity.saveSettings();
-		Log.d("mute", "saved");
 		MainActivity.mainActivity.muteSounds();
 		muteOn.setVisible(false);
+		MainActivity.mainActivity.saveSettings();
 		
 	    } else {
 		
-		MainActivity.mainActivity.saveSettings();
-		Log.d("mute", "saved");
 		MainActivity.mainActivity.unmuteSounds();
 		muteOn.setVisible(true);
+		MainActivity.mainActivity.saveSettings();
 	    }
 	}
 	

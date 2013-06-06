@@ -192,7 +192,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     @Override
     protected void onCreateResources() {
 	
-	isMute = loadSettings();
+	loadSettings();
 	Log.d("mute", "loaded");
 	
 	storage = new AtlasStorage();
@@ -646,7 +646,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	MainActivity.mainActivity.mStep.setVolume(0);
 	MainActivity.mainActivity.mDrop.setVolume(0);
 	MainActivity.mainActivity.mMagic.setVolume(0);
-	MainActivity.isMute = !MainActivity.isMute;
+	MainActivity.isMute = true; //!MainActivity.isMute;
     }
     
     public void unmuteSounds() {
@@ -661,7 +661,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	MainActivity.mainActivity.mStep.setVolume(1);
 	MainActivity.mainActivity.mDrop.setVolume(1);
 	MainActivity.mainActivity.mMagic.setVolume(1);
-	MainActivity.isMute = !MainActivity.isMute;
+	MainActivity.isMute = false; //!MainActivity.isMute;
     }
     
     @Override
@@ -719,14 +719,17 @@ public void saveSettings() {
     
     try {
 	ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("soundsets", 0));
-	oos.writeObject(isMute);
+	oos.writeBoolean(isMute);
 	oos.flush();
 	oos.close();
+	Log.d("mute", "saved");
     } catch(FileNotFoundException e) {
 	
+	Log.d("mute", "FileNotFoundException");
 	e.printStackTrace();
     } catch(IOException e) {
 	
+	Log.d("mute", "IOException");
 	e.printStackTrace();
     }
 }
@@ -750,17 +753,15 @@ public Object[] load() throws IOException {
 	return obj;
     }
 
-public boolean loadSettings() {
-    boolean sets = false;
+public void loadSettings() {
     try {
 	
 	ObjectInputStream ois = new ObjectInputStream(openFileInput("soundsets"));
-	sets = (boolean)ois.readBoolean();
+	isMute = (boolean)ois.readBoolean();
 	Log.d("mute", "OK");
-	return sets;
     } catch(IOException e) {
 	Log.d("mute", "IOException");
-	return false;
+	isMute = false;
     }
 }
 }
