@@ -28,7 +28,7 @@ public class AtlasStorage {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(assetBasePath);
 		
 		BuildableBitmapTextureAtlas atlas = new BuildableBitmapTextureAtlas( textureManager
-			 							   , 2048
+			 							   , 1024
 			 							   , 2048
 			 							   , BitmapTextureFormat.RGBA_8888
 			 							   , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
