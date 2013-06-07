@@ -1128,6 +1128,8 @@ public class SlotMatrix {
 	  	   , easeFunction));
 				
 	font.load();
+	text.setZIndex(1000);
+	text.sortChildren();
 	gameScene.attachChild(text);
 
 	text.registerEntityModifier(entityModifier);
