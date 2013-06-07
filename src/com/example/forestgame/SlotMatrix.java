@@ -4,17 +4,26 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 
+
+
+import org.andengine.opengl.font.Font;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
+import org.andengine.entity.modifier.RotationByModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 
 import com.example.forestgame.element.Element;
@@ -27,7 +36,7 @@ public class SlotMatrix {
     private static final int COLUMNS = 6;
     private int lastEditedSlotRow;
     private int lastEditedSlotColumn;
-    private static int NUMBER_OF_ElEMENTS_ON_START = 18;
+    private static int NUMBER_OF_ElEMENTS_ON_START = 24;
     private int score;
     private int filledSlots;
     private GameScene gameScene;
@@ -46,12 +55,15 @@ public class SlotMatrix {
     
     ParallelEntityModifier entityModifier;
     float animationDuration = 0.4f;
+    float animationDurationText = 0.8f;
     float fromAlpha = 1.0f;
     float toAlpha = 0.3f;
     IEaseFunction easeFunction = EaseLinear.getInstance();
     TimerHandler spriteTimerHandler;
     float disappearAlpha = 0.0f;
     float appearAlpha = 1.0f;
+    
+    private int currentScore;
     
     private static final Random randomGenerator = new Random();
     
@@ -77,6 +89,8 @@ public class SlotMatrix {
 	    } else if (element.getName().equals("DROP")) {
 		
 		addDropToSlot(row, col);
+		lastEditedSlotRow = row;
+		lastEditedSlotColumn = col;
 		MainActivity.mainActivity.mDrop.play(); 
 	    } else if (element.getName().equals("FLYING_SQUIRREL")) {
 		    
@@ -85,15 +99,16 @@ public class SlotMatrix {
 		
 		addToSlot(element, row, col);
 		MainActivity.mainActivity.mStep.play();
+		lastEditedSlotRow = row;
+		lastEditedSlotColumn = col;
 	    }
+	    
 	} else if (element.getName().equals("MAGIC_STICK")) {
 	    
 	    addMagicStickToSlot(row, col);
 	    MainActivity.mainActivity.mMagic.play();
 	}
 	
-	lastEditedSlotRow = row;
-	lastEditedSlotColumn = col;
 	update();
     }
     
@@ -107,10 +122,14 @@ public class SlotMatrix {
 
     private void update() {
 	
+	disappearFlyingSquirrels();
 	viewSlots();
-	moveForesters();
-	moveFlyingSquirrels();
+	currentScore = 0;
 	checkSimilarElements();
+	score = score + currentScore;
+	showScoreToast(lastEditedSlotRow, lastEditedSlotColumn, currentScore);
+	moveForesters();
+	appearFlyingSquirrels();
 	
 	gameScene.setScores(getScore());
 	filledSlots = 0;
@@ -146,7 +165,11 @@ public class SlotMatrix {
 			    lastEditedSlots.removeFirst();
 			    lastEditedSlotRow = s.getRow();
 			    lastEditedSlotColumn = s.getColumn();
+			    currentScore = 0;
 			    checkSimilarElements();
+			    score = score + currentScore;
+			    showScoreToast(lastEditedSlotRow, lastEditedSlotColumn, currentScore);
+			    
 			}
 			
 			viewSlots();
@@ -159,6 +182,7 @@ public class SlotMatrix {
     public void init() {
 	
 	score=0;
+	TableOfElements.renewAvaliableRandomElements(score);
 	for (int i = 0; i < ROWS; i++) {
 	    
 	    for (int j = 0; j < COLUMNS; j++) {
@@ -221,11 +245,11 @@ public class SlotMatrix {
         	clearSlot(i, j);
             }
         }
-	TableOfElements.renewAvaliableRandomElements(score);
+	
 	slotsWithFlyingSquirrels.clear();
 	slotsWithForesters.clear();
 	init();
-        viewSlots();
+	viewSlots();
     }
     
     public String[][] getNamesForSave() {
@@ -256,6 +280,7 @@ public class SlotMatrix {
 	slotsWithForesters.clear();
 	setMatrix((String[][]) obj);
 	this.score = scores;
+	TableOfElements.renewAvaliableRandomElements(score);
 	viewSlots();
 	
     }
@@ -391,6 +416,8 @@ public class SlotMatrix {
 	    element.changeToNextLvl();
 	    clearSlot(row, column);
 	    addToSlot(element, row, column);
+	    lastEditedSlotRow = row;
+	    lastEditedSlotColumn = column;
 	} else {
 	    
 	    if (row > 0) {
@@ -425,25 +452,41 @@ public class SlotMatrix {
     
     private void addDropToSlot(int row, int column) {
 	
-	LinkedList<Slot> slots = new LinkedList<Slot>();
+	/*LinkedList<Slot> slots = new LinkedList<Slot>();
 	if (row != 0) {
 	    if ( !matrix[row-1][column].isEmpty() ) {
-		slots.add(matrix[row-1][column]);
+		if (!matrix[row-1][column].getElement().getName().equals("FORESTER")  
+		|| (!matrix[row-1][column].getElement().getName().equals("FLYING_SQUIRREL"))) {
+		    
+		    slots.add(matrix[row-1][column]); 
+		}
 	    }
 	}
 	if (row != ROWS-1) {
 	    if ( !matrix[row+1][column].isEmpty() ) {
-		slots.add(matrix[row+1][column]);
+		if (!matrix[row+1][column].getElement().getName().equals("FORESTER")  
+		|| (!matrix[row+1][column].getElement().getName().equals("FLYING_SQUIRREL"))) {
+			    
+		    slots.add(matrix[row+1][column]); 
+		}
 	    }
 	}
 	if (column != 0) {
 	    if ( !matrix[row][column-1].isEmpty() ) {
-		slots.add(matrix[row][column-1]);
+		if (!matrix[row][column-1].getElement().getName().equals("FORESTER")  
+		|| (!matrix[row][column-1].getElement().getName().equals("FLYING_SQUIRREL"))) {
+			    
+		    slots.add(matrix[row][column-1]); 
+		}
 	    }
 	}
 	if (column != COLUMNS-1) {
 	    if ( !matrix[row][column+1].isEmpty() ) {
-		slots.add(matrix[row][column+1]);
+		if (!matrix[row][column+1].getElement().getName().equals("FORESTER")  
+		|| (!matrix[row][column+1].getElement().getName().equals("FLYING_SQUIRREL"))) {
+			    
+		    slots.add(matrix[row][column+1]); 
+		}
 	    }
 	}
 	
@@ -456,10 +499,11 @@ public class SlotMatrix {
 	} else {
 	    
 	    addToSlot( new Element("POND"), row, column);
-	}
+	}*/
+	addToSlot(gameScene.getBestElementForDropAdd(), row, column);
     }
     
-    private void filterSlotsLinkedList(LinkedList<Slot> slots) {
+    public void filterSlotsLinkedList(LinkedList<Slot> slots) {
 	
 	if (slots.isEmpty()){
 	    
@@ -490,7 +534,7 @@ public class SlotMatrix {
 	}
     }
     
-    private Element bestElementToAdd(Element currentBestElement, LinkedList<Slot> slots) {
+    public Element bestElementToAdd(Element currentBestElement, LinkedList<Slot> slots) {
 	
 	for (Slot s : slots) {
 		
@@ -510,13 +554,17 @@ public class SlotMatrix {
 	slotsWithFlyingSquirrels.add(new SlotWithFlyingSquirrel(row, column));
     }
     
-    private void moveFlyingSquirrels() {
+    private void disappearFlyingSquirrels() {
 	
-	int numberFS = slotsWithFlyingSquirrels.size();
 	for (SlotWithFlyingSquirrel slotWFS : slotsWithFlyingSquirrels) {
 	    
 	    disappearFlyingSquirrel(slotWFS);
 	}
+    }
+    
+    private void appearFlyingSquirrels() {
+	
+	int numberFS = slotsWithFlyingSquirrels.size();
 	slotsWithFlyingSquirrels.clear();
 	for (int i = 0; i < numberFS; i++) {
 	    
@@ -570,7 +618,7 @@ public class SlotMatrix {
 		if (matrix[row][col].isEmpty()) {
 		    if (r == 0) {
 			addFlyingSquirrelToSLot(row, col);
-			entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration/2
+			entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration
 				    						, disappearAlpha
 				    						, appearAlpha
 				    						, easeFunction));
@@ -675,6 +723,9 @@ public class SlotMatrix {
 	}	
 	
     }
+   
+    
+    
     
     private void transformForesterIntoNextLevel(int row, int column) {
 	
@@ -749,7 +800,10 @@ public class SlotMatrix {
 							, getSlotPositionLeft(toColumn)
 							, getSlotPositionUp(fromRow)
 							, getSlotPositionUp(toRow)
-							, easeFunction));
+							, easeFunction)
+						, new SequenceEntityModifier(new RotationByModifier(animationDuration/4, 10)
+									   , new RotationByModifier(animationDuration/2, -20)
+									   , new RotationByModifier(animationDuration/4, 10)));
 
 	TextureRegion slotTexture = MainActivity.mainActivity.storage.getTexture(
 					TableOfElements.getTextureName(new Element("FORESTER")));
@@ -812,11 +866,11 @@ public class SlotMatrix {
 	
 	int currentRow = lastEditedSlotRow;
 	int currentCol = lastEditedSlotColumn;
-	
 	if (matrix[currentRow][currentCol].getReadyForNextLevel()) {
 	    
 	    Slot slot = matrix[currentRow][currentCol];
 	    Element element = slot.getElement();
+	    currentScore = currentScore + matrix[currentRow][currentCol].getScore();
 	    clearSlot(currentRow, currentCol);
 	    gameScene.detachChild(matrix[currentRow][currentCol].getSprite());
 	    
@@ -869,7 +923,7 @@ public class SlotMatrix {
 		       , fromRow
 		       , fromCol);
 	
-	score = score + matrix[fromRow][fromCol].getScore();
+	currentScore = currentScore + matrix[fromRow][fromCol].getScore();
  	clearSlot(fromRow, fromCol);
  	
 	if (fromRow > 0) {
@@ -931,6 +985,7 @@ public class SlotMatrix {
 							  	   , getSlotPositionUp(fromRow)
 							  	   , getSlotPositionUp(toRow)
 							  	   , easeFunction));
+						  				
 	
 	Slot s = matrix[fromRow][fromCol];
 	
@@ -1041,5 +1096,56 @@ public class SlotMatrix {
 	}
     }
     
+    public Slot getSlot(int row, int col) {
+	
+	return matrix[row][col];
+    }
+
+    private void showScoreToast(final int row, final int col, final int showScore) {
+
+	float offset = 0;
+	if (showScore != 0){
+	    if (showScore < 100)
+		offset += SLOT_WIDTH/4;
+	Font font = FontFactory.create( MainActivity.mainActivity.getFontManager(), 
+					MainActivity.mainActivity.getTextureManager(), 
+					256, 
+					256, 
+					Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD), 
+					SLOT_WIDTH / 2,
+					true, 
+					Color.rgb(102, 51, 0));
+	final Text text = new Text(0,0,font,Integer.toString(showScore), 10, MainActivity.mainActivity.getVertexBufferObjectManager());
+	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration
+		    , fromAlpha
+		    , toAlpha
+		    , easeFunction)
+
+			, new MoveModifier(animationDurationText
+	  	   , getSlotPositionLeft(col) + offset
+	  	   , getSlotPositionLeft(col) + offset
+	  	   , getSlotPositionUp(row)
+	  	   , getSlotPositionUp(row-1) //- SLOT_HEIGHT/2
+	  	   , easeFunction));
+				
+	font.load();
+	text.setZIndex(1000);
+	text.sortChildren();
+	gameScene.attachChild(text);
+
+	text.registerEntityModifier(entityModifier);
+
+	MainActivity.mainActivity.getEngine().registerUpdateHandler(
+		spriteTimerHandler = new TimerHandler(animationDurationText
+							, false
+							, new ITimerCallback() {
+
+	@Override
+	public void onTimePassed(TimerHandler pTimerHandler) {
+	    gameScene.detachChild(text);
+		}
+	}));
+	}
+    }
     
 }
