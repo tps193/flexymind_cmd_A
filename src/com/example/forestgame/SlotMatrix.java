@@ -55,6 +55,7 @@ public class SlotMatrix {
     
     ParallelEntityModifier entityModifier;
     float animationDuration = 0.4f;
+    float animationDurationText = 0.8f;
     float fromAlpha = 1.0f;
     float toAlpha = 0.3f;
     IEaseFunction easeFunction = EaseLinear.getInstance();
@@ -1120,11 +1121,11 @@ public class SlotMatrix {
 		    , toAlpha
 		    , easeFunction)
 
-			, new MoveModifier(animationDuration
+			, new MoveModifier(animationDurationText
 	  	   , getSlotPositionLeft(col) + offset
 	  	   , getSlotPositionLeft(col) + offset
 	  	   , getSlotPositionUp(row)
-	  	   , getSlotPositionUp(row-1) - SLOT_HEIGHT/3
+	  	   , getSlotPositionUp(row-1) //- SLOT_HEIGHT/2
 	  	   , easeFunction));
 				
 	font.load();
@@ -1135,7 +1136,7 @@ public class SlotMatrix {
 	text.registerEntityModifier(entityModifier);
 
 	MainActivity.mainActivity.getEngine().registerUpdateHandler(
-		spriteTimerHandler = new TimerHandler(animationDuration
+		spriteTimerHandler = new TimerHandler(animationDurationText
 							, false
 							, new ITimerCallback() {
 
