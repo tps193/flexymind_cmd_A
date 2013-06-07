@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 
+
+
+import org.andengine.opengl.font.Font;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.modifier.AlphaModifier;
@@ -12,11 +15,15 @@ import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.RotationByModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 
 import com.example.forestgame.element.Element;
@@ -1092,10 +1099,50 @@ public class SlotMatrix {
 	
 	return matrix[row][col];
     }
-    
-    private void showScoreToast(int row, int col, int showScore) {
-	
-	
+
+    private void showScoreToast(final int row, final int col, final int showScore) {
+
+	float offset = 0;
+	if (showScore != 0){
+	    if (showScore < 100)
+		offset += SLOT_WIDTH/4;
+	Font font = FontFactory.create( MainActivity.mainActivity.getFontManager(), 
+					MainActivity.mainActivity.getTextureManager(), 
+					256, 
+					256, 
+					Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD), 
+					SLOT_WIDTH / 2,
+					true, 
+					Color.rgb(102, 51, 0));
+	final Text text = new Text(0,0,font,Integer.toString(showScore), 10, MainActivity.mainActivity.getVertexBufferObjectManager());
+	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration
+		    , fromAlpha
+		    , toAlpha
+		    , easeFunction)
+
+			, new MoveModifier(animationDuration
+	  	   , getSlotPositionLeft(col) + offset
+	  	   , getSlotPositionLeft(col) + offset
+	  	   , getSlotPositionUp(row)
+	  	   , getSlotPositionUp(row-1) - SLOT_HEIGHT/3
+	  	   , easeFunction));
+				
+	font.load();
+	gameScene.attachChild(text);
+
+	text.registerEntityModifier(entityModifier);
+
+	MainActivity.mainActivity.getEngine().registerUpdateHandler(
+		spriteTimerHandler = new TimerHandler(animationDuration
+							, false
+							, new ITimerCallback() {
+
+	@Override
+	public void onTimePassed(TimerHandler pTimerHandler) {
+	    gameScene.detachChild(text);
+		}
+	}));
+	}
     }
     
 }

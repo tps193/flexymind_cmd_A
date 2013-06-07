@@ -24,7 +24,6 @@ public class ScoresTable {
     private Text scoresText;
     private Text caption;
     
-    Context fileContext;
 
 //    public void createFile() {
     
