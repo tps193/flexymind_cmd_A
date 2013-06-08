@@ -15,9 +15,6 @@ public class Prison extends GameSlot {
     
     private final static float PRISON_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 136 / 625;
     private final static float PRISON_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
-    private final static float PRISON_WIDTH = MainActivity.TEXTURE_WIDTH * 61 / 250;
-    private final static float PRISON_HEIGHT = MainActivity.TEXTURE_HEIGHT * 303 / 2000;
-    private static final int PRISON_Z_INDEX = 401;
     private static float touchPointX;
     private static float touchPointY;
     
@@ -42,8 +39,8 @@ public class Prison extends GameSlot {
 	    slotTexture = MainActivity.mainActivity.storage.getTexture(TableOfElements.getTextureName(element));
 	    slotSprite = new Sprite ( PRISON_POSITION_LEFT
 		    		      , PRISON_POSITION_UP
-		    		      , PRISON_WIDTH
-		    		      , PRISON_HEIGHT
+		    		      , GAME_SLOT_WIDTH
+		    		      , GAME_SLOT_HEIGHT
 		    		      , slotTexture
 		    		      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 		
@@ -68,7 +65,7 @@ public class Prison extends GameSlot {
 		}
 	    };
 	
-	    gameSlotAttach(PRISON_Z_INDEX);
+	    gameSlotAttach(GAME_SLOT_Z_INDEX);
 	    
 	} else {
 	    
@@ -123,6 +120,6 @@ public class Prison extends GameSlot {
 	float spriteLeftBorder = touchPointX - slotSprite.getWidth() / 2;
 	float spriteUpBorder = touchPointY - slotSprite.getHeight() / 2 - VERTICAL_OFFSET;
 	slotSprite.setPosition(spriteLeftBorder, spriteUpBorder);
-	gameScene.backLight(touchPointX, touchPointY, element.getName());     
+	gameScene.backLight(touchPointX, touchPointY - VERTICAL_OFFSET, element.getName());     
     }
 }

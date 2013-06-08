@@ -452,11 +452,11 @@ public class SlotMatrix {
     
     private void addDropToSlot(int row, int column) {
 	
-	/*LinkedList<Slot> slots = new LinkedList<Slot>();
+	LinkedList<Slot> slots = new LinkedList<Slot>();
 	if (row != 0) {
 	    if ( !matrix[row-1][column].isEmpty() ) {
 		if (!matrix[row-1][column].getElement().getName().equals("FORESTER")  
-		|| (!matrix[row-1][column].getElement().getName().equals("FLYING_SQUIRREL"))) {
+		&& (!matrix[row-1][column].getElement().getName().equals("FLYING_SQUIRREL"))) {
 		    
 		    slots.add(matrix[row-1][column]); 
 		}
@@ -465,7 +465,7 @@ public class SlotMatrix {
 	if (row != ROWS-1) {
 	    if ( !matrix[row+1][column].isEmpty() ) {
 		if (!matrix[row+1][column].getElement().getName().equals("FORESTER")  
-		|| (!matrix[row+1][column].getElement().getName().equals("FLYING_SQUIRREL"))) {
+		&& (!matrix[row+1][column].getElement().getName().equals("FLYING_SQUIRREL"))) {
 			    
 		    slots.add(matrix[row+1][column]); 
 		}
@@ -474,7 +474,7 @@ public class SlotMatrix {
 	if (column != 0) {
 	    if ( !matrix[row][column-1].isEmpty() ) {
 		if (!matrix[row][column-1].getElement().getName().equals("FORESTER")  
-		|| (!matrix[row][column-1].getElement().getName().equals("FLYING_SQUIRREL"))) {
+		&& (!matrix[row][column-1].getElement().getName().equals("FLYING_SQUIRREL"))) {
 			    
 		    slots.add(matrix[row][column-1]); 
 		}
@@ -483,7 +483,7 @@ public class SlotMatrix {
 	if (column != COLUMNS-1) {
 	    if ( !matrix[row][column+1].isEmpty() ) {
 		if (!matrix[row][column+1].getElement().getName().equals("FORESTER")  
-		|| (!matrix[row][column+1].getElement().getName().equals("FLYING_SQUIRREL"))) {
+		&& (!matrix[row][column+1].getElement().getName().equals("FLYING_SQUIRREL"))) {
 			    
 		    slots.add(matrix[row][column+1]); 
 		}
@@ -499,8 +499,8 @@ public class SlotMatrix {
 	} else {
 	    
 	    addToSlot( new Element("POND"), row, column);
-	}*/
-	addToSlot(gameScene.getBestElementForDropAdd(), row, column);
+	}
+	//addToSlot(gameScene.getBestElementForDropAdd(), row, column);
     }
     
     public void filterSlotsLinkedList(LinkedList<Slot> slots) {

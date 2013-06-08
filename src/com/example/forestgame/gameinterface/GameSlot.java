@@ -7,7 +7,6 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.TextureRegion;
 import com.example.forestgame.MainActivity;
-import com.example.forestgame.SlotMatrix;
 import com.example.forestgame.GameScene;
 import com.example.forestgame.element.Element;
 
@@ -16,6 +15,10 @@ public abstract class GameSlot {
     protected boolean isEmpty;
     protected Element element;
     protected GameScene gameScene;
+    
+    protected final static float GAME_SLOT_WIDTH = MainActivity.TEXTURE_WIDTH * 61 / 250;;
+    protected final static float GAME_SLOT_HEIGHT = MainActivity.TEXTURE_HEIGHT * 303 / 2000;
+    protected final static int GAME_SLOT_Z_INDEX = 401;
     
     protected TextureRegion slotTexture;
     protected Sprite slotSprite;
@@ -39,9 +42,9 @@ public abstract class GameSlot {
 	element = null;
 	isEmpty = true;
 	if (MainActivity.mainActivity.hasLargeScreen()) {
-	    VERTICAL_OFFSET = (float)(SlotMatrix.getSlotHeight() * 0.4);
+	    VERTICAL_OFFSET = (float)(GAME_SLOT_HEIGHT * 0.3);
 	} else {
-	    VERTICAL_OFFSET = (float)(SlotMatrix.getSlotHeight() * 0.8);
+	    VERTICAL_OFFSET = (float)(GAME_SLOT_HEIGHT * 0.8);
 	}
     }
     

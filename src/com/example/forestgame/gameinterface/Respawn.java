@@ -15,9 +15,6 @@ public class Respawn extends GameSlot {
     
     private final static float RESPAWN_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 27 / 50;
     private final static float RESPAWN_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1381 / 2000;
-    private final static float RESPAWN_WIDTH = MainActivity.TEXTURE_WIDTH * 61 / 250;
-    private final static float RESPAWN_HEIGHT = MainActivity.TEXTURE_HEIGHT * 303 / 2000;
-    private static final int RESPAWN_Z_INDEX = 401;
     private static float touchPointX;
     private static float touchPointY;
     
@@ -54,8 +51,8 @@ public class Respawn extends GameSlot {
 	    
 	    slotSprite = new Sprite ( RESPAWN_POSITION_LEFT
 		    			 , RESPAWN_POSITION_UP
-		    			 , RESPAWN_WIDTH
-		    			 , RESPAWN_HEIGHT
+		    			 , GAME_SLOT_WIDTH
+		    			 , GAME_SLOT_HEIGHT
 		    			 , slotTexture
 		    			 , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 		
@@ -81,7 +78,7 @@ public class Respawn extends GameSlot {
 		}
 	    };
 	    
-	    gameSlotAttach(RESPAWN_Z_INDEX);
+	    gameSlotAttach(GAME_SLOT_Z_INDEX);
 	    
 	} else {
 	    
@@ -152,6 +149,6 @@ public class Respawn extends GameSlot {
 	float spriteLeftBorder = touchPointX - slotSprite.getWidth() / 2;
 	float spriteUpBorder = touchPointY - slotSprite.getHeight() / 2 - VERTICAL_OFFSET;
 	slotSprite.setPosition(spriteLeftBorder, spriteUpBorder);
-	gameScene.backLight(touchPointX, touchPointY, element.getName());
+	gameScene.backLight(touchPointX, touchPointY - VERTICAL_OFFSET, element.getName());
     }
 }
