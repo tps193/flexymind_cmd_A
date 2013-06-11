@@ -19,9 +19,9 @@ public class MainMenuScene extends Scene {
     private static final float TITLE_HEIGHT = MainActivity.TEXTURE_HEIGHT / 4;
     
     private static final float BUTTON_PLAY_POSITION_LEFT = MainActivity.TEXTURE_WIDTH / 4;
-    private static final float BUTTON_PLAY_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 48 / 128;
+    private static final float BUTTON_PLAY_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 51 / 128;
     private static final float BUTTON_PLAY_WIDTH = MainActivity.TEXTURE_WIDTH * 2 / 4;
-    private static final float BUTTON_PLAY_HEIGHT = MainActivity.TEXTURE_HEIGHT * 12 / 128;
+    private static final float BUTTON_PLAY_HEIGHT = MainActivity.TEXTURE_HEIGHT * 17 / 256;
     
     private static final float BUTTON_RESUME_POSITION_LEFT =  MainActivity.TEXTURE_WIDTH * 125 / 400;
     private static final float BUTTON_RESUME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 67 / 128;

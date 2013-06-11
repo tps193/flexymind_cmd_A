@@ -54,8 +54,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     public static final Color BACKGROUND_COLOR = new Color(0.1f, 0.1f, 0.0f);
     public static final AlphaModifier SHOW_ALPHA_MODIFIER = new AlphaModifier(0.55f, 1.0f, 0.5f);
     public static final AlphaModifier HIDE_ALPHA_MODIFIER = new AlphaModifier(0.55f, 0.5f, 1.0f);
-    public static final AlphaModifier TOUCH_ALPHA_MODIFIER = new AlphaModifier(0.001f, 1.0f, 0.5f);
-    public static final AlphaModifier UNTOUCH_ALPHA_MODIFIER = new AlphaModifier(0.001f, 0.5f, 1.0f);
+    public static final AlphaModifier TOUCH_ALPHA_MODIFIER = new AlphaModifier(0.001f, 1.0f, 0.6f);
+    public static final AlphaModifier UNTOUCH_ALPHA_MODIFIER = new AlphaModifier(0.001f, 0.6f, 1.0f);
     public static final ScaleModifier TOUCH_SCALE_MODIFIER = new ScaleModifier(0.001f, 1.0f, 0.95f);
     public static final ScaleModifier UNTOUCH_SCALE_MODIFIER = new ScaleModifier(0.001f, 0.95f, 1.0f);
     public static final AlphaModifier PAUSE_ALPHA_MODIFIER = new AlphaModifier(0.55f, 0.8f, 0.5f);
@@ -196,8 +196,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
         	   , MainActivity.mainActivity
         	   , "main_menu/"
-        	   , "background.jpg");
-	textureBackground = storage.getTexture("background.jpg");
+        	   , "background.png");
+	textureBackground = storage.getTexture("background.png");
 	
 	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
      	   , MainActivity.mainActivity
@@ -292,8 +292,8 @@ public class MainActivity extends SimpleBaseGameActivity {
         	/*storage.createAtlas( MainActivity.mainActivity.getTextureManager()
         	           	   , MainActivity.mainActivity
         	           	   , "main_menu/"
-        	           	   , "background.jpg");
-        	textureBackground = storage.getTexture("background.jpg");*/
+        	           	   , "background.png");
+        	textureBackground = storage.getTexture("background.png");*/
         	
         	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
         		 	   , MainActivity.mainActivity
