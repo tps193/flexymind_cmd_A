@@ -43,7 +43,7 @@ public class GameScene extends Scene {
     private static final float PAUSE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 18 / 250;
     
     private static final float SCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 4 / 60;
-    private static final float SCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT *3 / 200;
+    private static final float SCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT *6 / 200;
     
     private static final int CAGE_Z_INDEX = 9999;
     private static final int PAUSE_SCENE_Z_INDEX = 10000;

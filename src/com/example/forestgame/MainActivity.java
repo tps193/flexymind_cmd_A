@@ -21,6 +21,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.util.FPSLogger;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.StrokeFont;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
@@ -103,19 +104,9 @@ public class MainActivity extends SimpleBaseGameActivity {
     private static ITexture creditsCaps;
     private static ITexture creditsNames;
     private static ITexture scoresAtlas;
-    public StrokeFont tPause;
-    public StrokeFont tResume;
-    private static ITexture pauseLabel;
-    private static ITexture pauseResume;
-    public StrokeFont tGameOver;
-    public StrokeFont tMainMenu;
-    public StrokeFont tNewGame;
     public StrokeFont tScores;
     private BitmapTextureAtlas scoresSceneCaps;
     private BitmapTextureAtlas scoresSceneScores;
-    private static ITexture GameOver;
-    private static ITexture MainMenu;
-    private static ITexture NewGame;
     
     private TextureRegion regionStatic;
     private Sprite spriteStatic;
@@ -376,7 +367,8 @@ public class MainActivity extends SimpleBaseGameActivity {
             		Debug.e("Error", e);
                 }	
         	
-        	creditsCaps = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
+                FontFactory.setAssetBasePath("font/");
+                creditsCaps = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
         						, 2048
         						, 1024
         						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -397,8 +389,8 @@ public class MainActivity extends SimpleBaseGameActivity {
         						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         	
         	scoresAtlas = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
-        						, 2048
         						, 1024
+        						, 256
         						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         	
         	tCaptions = new StrokeFont(MainActivity.mainActivity.getFontManager()
@@ -428,14 +420,15 @@ public class MainActivity extends SimpleBaseGameActivity {
         						, 2
         						, new Color(1.0f, 0.2f, 0.0f));
 
-        	tScores = new StrokeFont(MainActivity.mainActivity.getFontManager()
-                        		 , scoresAtlas
-                        		 , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                        		 , 100
-                        		 , true
-                        		 , new Color(1.0f, 1.0f, 1.0f)
-                        		 , 2
-                        		 , new Color(1.0f, 0.2f, 0.0f));
+        	tScores = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
+        		,scoresAtlas 
+        		, MainActivity.mainActivity.getAssets()
+        		, "showg.ttf"
+        		, (float)100
+        		, true
+        		, Color.YELLOW_ARGB_PACKED_INT
+        		, 2
+        		, Color.BLACK_ARGB_PACKED_INT);
         	
         	tDevNames = new StrokeFont(MainActivity.mainActivity.getFontManager()
         				   , creditsNames
@@ -446,86 +439,13 @@ public class MainActivity extends SimpleBaseGameActivity {
         				   , 2
         				   , new Color(1.0f, 0.2f, 0.0f));
         	
-        	pauseLabel = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
-        						, 2048
-        						, 256
-        						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        	
-        	pauseResume = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
-        						, 512
-        						, 256
-        						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        	
-        	tPause = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				   , pauseLabel
-        				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				   , 165
-        				   , true
-        				   , new Color(1.0f, 0.6f, 0.0f)
-        				   , 2
-        				   , new Color(1.0f, 0.2f, 0.0f));
-        	
-        	tResume = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				    , pauseResume
-        				    , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				    , 120
-        				    , true
-        				    , new Color(1.0f, 1.0f, 1.0f)
-        				    , 2
-        				    , new Color(1.0f, 0.2f, 0.0f));
-        	
-        	GameOver = new BitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
-        					  , 2048
-        					  , 256
-        					  , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        	
-        	MainMenu = new BitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
-        					  , 1024
-        					  , 256
-        					  , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        	
-        	NewGame = new BitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
-        					 , 1024
-        					 , 256
-        					 , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        	
-        	tGameOver = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				   , GameOver
-        				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				   , 165
-        				   , true
-        				   , new Color(1.0f, 0.6f, 0.0f)
-        				   , 2
-        				   , new Color(1.0f, 0.2f, 0.0f));
-        	
-        	tMainMenu = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				   , MainMenu
-        				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				   , 120
-        				   , true
-        				   , new Color(1.0f, 1.0f, 1.0f)
-        				   , 2
-        				   , new Color(1.0f, 0.2f, 0.0f));
-        	
-        	tNewGame = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				  , NewGame
-        				  , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				  , 120
-        				  , true
-        				  , new Color(1.0f, 1.0f, 1.0f)
-        				  , 2
-        				  , new Color(1.0f, 0.2f, 0.0f));
+      
         	
         	tScoresSceneCaptions.load();
         	tScoresSceneScores.load();
         	tDevNames.load();
         	tCaptions.load();
-        	tPause.load();
-        	tResume.load();
-        	tGameOver.load();
         	tScores.load();
-        	tMainMenu.load();
-        	tNewGame.load();
  
             }
  
@@ -559,7 +479,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	//������� �������� ����������
 	//MainActivity.mainActivity.getTextureManager().unloadTexture();
 	
-	mainScene.showMainMenuScene();
+	MainScene.showMainMenuScene();
 	
     }
     

@@ -5,7 +5,6 @@ import javax.microedition.khronos.opengles.GL10;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 
 public class GameOverScene extends Scene {
