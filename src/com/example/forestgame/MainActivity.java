@@ -104,6 +104,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     private static ITexture creditsCaps;
     private static ITexture creditsNames;
     private static ITexture scoresAtlas;
+    public static ITexture scoresToastAtlas;
     public StrokeFont tScores;
     private BitmapTextureAtlas scoresSceneCaps;
     private BitmapTextureAtlas scoresSceneScores;
@@ -392,6 +393,11 @@ public class MainActivity extends SimpleBaseGameActivity {
         						, 1024
         						, 256
         						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        	
+        	scoresToastAtlas = new BitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
+			, 256
+			, 256
+			, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         	
         	tCaptions = new StrokeFont(MainActivity.mainActivity.getFontManager()
         				   , creditsCaps

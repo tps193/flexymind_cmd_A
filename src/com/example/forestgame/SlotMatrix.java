@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 
-
-
-import org.andengine.opengl.font.Font;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.modifier.AlphaModifier;
@@ -18,12 +15,13 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.font.StrokeFont;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.ease.EaseLinear;
+import org.andengine.util.modifier.ease.EaseQuartIn;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.util.Log;
 
 import com.example.forestgame.element.Element;
@@ -58,7 +56,9 @@ public class SlotMatrix {
     float animationDurationText = 0.8f;
     float fromAlpha = 1.0f;
     float toAlpha = 0.3f;
+    float toAlphaScores = 0.0f;
     IEaseFunction easeFunction = EaseLinear.getInstance();
+    IEaseFunction easeFunctionAlpha = EaseQuartIn.getInstance();
     TimerHandler spriteTimerHandler;
     float disappearAlpha = 0.0f;
     float appearAlpha = 1.0f;
@@ -1107,19 +1107,29 @@ public class SlotMatrix {
 	if (showScore != 0){
 	    if (showScore < 100)
 		offset += SLOT_WIDTH/4;
-	Font font = FontFactory.create( MainActivity.mainActivity.getFontManager(), 
+	/*Font font = FontFactory.create( MainActivity.mainActivity.getFontManager(), 
 					MainActivity.mainActivity.getTextureManager(), 
 					256, 
 					256, 
 					Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD), 
 					SLOT_WIDTH / 2,
 					true, 
-					Color.rgb(102, 51, 0));
+					Color.rgb(255, 110, 0));*/
+	StrokeFont font = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
+		,MainActivity.scoresToastAtlas 
+		, MainActivity.mainActivity.getAssets()
+		, "showg.ttf"
+		, SLOT_WIDTH / 2
+		, true
+		, Color.rgb(255, 255, 0)
+		, 4
+		, Color.rgb(255, 143, 0));
+	
 	final Text text = new Text(0,0,font,Integer.toString(showScore), 10, MainActivity.mainActivity.getVertexBufferObjectManager());
-	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration
+	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDurationText
 		    , fromAlpha
-		    , toAlpha
-		    , easeFunction)
+		    , toAlphaScores
+		    , easeFunctionAlpha)
 
 			, new MoveModifier(animationDurationText
 	  	   , getSlotPositionLeft(col) + offset
