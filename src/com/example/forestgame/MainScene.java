@@ -188,7 +188,7 @@ public class MainScene extends Scene {
 	    break;
 	    
 	case PAUSE:
-	    showMainMenuScene();
+	    showGameScene();
 	    break;
 	    
 	case GAME_OVER:

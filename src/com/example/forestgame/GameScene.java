@@ -38,7 +38,7 @@ public class GameScene extends Scene {
     private static final float CAGE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 313 / 2000;
     
     private static final float PAUSE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 516 / 625;
-    private static final float PAUSE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 17 / 2000;
+    private static final float PAUSE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 22 / 2000;
     private static final float PAUSE_WIDTH = MainActivity.TEXTURE_WIDTH * 30 / 250;
     private static final float PAUSE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 18 / 250;
     
