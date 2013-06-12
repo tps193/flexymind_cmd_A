@@ -22,11 +22,11 @@ public class PauseScene extends Scene {
     private static final float RESUME_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
     private static final float NEWGAME_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 227 / 1024;
     private static final float NEWGAME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 31 / 64;
-    private static final float NEWGAME_WIDTH = MainActivity.TEXTURE_WIDTH * 225 / 400;;
+    private static final float NEWGAME_WIDTH = MainActivity.TEXTURE_WIDTH * 225 / 400;
     private static final float NEWGAME_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
     private static final float MAINMENU_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 222 / 1024;
     private static final float MAINMENU_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 38 / 64; 
-    private static final float MAINMENU_WIDTH = MainActivity.TEXTURE_WIDTH * 225 / 400;;
+    private static final float MAINMENU_WIDTH = MainActivity.TEXTURE_WIDTH * 225 / 400;
     private static final float MAINMENU_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
 
     private Sprite background = new Sprite( 0
