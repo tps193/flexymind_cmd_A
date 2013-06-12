@@ -406,7 +406,7 @@ public class MainActivity extends SimpleBaseGameActivity {
         		,creditsCaps 
         		, MainActivity.mainActivity.getAssets()
         		, "showg.ttf"
-        		, (float)100
+        		, (float)90
         		, true
         		, Color.YELLOW_ARGB_PACKED_INT
         		, 2
@@ -445,7 +445,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 			, creditsNames
 			, MainActivity.mainActivity.getAssets()
 			, "showg.ttf"
-			, 100
+			, 90
 			, true
 			, Color.WHITE_ARGB_PACKED_INT
 			, 2
