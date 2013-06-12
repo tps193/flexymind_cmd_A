@@ -79,6 +79,10 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion textureTitle;
     public TextureRegion texturePlay;
     public TextureRegion textureResume;
+    public TextureRegion texturePauseL;
+    public TextureRegion textureGameOverL;
+    public TextureRegion textureNewGame;
+    public TextureRegion textureMainMenu;
     public TextureRegion textureScores;
     public TextureRegion textureCredits;
     public TextureRegion textureExit;
@@ -272,7 +276,11 @@ public class MainActivity extends SimpleBaseGameActivity {
         			   , "arrow_left.png"
         			   , "arrow_right.png"
         			   , "arrow_up.png"
-        			   , "arrow_down.png");
+        			   , "arrow_down.png"
+        			   , "game_over_label.png"
+        			   , "pause_label.png"
+        			   , "pause_new_game.png"
+        			   , "pause_main_menu.png");
 		   
 
         	textureTitle = storage.getTexture("main_menu_title.png");
@@ -288,6 +296,10 @@ public class MainActivity extends SimpleBaseGameActivity {
         	textureArrowRight = storage.getTexture("arrow_right.png");
         	textureArrowUp = storage.getTexture("arrow_up.png");
         	textureArrowDown = storage.getTexture("arrow_down.png");
+        	texturePauseL = storage.getTexture("pause_label.png");
+        	textureGameOverL = storage.getTexture("game_over_label.png");
+        	textureMainMenu = storage.getTexture("pause_main_menu.png");
+        	textureNewGame = storage.getTexture("pause_new_game.png");
         	
         	/*storage.createAtlas( MainActivity.mainActivity.getTextureManager()
         	           	   , MainActivity.mainActivity

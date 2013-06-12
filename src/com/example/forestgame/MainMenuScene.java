@@ -54,7 +54,7 @@ public class MainMenuScene extends Scene {
     public static final float MUTEON_HEIGHT = MainActivity.TEXTURE_HEIGHT * 123 / 2000;
     
     public static final float HELP_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 40 / 625;
-    public static final float HELP_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1798 / 2000;
+    public static final float HELP_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1797 / 2000;
     public static final float HELP_WIDTH = MainActivity.TEXTURE_WIDTH * 30 / 250;
     public static final float HELP_HEIGHT = MainActivity.TEXTURE_HEIGHT * 160 / 2000;
 
