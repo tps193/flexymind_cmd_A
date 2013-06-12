@@ -82,6 +82,7 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion textureResume;
     public TextureRegion texturePauseL;
     public TextureRegion textureGameOverL;
+    public TextureRegion textureHighScoresL;
     public TextureRegion textureNewGame;
     public TextureRegion textureMainMenu;
     public TextureRegion textureScores;
@@ -272,7 +273,8 @@ public class MainActivity extends SimpleBaseGameActivity {
         			   , "game_over_label.png"
         			   , "pause_label.png"
         			   , "pause_new_game.png"
-        			   , "pause_main_menu.png");
+        			   , "pause_main_menu.png"
+        			   , "high_scores_label.png");
 		   
 
         	textureTitle = storage.getTexture("main_menu_title.png");
@@ -290,6 +292,7 @@ public class MainActivity extends SimpleBaseGameActivity {
         	textureArrowDown = storage.getTexture("arrow_down.png");
         	texturePauseL = storage.getTexture("pause_label.png");
         	textureGameOverL = storage.getTexture("game_over_label.png");
+        	textureHighScoresL = storage.getTexture("high_scores_label.png");
         	textureMainMenu = storage.getTexture("pause_main_menu.png");
         	textureNewGame = storage.getTexture("pause_new_game.png");
         	
@@ -399,14 +402,15 @@ public class MainActivity extends SimpleBaseGameActivity {
 			, 256
 			, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         	
-        	tCaptions = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				   , creditsCaps
-        				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				   , 100
-        				   , true
-        				   , new Color(1.0f, 0.6f, 0.0f)
-        				   , 2
-        				   , new Color(1.0f, 0.2f, 0.0f));
+        	tCaptions = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
+        		,creditsCaps 
+        		, MainActivity.mainActivity.getAssets()
+        		, "showg.ttf"
+        		, (float)100
+        		, true
+        		, Color.YELLOW_ARGB_PACKED_INT
+        		, 2
+        		, Color.BLACK_ARGB_PACKED_INT);
         	
         	tScoresSceneCaptions = new StrokeFont	(MainActivity.mainActivity.getFontManager()
         						, scoresSceneCaps
@@ -417,14 +421,15 @@ public class MainActivity extends SimpleBaseGameActivity {
         						, 2
         						, new Color(1.0f, 0.2f, 0.0f));
         	
-        	tScoresSceneScores = new StrokeFont(	MainActivity.mainActivity.getFontManager()
+        	tScoresSceneScores = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
         						, scoresSceneScores
-        						, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        						, MainActivity.mainActivity.getAssets()
+        						, "showg.ttf"
         						, 120
         						, true
-        						, new Color(1.0f, 1.0f, 1.0f)
+        						, Color.WHITE_ARGB_PACKED_INT
         						, 2
-        						, new Color(1.0f, 0.2f, 0.0f));
+        						, Color.RED_ARGB_PACKED_INT);
 
         	tScores = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
         		,scoresAtlas 
@@ -436,14 +441,15 @@ public class MainActivity extends SimpleBaseGameActivity {
         		, 2
         		, Color.BLACK_ARGB_PACKED_INT);
         	
-        	tDevNames = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				   , creditsNames
-        				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				   , 100
-        				   , true
-        				   , new Color(1.0f, 1.0f, 1.0f)
-        				   , 2
-        				   , new Color(1.0f, 0.2f, 0.0f));
+        	tDevNames = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
+			, creditsNames
+			, MainActivity.mainActivity.getAssets()
+			, "showg.ttf"
+			, 100
+			, true
+			, Color.WHITE_ARGB_PACKED_INT
+			, 2
+			, Color.RED_ARGB_PACKED_INT);
         	
       
         	

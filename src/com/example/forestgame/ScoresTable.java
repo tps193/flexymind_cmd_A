@@ -7,22 +7,25 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 
 import android.content.Context;
 
 public class ScoresTable {
 
-    private static final float HIGHSCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 1 / 5;
-    private static final float HIGHSCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT / 6;
+    private static final float HIGHSCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 17 / 120;
+    private static final float HIGHSCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 8 / 64;
+    private static final float HIGHSCORES_WIDTH = MainActivity.TEXTURE_WIDTH * 286 / 400;
+    private static final float HIGHSCORES_HEIGHT = MainActivity.TEXTURE_HEIGHT * 10 / 128;
     private static final float SCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 1 / 5;
-    private static final float SCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT / 3;
+    private static final float SCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 19 / 64;
 
     private final int NUMBER_OF_SCORES = 6;
     private long[] scores = new long[NUMBER_OF_SCORES];
     
     private Text scoresText;
-    private Text caption;
+    private Sprite caption;
     
 
 //    public void createFile() {
@@ -61,11 +64,13 @@ public class ScoresTable {
 	MainScene.getScoresScene().detachChild(caption);
 	MainScene.getScoresScene().detachChild(scoresText);
 	for (int i = 0; i < scores.length - 1; i++) {
-	    str += Integer.toString(i + 1) + ".  " + Long.toString(scores[i]) + "\n";
+	    str += Integer.toString(i + 1) + ".  " + Long.toString(scores[i]) + "\n\n";
 	}
-	caption = new Text(HIGHSCORES_POSITION_LEFT,
-		HIGHSCORES_POSITION_UP, MainActivity.mainActivity.tScoresSceneCaptions,
-		"High Scores \n\n\n",
+	caption = new Sprite(HIGHSCORES_POSITION_LEFT,
+		HIGHSCORES_POSITION_UP,
+		HIGHSCORES_WIDTH,
+		HIGHSCORES_HEIGHT,
+		MainActivity.mainActivity.textureHighScoresL,
 		MainActivity.mainActivity.getVertexBufferObjectManager());
 
 	scoresText = new Text(SCORES_POSITION_LEFT, SCORES_POSITION_UP,
