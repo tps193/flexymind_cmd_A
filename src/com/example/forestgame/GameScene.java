@@ -745,22 +745,22 @@ public void setScores(int scores) {
     
     private void attachHelpSprites() {
 	
-	helpPart1 = new Sprite( MainActivity.TEXTURE_WIDTH*200/2000 
-		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+	helpPart1 = new Sprite( MainActivity.TEXTURE_WIDTH*190/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1780/2000
 		    , MainActivity.TEXTURE_WIDTH/8
 		    , MainActivity.TEXTURE_HEIGHT/13
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName1)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
-	helpPart2 = new Sprite( MainActivity.TEXTURE_WIDTH*500/2000 
-		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+	helpPart2 = new Sprite( MainActivity.TEXTURE_WIDTH*490/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1780/2000
 		    , MainActivity.TEXTURE_WIDTH/8
 		    , MainActivity.TEXTURE_HEIGHT/13
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName2)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
-	helpPart3 = new Sprite( MainActivity.TEXTURE_WIDTH*800/2000 
-		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+	helpPart3 = new Sprite( MainActivity.TEXTURE_WIDTH*790/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1780/2000
 		    , MainActivity.TEXTURE_WIDTH/8
 		    , MainActivity.TEXTURE_HEIGHT/13
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName3)
@@ -772,8 +772,8 @@ public void setScores(int scores) {
 	
 	if (helpTextureName4 != null) {
 	    
-	    helpPart4 = new Sprite( MainActivity.TEXTURE_WIDTH*1100/2000 
-		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+	    helpPart4 = new Sprite( MainActivity.TEXTURE_WIDTH*1090/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1780/2000
 		    , MainActivity.TEXTURE_WIDTH/8
 		    , MainActivity.TEXTURE_HEIGHT/13
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName4)
