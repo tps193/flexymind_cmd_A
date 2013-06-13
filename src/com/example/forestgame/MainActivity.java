@@ -370,6 +370,11 @@ public class MainActivity extends SimpleBaseGameActivity {
                 } catch (final IOException e) {
             		Debug.e("Error", e);
                 }	
+                
+                loadSettings();
+                if(isMute) {
+                    muteSounds();
+                }
         	
                 FontFactory.setAssetBasePath("font/");
                 creditsCaps = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
@@ -406,7 +411,7 @@ public class MainActivity extends SimpleBaseGameActivity {
         		,creditsCaps 
         		, MainActivity.mainActivity.getAssets()
         		, "showg.ttf"
-        		, (float)90
+        		, (float)100
         		, true
         		, Color.YELLOW_ARGB_PACKED_INT
         		, 2
@@ -445,7 +450,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 			, creditsNames
 			, MainActivity.mainActivity.getAssets()
 			, "showg.ttf"
-			, 90
+			, 100
 			, true
 			, Color.WHITE_ARGB_PACKED_INT
 			, 2
@@ -576,7 +581,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	MainActivity.mainActivity.mStep.setVolume(0);
 	MainActivity.mainActivity.mDrop.setVolume(0);
 	MainActivity.mainActivity.mMagic.setVolume(0);
-	MainActivity.isMute = !MainActivity.isMute;
+	MainActivity.isMute = true;
     }
     
     public void unmuteSounds() {
@@ -591,7 +596,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	MainActivity.mainActivity.mStep.setVolume(1);
 	MainActivity.mainActivity.mDrop.setVolume(1);
 	MainActivity.mainActivity.mMagic.setVolume(1);
-	MainActivity.isMute = !MainActivity.isMute;
+	MainActivity.isMute = false;
     }
     
     @Override
@@ -645,6 +650,25 @@ public void saveProgress() {
 	}
     }
 
+public void saveSettings() {
+    
+    try {
+	ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("soundsets", 0));
+	oos.writeBoolean(isMute);
+	oos.flush();
+	oos.close();
+	Log.d("mute", "saved");
+    } catch(FileNotFoundException e) {
+
+	Log.d("mute", "FileNotFoundException");
+	e.printStackTrace();
+    } catch(IOException e) {
+
+	Log.d("mute", "IOException");
+	e.printStackTrace();
+    }
+}
+
 public void progressNotSaved() {
     
     gameSaved = false;
@@ -663,4 +687,16 @@ public Object[] load() throws IOException {
 	
 	return obj;
     }
+
+public void loadSettings() {
+    try {
+
+	ObjectInputStream ois = new ObjectInputStream(openFileInput("soundsets"));
+	isMute = (boolean)ois.readBoolean();
+	Log.d("mute", "OK");
+    } catch(IOException e) {
+	Log.d("mute", "IOException");
+	isMute = false;
+    }
+}
 }
