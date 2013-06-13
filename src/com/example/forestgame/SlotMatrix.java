@@ -127,31 +127,12 @@ public class SlotMatrix {
 	currentScore = 0;
 	checkSimilarElements();
 	score = score + currentScore;
+	gameScene.setScores(getScore());
 	showScoreToast(lastEditedSlotRow, lastEditedSlotColumn, currentScore);
 	moveForesters();
 	appearFlyingSquirrels();
 	
-	gameScene.setScores(getScore());
-	filledSlots = 0;
-	for (int i = 0; i < ROWS; i++) {
-	    
-	    for (int j = 0; j < COLUMNS; j++) {
-		
-		if (!isSlotEmpty(i, j)) {
-		    
-		    filledSlots++;
-		}
-	    }
-	}
-	if (filledSlots == ROWS*COLUMNS) {
-	    
-	    Log.d("GAME", "OVER");
-	    MainScene.showGameOverScene();
-	} else {
-	    
-	    TableOfElements.renewAvaliableRandomElements(score);
-	}
-	
+				
 	MainActivity.mainActivity.getEngine().registerUpdateHandler(new TimerHandler(animationDuration
 		, false
 		, new ITimerCallback() {
@@ -167,16 +148,34 @@ public class SlotMatrix {
 			    lastEditedSlotColumn = s.getColumn();
 			    currentScore = 0;
 			    checkSimilarElements();
-			    score = score + currentScore;
-			    showScoreToast(lastEditedSlotRow, lastEditedSlotColumn, currentScore);
 			    
+			    score = score + currentScore;
+			    gameScene.setScores(getScore());
+			    showScoreToast(lastEditedSlotRow, lastEditedSlotColumn, currentScore);
 			}
-			
 			viewSlots();
+			filledSlots = 0;
+			    for (int i = 0; i < ROWS; i++) {
+				    
+				for (int j = 0; j < COLUMNS; j++) {
+					
+				    if (!isSlotEmpty(i, j)) {
+					    
+					filledSlots++;
+				    }
+				}
+			    }
+			    if (filledSlots == ROWS*COLUMNS) {
+				    
+				Log.d("GAME", "OVER");
+				MainScene.showGameOverScene();
+			    } else {
+				   
+				TableOfElements.renewAvaliableRandomElements(score);
+			    }
 			
 		    }
 		}));
-	
     }
     
     public void init() {
@@ -400,8 +399,10 @@ public class SlotMatrix {
     private void addMagicStickToSlot(int row, int column) {
 	
 	Element element = matrix[row][column].getElement();
-	score = score + TableOfElements.getScores(element);
-		
+	currentScore = TableOfElements.getScores(element);
+	score = score + currentScore;
+	gameScene.setScores(getScore());
+	showScoreToast(row, column, currentScore);
 	if (element.getName().equals("FORESTER")) {
 	    
 	    catchForester(row, column);
@@ -713,6 +714,10 @@ public class SlotMatrix {
 	    if (!slotWF.getHasAlreadyMoved()) {
 		
 		transformForesterIntoNextLevel(slotWF.getRow(), slotWF.getColumn());
+		currentScore = TableOfElements.getScores(new Element("FORESTER"));
+		score = score + currentScore;
+		gameScene.setScores(getScore());
+		showScoreToast(slotWF.getRow(), slotWF.getColumn(), currentScore);
 	    }
 	}	
 	
@@ -736,7 +741,6 @@ public class SlotMatrix {
 	graphicalMoving(row, column, row, column);
 	lastEditedSlots.add(new SlotPosition(row, column));
 	MainActivity.mainActivity.mSound.play();
-	
     }
     
     private boolean foresterTriesToMove(SlotWithForester slotWF) {

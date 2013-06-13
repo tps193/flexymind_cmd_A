@@ -353,7 +353,7 @@ public class GameScene extends Scene {
     
     private void emptySlotBacklight(int i, int j, String elementName) {
 	
-	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
+	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && i >= 0 && j >=0 && slotMatrix.isSlotEmpty(i, j)) {
 	    
 	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
                 	    	 , SlotMatrix.getSlotPositionUp(i)
@@ -380,7 +380,7 @@ public class GameScene extends Scene {
 
     private void fullSlotBacklight(int i, int j) {
 	
-	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && !slotMatrix.isSlotEmpty(i, j)) {
+	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && i >= 0 && j >=0 && !slotMatrix.isSlotEmpty(i, j)) {
 	    
 	    Log.d("fores",slotMatrix.getElement(i, j));
 	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
@@ -689,7 +689,8 @@ public void setScores(int scores) {
 	    
 	    helpTextureName1 = TableOfElements.getTextureName(element);
 	    helpTextureName2 = helpTextureX3;
-	    helpTextureName3 = TableOfElements.getNextLevelTextureName(element);
+	    helpTextureName3 = helpTextureArrow;
+	    helpTextureName4 = TableOfElements.getNextLevelTextureName(element);
 	}    
 	attachHelpSprites();
 	
@@ -703,13 +704,11 @@ public void setScores(int scores) {
 	    detachChild(helpPart1);
 	    detachChild(helpPart2);
 	    detachChild(helpPart3);
-	    if (helpTextureName4 != null) {
-		
-		detachChild(helpPart4);
-	    }
+	    detachChild(helpPart4);
+	    
 	}
 	helpIsShown = false;
-	helpTextureName4 = null;
+	
     }
     
     private void makeHelpForDrop() {
@@ -765,21 +764,19 @@ public void setScores(int scores) {
 		    , MainActivity.TEXTURE_HEIGHT/13
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName3)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
-	
-	attachChild(helpPart1);
-	attachChild(helpPart2);
-	attachChild(helpPart3);
-	
-	if (helpTextureName4 != null) {
-	    
-	    helpPart4 = new Sprite( MainActivity.TEXTURE_WIDTH*1090/2000 
+
+	helpPart4 = new Sprite( MainActivity.TEXTURE_WIDTH*1090/2000 
 		    , MainActivity.TEXTURE_HEIGHT*1780/2000
 		    , MainActivity.TEXTURE_WIDTH/8
 		    , MainActivity.TEXTURE_HEIGHT/13
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName4)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
-	    attachChild(helpPart4);
-	}
+	
+	attachChild(helpPart1);
+	attachChild(helpPart2);
+	attachChild(helpPart3);
+	attachChild(helpPart4);
+	
 	helpIsShown = true;
     }
 }
