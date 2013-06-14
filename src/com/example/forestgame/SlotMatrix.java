@@ -66,10 +66,19 @@ public class SlotMatrix {
     private int currentScore;
     
     private static final Random randomGenerator = new Random();
-    
+    StrokeFont font = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
+		,MainActivity.scoresToastAtlas 
+		, MainActivity.mainActivity.getAssets()
+		, "showg.ttf"
+		, SLOT_WIDTH / 2
+		, true
+		, Color.rgb(255, 255, 0)
+		, 4
+		, Color.rgb(255, 143, 0));
+   
     
     public SlotMatrix(GameScene scene) {
-	
+	 font.load();
 	gameScene = scene;
 	matrix = new Slot[ROWS][COLUMNS];
 	init();
@@ -1119,15 +1128,7 @@ public class SlotMatrix {
 					SLOT_WIDTH / 2,
 					true, 
 					Color.rgb(255, 110, 0));*/
-	StrokeFont font = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
-		,MainActivity.scoresToastAtlas 
-		, MainActivity.mainActivity.getAssets()
-		, "showg.ttf"
-		, SLOT_WIDTH / 2
-		, true
-		, Color.rgb(255, 255, 0)
-		, 4
-		, Color.rgb(255, 143, 0));
+	
 	
 	final Text text = new Text(0,0,font,Integer.toString(showScore), 10, MainActivity.mainActivity.getVertexBufferObjectManager());
 	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDurationText
@@ -1142,7 +1143,7 @@ public class SlotMatrix {
 	  	   , getSlotPositionUp(row-1) //- SLOT_HEIGHT/2
 	  	   , easeFunction));
 				
-	font.load();
+	
 	text.setZIndex(1000);
 	text.sortChildren();
 	gameScene.attachChild(text);

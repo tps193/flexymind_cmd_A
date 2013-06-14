@@ -15,6 +15,9 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
+import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.bitmap.BitmapTextureFormat;
 import org.andengine.opengl.texture.region.TextureRegion;
 
@@ -25,6 +28,7 @@ import com.example.forestgame.element.TableOfElements;
 
 public class HelpScene extends Scene {
     
+    private static final int HELP_ATLAS_COUNT = 7;
     private static final float ARROW_LEFT_POSITION_LEFT = MainActivity.DISPLAY_WIDTH * 10 / 2000;
     private static final float ARROW_LEFT_POSITION_UP = MainActivity.DISPLAY_HEIGHT * 900 / 2000;
     private static final float ARROW_LEFT_WIDTH = MainActivity.DISPLAY_WIDTH * 100 / 2000;
@@ -109,14 +113,19 @@ public class HelpScene extends Scene {
     
     ////////////
     
-    private Sprite helpSprite;
-    
+    private Sprite helpSprite[]=new Sprite[HELP_ATLAS_COUNT];
+    private BuildableBitmapTextureAtlas atlasArray[]=new BuildableBitmapTextureAtlas[HELP_ATLAS_COUNT];
+
+   private TextureRegion helpSpriteArray;
+   private int currentScreen;
+   
     private Sprite background = new Sprite( 0
             				, 0
             				, MainActivity.TEXTURE_WIDTH
             				, MainActivity.TEXTURE_HEIGHT
             				, MainActivity.mainActivity.textureBackground
             				, MainActivity.mainActivity.getVertexBufferObjectManager());
+    
     
     public HelpScene() {
 	
@@ -125,6 +134,9 @@ public class HelpScene extends Scene {
 	attachChild(background);
 	background.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER.deepCopy());
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
+//	currentScreen = 0;
+	this.buildHelpSprite();
+	
     }
     
     public void show() {
@@ -146,33 +158,52 @@ public class HelpScene extends Scene {
     }
     
     private void buildHelpSprite() {
-	
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("help_scene/");
 	for(int i = 0; i < HELP_ATLAS_COUNT; i++) {
 	    
-	    /*BuildableBitmapTextureAtlas */atlasArray[i] = new BuildableBitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
+	    
+	   atlasArray[i] = new BuildableBitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
+		   							      , 512
 		   							      , 1024
-		   							      , 2048
 		   							      , BitmapTextureFormat.RGBA_8888
 		   							      , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	    
-	    helpSpriteArray[i] = BitmapTextureAtlasTextureRegionFactory
-			.createFromAsset( atlas
+	    helpSpriteArray = BitmapTextureAtlasTextureRegionFactory
+			.createFromAsset( atlasArray[i]
 				, MainActivity.mainActivity
-				, "helpSpritePage" + i);
-	    
-	    atlasArray[i].build();
-	}
+				, "helpSprite" + i + ".png");
+	   
+	 
+	    helpSprite[i] = new Sprite( i*MainActivity.TEXTURE_WIDTH
+		     , 0
+		     , MainActivity.TEXTURE_WIDTH
+		     , MainActivity.TEXTURE_HEIGHT
+		     , helpSpriteArray
+		     , MainActivity.mainActivity.getVertexBufferObjectManager());
+	    try {
+	 		atlasArray[i].build( new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource
+	 			   , BitmapTextureAtlas>(0, 1, 1));
+	 	    } catch (TextureAtlasBuilderException e) {
+	 		// TODO Auto-generated catch block
+	 		e.printStackTrace();
+	 	    }
+	    this.attachChild(helpSprite[i]);
+	
+   
     }
+    } 
     
-    private void loadHelpSprite() {
+    
+   
+    public void loadHelpSprite() {
 	
 	for(int i = 0; i < HELP_ATLAS_COUNT; i++) {
-	    
+
 	    atlasArray[i].load();
 	}
     }
     
-    private void unloadHelpSprite() {
+     public void unloadHelpSprite() {
 	
 	for(int i = 0; i < HELP_ATLAS_COUNT; i++) {
 	    

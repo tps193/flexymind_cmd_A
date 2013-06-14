@@ -169,6 +169,7 @@ public class MainMenuScene extends Scene {
 	private void helpIconCLick() {
 	
 	    MainActivity.mainActivity.mClick.play();
+	    MainScene.helpScene.loadHelpSprite();
 	    MainScene.showHelpScene();
 	      
 	}

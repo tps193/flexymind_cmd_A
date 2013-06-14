@@ -39,6 +39,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import com.example.forestgame.MainScene.GameState;
 import com.example.forestgame.altasstorage.AtlasStorage;
 
 public class MainActivity extends SimpleBaseGameActivity {
@@ -558,11 +559,16 @@ public class MainActivity extends SimpleBaseGameActivity {
 		
 		return true;
 	    }
-	  
+	    
 	    if (mainScene != null && gameLoaded) {
 	      
 		mainScene.keyPressed(keyCode, event);
 		MainActivity.mainActivity.mClick.play();
+		return true;
+	    }
+	    if (mainScene!=null && MainScene.gameState==MainScene.GameState.SHOW_HINTS)
+	    {
+		mainScene.helpScene.unloadHelpSprite();
 		return true;
 	    }
 	return true;
