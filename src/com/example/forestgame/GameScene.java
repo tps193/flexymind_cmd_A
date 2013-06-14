@@ -259,6 +259,8 @@ public class GameScene extends Scene {
 	respawn = new Respawn(this);
 
 	attachChild(pauseScene);
+	pauseScene.setZIndex(10000);
+	sortChildren();
 	attachChild(gameOverScene);
 	pauseScene.hide();
 	gameOverScene.hide();
@@ -606,6 +608,8 @@ public void setScores(int scores) {
 			   , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
 	attachChild(scoresText);
+	scoresText.setZIndex(999);
+	sortChildren();
     }
 
     public Sprite getBacklight() {

@@ -363,6 +363,15 @@ public class MainMenuScene extends Scene {
 		    Log.d("ButtonExit", "touch");
 		    applyTouchEffects(buttonExit);
 		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < BUTTON_EXIT_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < BUTTON_EXIT_HEIGHT))) {
+			applyUntouchEffects(buttonExit);
+		    } else {
+			applyTouchEffects(buttonExit);
+		    }
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
 		    if (    (pTouchAreaLocalX > 0) 
@@ -379,16 +388,7 @@ public class MainMenuScene extends Scene {
 			applyUntouchEffects(buttonExit);
 		    }
 		    
-		} else if (pSceneTouchEvent.isActionMove()) {
-		    if (    !((pTouchAreaLocalX > 0) 
-		                 && (pTouchAreaLocalX < BUTTON_EXIT_WIDTH)
-		                 && (pTouchAreaLocalY > 0)
-		                 && (pTouchAreaLocalY < BUTTON_EXIT_HEIGHT))) {
-			applyUntouchEffects(buttonExit);
-		    } else {
-			applyTouchEffects(buttonExit);
-		    }
-		}
+		} 
 		return true;
 	    }
 	};
@@ -420,22 +420,6 @@ public class MainMenuScene extends Scene {
 
 		    Log.d("MuteOff", "touch");
 		    applyTouchEffects(muteOff);
-
-		} else if (pSceneTouchEvent.isActionUp()) {
-		    
-		    if (    (pTouchAreaLocalX > 0) 
-		                 && (pTouchAreaLocalX < MUTE_WIDTH)
-		                 && (pTouchAreaLocalY > 0)
-		                 && (pTouchAreaLocalY < MUTE_HEIGHT)) {
-
-		    Log.d("MuteOff", "no touch");
-		    applyUntouchEffects(muteOff);
-		    muteIconCLick();
-		    
-		} else {
-			Log.d("MuteOff", "no touch outside");
-			applyUntouchEffects(muteOff);
-		    }
 		    
 		} else if (pSceneTouchEvent.isActionMove()) {
 		    if (    !((pTouchAreaLocalX > 0) 
@@ -445,7 +429,25 @@ public class MainMenuScene extends Scene {
 			applyUntouchEffects(muteOff);
 		    } else {
 			applyTouchEffects(muteOff);
+			
 		    }
+		    
+		} else if (pSceneTouchEvent.isActionUp()) {
+		    
+		    if (    (pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < MUTE_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < MUTE_HEIGHT)) {
+
+		    Log.d("MuteOff", "no touch");
+		    applyUntouchEffects(muteOff);		    
+		    muteIconCLick();
+		    
+		} else {
+			Log.d("MuteOff", "no touch outside");
+			applyUntouchEffects(muteOff);
+		    }	
+
 		    
 		}
 		return true;
@@ -467,7 +469,6 @@ public class MainMenuScene extends Scene {
 		MainActivity.mainActivity.muteSounds();
 		muteOn.setVisible(false);
 		MainActivity.mainActivity.saveSettings();
-		
 	    } else {
 		
 		MainActivity.mainActivity.unmuteSounds();
@@ -476,9 +477,17 @@ public class MainMenuScene extends Scene {
 	    }
 	}
 	
+	/*private void updateUntouchEffect(float tt, final Sprite sp) {
+
+	    registerUpdateHandler(new TimerHandler(tt, false, new ITimerCallback() {
+		    @Override
+		    public void onTimePassed(TimerHandler pTimerHandler) {
+			applyUntouchEffects(sp);		
+		    }}));
+	}*/
+	
     
     public MainMenuScene() {
-	
 	setBackgroundEnabled(true);
 	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
@@ -502,7 +511,7 @@ public class MainMenuScene extends Scene {
 	registerTouchArea(muteOff);
 	registerTouchArea(helpIcon);
 	setTouchAreaBindingOnActionDownEnabled(true);
-	setTouchAreaBindingOnActionMoveEnabled(true);
+	setTouchAreaBindingOnActionMoveEnabled(true);	
 	
 	MainActivity.mainActivity.mMusic.play();
     }
