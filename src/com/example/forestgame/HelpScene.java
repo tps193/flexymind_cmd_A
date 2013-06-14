@@ -11,6 +11,12 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.bitmap.BitmapTextureFormat;
+import org.andengine.opengl.texture.region.TextureRegion;
 
 import android.util.Log;
 
@@ -101,10 +107,9 @@ public class HelpScene extends Scene {
     							  , "POND"
     };
     
-    private List<HelpCard> arrayHelpCard = new ArrayList<HelpCard>();
     ////////////
     
-    public HUD hud = new HUD();
+    private Sprite helpSprite;
     
     private Sprite background = new Sprite( 0
             				, 0
@@ -113,270 +118,6 @@ public class HelpScene extends Scene {
             				, MainActivity.mainActivity.textureBackground
             				, MainActivity.mainActivity.getVertexBufferObjectManager());
     
-    
-    private Sprite arrowLeft = new Sprite( ARROW_LEFT_POSITION_LEFT
-					 , ARROW_LEFT_POSITION_UP
-					 , ARROW_LEFT_WIDTH
-					 , ARROW_LEFT_HEIGHT
-					 , MainActivity.mainActivity.textureArrowLeft
-					 , MainActivity.mainActivity.getVertexBufferObjectManager()) {
-	    @Override
-	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
-					, float pTouchAreaLocalX
-					, float pTouchAreaLocalY) {
-		
-		if (pSceneTouchEvent.isActionDown()) {
-		    
-		    Log.d("arrowLeft", "touch");
-		    arrowLeft.setAlpha(0.6f);
-		    
-		} else if (pSceneTouchEvent.isActionUp()) {
-		    
-		    Log.d("arrowLeft", "no touch");
-		    arrowLeft.setAlpha(1.0f);
-		    arrowLeftClick();
-		}
-		return true;
-	    }
-	};
-	
-	private void arrowLeftClick() {
-	    
-	    MainActivity.mainActivity.mClick.play();
-	    
-	    rootNumber--;
-	    
-	    if (rootNumber < 0) {
-		
-		rootNumber = 0;
-	    }
-	    
-	    arrowRight.setVisible(true);
-	    hud.registerTouchArea(arrowRight);
-	    
-	    if (LIST_COUNT[rootNumber] == 0) {
-		
-		arrowDown.setVisible(false);
-		hud.unregisterTouchArea(arrowDown);
-	    } 
-	    else {
-		
-		arrowDown.setVisible(true);
-		hud.registerTouchArea(arrowDown);
-	    }
-
-	    if (rootNumber == 0) {
-		
-		arrowLeft.setVisible(false);
-		hud.unregisterTouchArea(arrowLeft);
-	    }
-	    
-	    listNumber = 0;
-	    el = new Element(FIRST_ELEMENT_OF_ROOT[rootNumber]);
-	    detachAllElementHint();
-	    attachAllElementHint(this);
-	}
-	
-	
-    
-	private Sprite arrowRight = new Sprite( ARROW_RIGHT_POSITION_LEFT
-	    				  , ARROW_RIGHT_POSITION_UP
-	    				  , ARROW_RIGHT_WIDTH
-	    				  , ARROW_RIGHT_HEIGHT
-	    				  , MainActivity.mainActivity.textureArrowRight
-	    				  , MainActivity.mainActivity.getVertexBufferObjectManager()) {
-	    @Override
-	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
-					, float pTouchAreaLocalX
-					, float pTouchAreaLocalY) {
-		
-		if (pSceneTouchEvent.isActionDown()) {
-		    
-		    Log.d("arrowRight", "touch");
-		    arrowRight.setAlpha(0.6f);
-		    
-		} else if (pSceneTouchEvent.isActionUp()) {
-		    
-		    Log.d("arrowRight", "no touch");
-		    arrowRight.setAlpha(1.0f);
-		    arrowRightClick();
-		}
-		return true;
-	    }
-	};
-	
-	private void arrowRightClick() {
-	    
-	    MainActivity.mainActivity.mClick.play();
-	    
-	    rootNumber++;
-	    
-	    if (rootNumber > ROOT_COUNT) {
-		
-		rootNumber = ROOT_COUNT;
-	    }
-	    
-	    arrowLeft.setVisible(true);
-	    hud.registerTouchArea(arrowLeft);
-	    
-	    if (LIST_COUNT[rootNumber] == 0) {
-		
-		arrowDown.setVisible(false);
-		hud.unregisterTouchArea(arrowDown);
-	    }
-	    
-	    else {
-		
-		arrowDown.setVisible(true);
-		hud.registerTouchArea(arrowDown);
-	    }
-	    
-	    if (rootNumber == ROOT_COUNT) {
-		
-		arrowRight.setVisible(false);
-		hud.unregisterTouchArea(arrowRight);
-	    }
-	    
-	    listNumber = 0;
-	    detachAllElementHint();
-	    
-	    if (rootNumber == SPECIAL_ROOT) {
-		
-		attachAllSpecialElementHint(this);
-	    }
-	    else {
-		
-		el = new Element(FIRST_ELEMENT_OF_ROOT[rootNumber]);
-		attachAllElementHint(this);
-	    }
-	}
-    
-	
-	
-    private Sprite arrowUp = new Sprite( ARROW_UP_POSITION_LEFT
-	    			       , ARROW_UP_POSITION_UP
-	    			       , ARROW_UP_WIDTH
-	    			       , ARROW_UP_HEIGHT
-	    			       , MainActivity.mainActivity.textureArrowUp
-	    			       , MainActivity.mainActivity.getVertexBufferObjectManager()) {
-	    @Override
-	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
-					, float pTouchAreaLocalX
-					, float pTouchAreaLocalY) {
-		
-		if (pSceneTouchEvent.isActionDown()) {
-		    
-		    Log.d("arrowUp", "touch");
-		    arrowUp.setAlpha(0.6f);
-		    
-		} else if (pSceneTouchEvent.isActionUp()) {
-		    
-		    Log.d("arrowUp", "no touch");
-		    arrowUp.setAlpha(1.0f);
-		    arrowUpClick();
-		}
-		return true;
-	    }
-	};
-	
-	private void arrowUpClick() {
-	    
-	    MainActivity.mainActivity.mClick.play();
-	    
-	    listNumber--;
-	    
-	    if (listNumber < 0) {
-		
-		listNumber = 0;
-	    }
-	    
-	    arrowDown.setVisible(true);
-	    hud.registerTouchArea(arrowDown);
-	    
-	    if (listNumber == 0) {
-		
-		if (rootNumber < ROOT_COUNT) {
-		    
-		    arrowRight.setVisible(true);
-		    hud.registerTouchArea(arrowRight);
-		}
-		
-		if (rootNumber > 0) {  
-		    
-		    arrowLeft.setVisible(true);
-		    hud.registerTouchArea(arrowLeft);
-		}
-		
-		arrowUp.setVisible(false);
-		hud.unregisterTouchArea(arrowUp);
-	    }
-	    
-	    el = new Element(TableOfElements.getElementOfLvl(FIRST_ELEMENT_OF_ROOT[rootNumber], listNumber * CARD_ON_LIST));
-	    
-	    detachAllElementHint();
-	    attachAllElementHint(this);
-	}
-	
-	
-	
-    
-    private Sprite arrowDown = new Sprite( ARROW_DOWN_POSITION_LEFT
-	    				 , ARROW_DOWN_POSITION_UP
-	    				 , ARROW_DOWN_WIDTH
-	    				 , ARROW_DOWN_HEIGHT
-	    				 , MainActivity.mainActivity.textureArrowDown
-	    				 , MainActivity.mainActivity.getVertexBufferObjectManager()) {
-	    @Override
-	    public boolean onAreaTouched( TouchEvent pSceneTouchEvent
-					, float pTouchAreaLocalX
-					, float pTouchAreaLocalY) {
-		
-		if (pSceneTouchEvent.isActionDown()) {
-		    
-		    Log.d("arrowDown", "touch");
-		    arrowDown.setAlpha(0.6f);
-		    
-		} else if (pSceneTouchEvent.isActionUp()) {
-		    
-		    Log.d("arrowDown", "no touch");
-		    arrowDown.setAlpha(1.0f);
-		    arrowDownClick();
-		}
-		return true;
-	    }
-	};
-	
-	private void arrowDownClick() {
-	    
-	    MainActivity.mainActivity.mClick.play();
-	    
-	    listNumber++;
-	    
-	    if (listNumber > LIST_COUNT[rootNumber]) {
-		
-		listNumber = 0;
-	    }
-	    
-	    arrowUp.setVisible(true);
-	    hud.registerTouchArea(arrowUp);
-	    
-	    arrowRight.setVisible(false);
-	    hud.unregisterTouchArea(arrowRight);
-	    
-	    arrowLeft.setVisible(false);
-	    hud.unregisterTouchArea(arrowLeft);
-	    
-	    if (listNumber == LIST_COUNT[rootNumber]) {
-		
-		arrowDown.setVisible(false);
-		hud.unregisterTouchArea(arrowDown);
-	    }
-	    
-	    detachAllElementHint();
-	    attachAllElementHint(this);
-	}
-	
-    
     public HelpScene() {
 	
 	setBackgroundEnabled(true);
@@ -384,282 +125,58 @@ public class HelpScene extends Scene {
 	attachChild(background);
 	background.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER.deepCopy());
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-	
-	hud.attachChild(arrowLeft);
-	hud.attachChild(arrowRight);
-	hud.attachChild(arrowUp);
-	hud.attachChild(arrowDown);
-	hud.registerTouchArea(arrowLeft);
-	hud.registerTouchArea(arrowRight);
-	hud.registerTouchArea(arrowUp);
-	hud.registerTouchArea(arrowDown);
-	
-	// Неактивные стрелки
-	arrowLeft.setVisible(false);
-	hud.unregisterTouchArea(arrowLeft);
-	arrowUp.setVisible(false);
-	hud.unregisterTouchArea(arrowUp);
-	/////////
-	
-	el = new Element(FIRST_ELEMENT_OF_ROOT[rootNumber]);
-	
-	attachAllElementHint(this);
     }
     
     public void show() {
 	
 	setVisible(true);
 	setIgnoreUpdate(false);
-	hud.setVisible(true);
-	hud.setIgnoreUpdate(false);	
+	setVisible(true);
+	setIgnoreUpdate(false);	
 	background.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER.deepCopy());
     }
     
     public void hide() {
 	
-	hud.setVisible(false);
-	hud.setIgnoreUpdate(true);
+	setVisible(false);
+	setIgnoreUpdate(true);
    	setVisible(false);
    	setIgnoreUpdate(true);
    	background.setAlpha(1.0f);
     }
     
-    private void attachAllElementHint(HelpScene helpScene) {
+    private void buildHelpSprite() {
 	
-	for(int i = 0; i < CARD_ON_LIST; i++) {
+	for(int i = 0; i < HELP_ATLAS_COUNT; i++) {
 	    
-	    attachElementHint(helpScene
-		    	    , RECTANGLE_POSITION_LEFT
-		    	    , RECTANGLE_POSITION_UP + i * RECTANGLES_INTERVAL
-		    	    , GameScene.helpTextureX3
-		    	    , null
-		    	    , TableOfElements.getTextureName(el)
-		    	    , TableOfElements.getNextLevelTextureName(el)
-		    	    , i);
-	    el.changeToNextLvl();
-	    if (TableOfElements.getTextureName(el).equals(TableOfElements.getNextLevelTextureName(el))) return;
+	    /*BuildableBitmapTextureAtlas */atlasArray[i] = new BuildableBitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
+		   							      , 1024
+		   							      , 2048
+		   							      , BitmapTextureFormat.RGBA_8888
+		   							      , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	    
+	    helpSpriteArray[i] = BitmapTextureAtlasTextureRegionFactory
+			.createFromAsset( atlas
+				, MainActivity.mainActivity
+				, "helpSpritePage" + i);
+	    
+	    atlasArray[i].build();
 	}
     }
     
-    private void detachAllElementHint() {
+    private void loadHelpSprite() {
 	
-	while(!arrayHelpCard.isEmpty()) {
+	for(int i = 0; i < HELP_ATLAS_COUNT; i++) {
 	    
-	    detachElementHint(0);
-	}	
-    }
-
-    private void attachAllSpecialElementHint(HelpScene helpScene) {
-	
-	attachElementHint(helpScene
-	    	    , RECTANGLE_POSITION_LEFT
-	    	    , RECTANGLE_POSITION_UP + 0 * RECTANGLES_INTERVAL
-	    	    , GameScene.helpTextureArrow
-	    	    , TableOfElements.getTextureName(new Element("MAGIC_STICK"))
-	    	    , TableOfElements.getTextureName(new Element("FORESTER"))
-	    	    , TableOfElements.getTextureName(new Element("HUT"))
-	    	    , 0);
-	
-	attachElementHint(helpScene
-	    	    , RECTANGLE_POSITION_LEFT
-	    	    , RECTANGLE_POSITION_UP + 1 * RECTANGLES_INTERVAL
-	    	    , GameScene.helpTextureArrow
-	    	    , TableOfElements.getTextureName(new Element("DROP"))
-	    	    , GameScene.helpTextureTwoQuestions
-	    	    , GameScene.helpTextureQuestionWithCrown
-	    	    , 1);
-	
-	attachElementHint(helpScene
-	    	    , RECTANGLE_POSITION_LEFT
-	    	    , RECTANGLE_POSITION_UP + 2 * RECTANGLES_INTERVAL
-	    	    , GameScene.helpTextureArrow
-	    	    , TableOfElements.getTextureName(new Element("MAGIC_STICK"))
-	    	    , TableOfElements.getTextureName(new Element("FLYING_SQUIRREL"))
-	    	    , TableOfElements.getTextureName(new Element("SQUIRREL"))
-	    	    , 2);
-	
-	attachElementHint(helpScene
-	    	    , RECTANGLE_POSITION_LEFT
-	    	    , RECTANGLE_POSITION_UP + 3 * RECTANGLES_INTERVAL
-	    	    , GameScene.helpTextureArrow
-	    	    , TableOfElements.getTextureName(new Element("MAGIC_STICK"))
-	    	    , GameScene.helpTextureQuestion
-	    	    , GameScene.helpTextureShadow
-	    	    , 3);
+	    atlasArray[i].load();
+	}
     }
     
-    private void attachElementHint(HelpScene helpScene
-	    			 , float x
-	    			 , float y
-	    			 , String helpTextureArrow
-	    			 , String helpTextureName1
-	    			 , String helpTextureName2
-	    			 , String helpTextureName3
-	    			 , int number) {
+    private void unloadHelpSprite() {
 	
-	Sprite arrowSprite;
-	Sprite name1Sprite;
-	Sprite name2Sprite;
-	Sprite name3Sprite;
-	Rectangle rect;
-	
-	if (helpTextureArrow != null) {
+	for(int i = 0; i < HELP_ATLAS_COUNT; i++) {
 	    
-	    arrowSprite = new Sprite(x + ARROW_DELTA_LEFT
-		    		   , y + ARROW_DELTA_UP
-		    		   , ARROW_WIDTH
-		    		   , ARROW_HEIGHT
-		    		   , MainActivity.mainActivity.storage.getTexture(helpTextureArrow)
-		    		   , MainActivity.mainActivity.getVertexBufferObjectManager());
-	}
-	else {
-	    
-	    arrowSprite = null;
-	}
-	
-	if (helpTextureName1 != null) {
-	    
-	    name1Sprite = new Sprite(x + ELEMENT_MARGIN_LEFT
-		    		   , y + ELEMENT_MARGIN_TOP
-		    		   , ELEMENT_WIDTH
-		    		   , ELEMENT_HEIGHT
-		    		   , MainActivity.mainActivity.storage.getTexture(helpTextureName1)
-		    		   , MainActivity.mainActivity.getVertexBufferObjectManager());
-	}
-	else {
-	    
-	    name1Sprite = null;
-	}
-	
-	if (helpTextureName2 != null) {
-	    
-	    name2Sprite = new Sprite(x + THIRD_DELTA_LEFT
-		    		   , y + ELEMENT_MARGIN_TOP
-		    		   , ELEMENT_WIDTH
-		    		   , ELEMENT_HEIGHT
-		    		   , MainActivity.mainActivity.storage.getTexture(helpTextureName2)
-		    		   , MainActivity.mainActivity.getVertexBufferObjectManager());
-	}
-	else {
-	    
-	    name2Sprite = null;
-	}
-	
-	if (helpTextureName3 != null) {
-	    
-	    name3Sprite = new Sprite(x + NEXT_DELTA_LEFT
-				   , y + NEXT_DELTA_UP
-				   , ELEMENT_WIDTH
-				   , ELEMENT_HEIGHT
-				   , MainActivity.mainActivity.storage.getTexture(helpTextureName3)
-				   , MainActivity.mainActivity.getVertexBufferObjectManager());
-	}
-	else {
-	    
-	    name3Sprite = null;
-	}
-	
-	rect = new Rectangle(x
-		   		     , y
-		   		     , RECTANGLE_WIDTH
-		   		     , RECTANGLE_HEIGHT
-		   		     , MainActivity.mainActivity.getVertexBufferObjectManager());
-	
-	arrayHelpCard.add(new HelpCard(helpScene
-				     , arrowSprite
-				     , name1Sprite
-				     , name2Sprite
-				     , name3Sprite
-				     , rect));
-	
-	arrayHelpCard.get(number).attachHelpCard();
-    }
-    
-    private void detachElementHint(int number) {
-	
-	arrayHelpCard.get(number).detachHelpCard();
-	arrayHelpCard.remove(number);
-    }
-    
-    private static class HelpCard {
-	
-	private Sprite helpTextureArrow;
-	private Sprite helpTextureName1;
-	private Sprite helpTextureName2;
-	private Sprite helpTextureName3;
-	private Rectangle rect;
-	private HelpScene helpScene;
-	
-	private HelpCard(HelpScene helpScene
-		       , Sprite helpTextureArrow
-		       , Sprite helpTextureName1
-		       , Sprite helpTextureName2
-		       , Sprite helpTextureName3
-		       , Rectangle rect) {
-	    
-	    this.helpScene = helpScene;
-	    this.helpTextureArrow = helpTextureArrow;
-	    this.helpTextureName1 = helpTextureName1;
-	    this.helpTextureName2 = helpTextureName2;
-	    this.helpTextureName3 = helpTextureName3;
-	    this.rect = rect;
-	}
-	
-	private void attachHelpCard() {
-	   
-	    if (rect != null) {
-		
-		helpScene.attachChild(rect);
-		rect.setColor(1.0f, 0.82f, 0.43f);
-	    }
-
-	    if (helpTextureArrow != null) {
-		
-		helpScene.attachChild(helpTextureArrow);
-	    }
-	    
-	    if (helpTextureName1 != null) {
-		
-		helpScene.attachChild(helpTextureName1);
-	    }
-
-	    if (helpTextureName2 != null) {
-	
-		helpScene.attachChild(helpTextureName2);
-	    }
-
-	    if (helpTextureName3 != null) {
-	
-		helpScene.attachChild(helpTextureName3);
-	    }
-	}
-	
-	private void detachHelpCard() {
-	    
-	    if (rect != null) {
-		
-		helpScene.detachChild(rect);
-	    }
-
-	    if (helpTextureArrow != null) {
-		
-		helpScene.detachChild(helpTextureArrow);
-	    }
-	    
-	    if (helpTextureName1 != null) {
-		
-		helpScene.detachChild(helpTextureName1);
-	    }
-
-	    if (helpTextureName2 != null) {
-	
-		helpScene.detachChild(helpTextureName2);
-	    }
-
-	    if (helpTextureName3 != null) {
-	
-		helpScene.detachChild(helpTextureName3);
-	    }
+	    atlasArray[i].unload();
 	}
     }
 }
