@@ -70,6 +70,7 @@ public class GameScene extends Scene {
     private Sprite helpPart3;
     private Sprite helpPart4;
     private boolean helpIsShown;
+    private boolean onMagicStickFlag;
     private String helpTextureName1;
     private String helpTextureName2;
     private String helpTextureName3;
@@ -252,6 +253,7 @@ public class GameScene extends Scene {
 	registerTouchArea(pauseIcon);
 	registerTouchArea(muteOff);
 	helpIsShown = false;
+	onMagicStickFlag = false;
 	
 	
 	slotMatrix = new SlotMatrix(this);
@@ -721,6 +723,7 @@ public void setScores(int scores) {
 	helpTextureName2 = helpTextureTwoQuestions;
 	helpTextureName3 = helpTextureArrow;
 	helpTextureName4 = helpTextureQuestionWithCrown;
+	onMagicStickFlag = false;
     }
     
     private void makeHelpForFlyingSquirrel() {
@@ -729,6 +732,7 @@ public void setScores(int scores) {
 	helpTextureName2 = TableOfElements.getTextureName(new Element("FLYING_SQUIRREL"));
 	helpTextureName3 = helpTextureArrow;
 	helpTextureName4 = TableOfElements.getTextureName(new Element("SQUIRREL"));
+	onMagicStickFlag = true;
     }
     
     private void makeHelpForForester() {
@@ -737,6 +741,7 @@ public void setScores(int scores) {
 	helpTextureName2 = TableOfElements.getTextureName(new Element("FORESTER"));
 	helpTextureName3 = helpTextureArrow;
 	helpTextureName4 = TableOfElements.getTextureName(new Element("HUT"));
+	onMagicStickFlag = true;
     }
     private void makeHelpForMagicStick() {
 	
@@ -744,13 +749,14 @@ public void setScores(int scores) {
 	helpTextureName2 = helpTextureQuestion;
 	helpTextureName3 = helpTextureArrow;
 	helpTextureName4 = helpTextureShadow;
+	onMagicStickFlag = true;
     }
     
     private void attachHelpSprites() {
 	
-	helpPart1 = new Sprite( MainActivity.TEXTURE_WIDTH*190/2000 
+	helpPart1 = new Sprite( (onMagicStickFlag)?MainActivity.TEXTURE_WIDTH*450/2000:MainActivity.TEXTURE_WIDTH*200/2000 
 		    , MainActivity.TEXTURE_HEIGHT*1780/2000
-		    , MainActivity.TEXTURE_WIDTH/8
+		    , (onMagicStickFlag)?-MainActivity.TEXTURE_WIDTH/8:MainActivity.TEXTURE_WIDTH/8
 		    , MainActivity.TEXTURE_HEIGHT/13
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName1)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
@@ -762,14 +768,14 @@ public void setScores(int scores) {
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName2)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
-	helpPart3 = new Sprite( MainActivity.TEXTURE_WIDTH*790/2000 
-		    , MainActivity.TEXTURE_HEIGHT*1780/2000
+	helpPart3 = new Sprite( MainActivity.TEXTURE_WIDTH*780/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1795/2000
 		    , MainActivity.TEXTURE_WIDTH/8
-		    , MainActivity.TEXTURE_HEIGHT/13
+		    , MainActivity.TEXTURE_HEIGHT*113/2000
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName3)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
 
-	helpPart4 = new Sprite( MainActivity.TEXTURE_WIDTH*1090/2000 
+	helpPart4 = new Sprite( MainActivity.TEXTURE_WIDTH*1080/2000 
 		    , MainActivity.TEXTURE_HEIGHT*1780/2000
 		    , MainActivity.TEXTURE_WIDTH/8
 		    , MainActivity.TEXTURE_HEIGHT/13
