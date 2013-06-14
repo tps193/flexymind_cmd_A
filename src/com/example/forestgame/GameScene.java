@@ -683,7 +683,7 @@ public void setScores(int scores) {
 	    onMagicStickFlag = true;	    
 	    makeHelpForForester();
 	} else if (element.getName().equals("DROP")) {
-	    onMagicStickFlag = true;
+	    onMagicStickFlag = false;
 	    makeHelpForDrop();
 	} else if (element.getName().equals("FLYING_SQUIRREL")) {
 	    onMagicStickFlag = true;
