@@ -680,19 +680,19 @@ public void setScores(int scores) {
 	    detachHelpForElement();
 	}
 	if (element.getName().equals("FORESTER")) {
-	    
+	    onMagicStickFlag = true;	    
 	    makeHelpForForester();
 	} else if (element.getName().equals("DROP")) {
-	    
+	    onMagicStickFlag = true;
 	    makeHelpForDrop();
 	} else if (element.getName().equals("FLYING_SQUIRREL")) {
-	    
+	    onMagicStickFlag = true;
 	    makeHelpForFlyingSquirrel();
 	} else if (element.getName().equals("MAGIC_STICK")) {
-	    
+	    onMagicStickFlag = true;
 	    makeHelpForMagicStick();
 	} else {   
-	    
+	    onMagicStickFlag = false;
 	    helpTextureName1 = TableOfElements.getTextureName(element);
 	    helpTextureName2 = helpTextureX3;
 	    helpTextureName3 = helpTextureArrow;
@@ -723,7 +723,6 @@ public void setScores(int scores) {
 	helpTextureName2 = helpTextureTwoQuestions;
 	helpTextureName3 = helpTextureArrow;
 	helpTextureName4 = helpTextureQuestionWithCrown;
-	onMagicStickFlag = false;
     }
     
     private void makeHelpForFlyingSquirrel() {
@@ -732,7 +731,6 @@ public void setScores(int scores) {
 	helpTextureName2 = TableOfElements.getTextureName(new Element("FLYING_SQUIRREL"));
 	helpTextureName3 = helpTextureArrow;
 	helpTextureName4 = TableOfElements.getTextureName(new Element("SQUIRREL"));
-	onMagicStickFlag = true;
     }
     
     private void makeHelpForForester() {
@@ -741,7 +739,6 @@ public void setScores(int scores) {
 	helpTextureName2 = TableOfElements.getTextureName(new Element("FORESTER"));
 	helpTextureName3 = helpTextureArrow;
 	helpTextureName4 = TableOfElements.getTextureName(new Element("HUT"));
-	onMagicStickFlag = true;
     }
     private void makeHelpForMagicStick() {
 	
@@ -749,7 +746,6 @@ public void setScores(int scores) {
 	helpTextureName2 = helpTextureQuestion;
 	helpTextureName3 = helpTextureArrow;
 	helpTextureName4 = helpTextureShadow;
-	onMagicStickFlag = true;
     }
     
     private void attachHelpSprites() {
