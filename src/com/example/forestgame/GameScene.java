@@ -70,6 +70,7 @@ public class GameScene extends Scene {
     private Sprite helpPart3;
     private Sprite helpPart4;
     private boolean helpIsShown;
+    private boolean onMagicStickFlag;
     private String helpTextureName1;
     private String helpTextureName2;
     private String helpTextureName3;
@@ -252,6 +253,7 @@ public class GameScene extends Scene {
 	registerTouchArea(pauseIcon);
 	registerTouchArea(muteOff);
 	helpIsShown = false;
+	onMagicStickFlag = false;
 	
 	
 	slotMatrix = new SlotMatrix(this);
@@ -259,6 +261,8 @@ public class GameScene extends Scene {
 	respawn = new Respawn(this);
 
 	attachChild(pauseScene);
+	pauseScene.setZIndex(10000);
+	sortChildren();
 	attachChild(gameOverScene);
 	pauseScene.hide();
 	gameOverScene.hide();
@@ -606,6 +610,8 @@ public void setScores(int scores) {
 			   , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
 	attachChild(scoresText);
+	scoresText.setZIndex(999);
+	sortChildren();
     }
 
     public Sprite getBacklight() {
@@ -674,19 +680,19 @@ public void setScores(int scores) {
 	    detachHelpForElement();
 	}
 	if (element.getName().equals("FORESTER")) {
-	    
+	    onMagicStickFlag = true;	    
 	    makeHelpForForester();
 	} else if (element.getName().equals("DROP")) {
-	    
+	    onMagicStickFlag = false;
 	    makeHelpForDrop();
 	} else if (element.getName().equals("FLYING_SQUIRREL")) {
-	    
+	    onMagicStickFlag = true;
 	    makeHelpForFlyingSquirrel();
 	} else if (element.getName().equals("MAGIC_STICK")) {
-	    
+	    onMagicStickFlag = true;
 	    makeHelpForMagicStick();
 	} else {   
-	    
+	    onMagicStickFlag = false;
 	    helpTextureName1 = TableOfElements.getTextureName(element);
 	    helpTextureName2 = helpTextureX3;
 	    helpTextureName3 = helpTextureArrow;
@@ -744,9 +750,9 @@ public void setScores(int scores) {
     
     private void attachHelpSprites() {
 	
-	helpPart1 = new Sprite( MainActivity.TEXTURE_WIDTH*190/2000 
+	helpPart1 = new Sprite( (onMagicStickFlag)?MainActivity.TEXTURE_WIDTH*450/2000:MainActivity.TEXTURE_WIDTH*200/2000 
 		    , MainActivity.TEXTURE_HEIGHT*1780/2000
-		    , MainActivity.TEXTURE_WIDTH/8
+		    , (onMagicStickFlag)?-MainActivity.TEXTURE_WIDTH/8:MainActivity.TEXTURE_WIDTH/8
 		    , MainActivity.TEXTURE_HEIGHT/13
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName1)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
@@ -758,14 +764,14 @@ public void setScores(int scores) {
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName2)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
-	helpPart3 = new Sprite( MainActivity.TEXTURE_WIDTH*790/2000 
-		    , MainActivity.TEXTURE_HEIGHT*1780/2000
+	helpPart3 = new Sprite( MainActivity.TEXTURE_WIDTH*780/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1795/2000
 		    , MainActivity.TEXTURE_WIDTH/8
-		    , MainActivity.TEXTURE_HEIGHT/13
+		    , MainActivity.TEXTURE_HEIGHT*113/2000
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName3)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
 
-	helpPart4 = new Sprite( MainActivity.TEXTURE_WIDTH*1090/2000 
+	helpPart4 = new Sprite( MainActivity.TEXTURE_WIDTH*1080/2000 
 		    , MainActivity.TEXTURE_HEIGHT*1780/2000
 		    , MainActivity.TEXTURE_WIDTH/8
 		    , MainActivity.TEXTURE_HEIGHT/13
