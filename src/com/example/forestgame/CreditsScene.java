@@ -11,10 +11,10 @@ import org.andengine.util.HorizontalAlign;
 
 public class CreditsScene extends Scene {
     
-    private static final float CAPTIONS_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 1 / 6;
-    private static final float CAPTIONS_POSITION_UP = MainActivity.TEXTURE_HEIGHT / 11;
-    private static final float DEV_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 119 / 1024;
-    private static final float DEV_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 10 / 64;
+    private static final float CAPTIONS_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 151 / 1024;
+    private static final float CAPTIONS_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 15 / 110;
+    private static final float DEV_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 81 / 1024;
+    private static final float DEV_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 22 / 110;
     private static final AlphaModifier BACKGROUND_ALPHA_MODIFIER = new AlphaModifier(0.55f, 0.99f, 0.5f);
     private static final AlphaModifier CREDITS_ALPHA_MODIFIER = new AlphaModifier(0.95f, 0.0f, 1.0f);
     
@@ -41,7 +41,7 @@ public class CreditsScene extends Scene {
 					, "Buvaylik Sergey\n" +
 					  "Cherkasov Alexander\n" + 
 					  "Kolesnichenko Pavel\n" +
-					  "Kuznetsov Mixail\n" +
+					  "Kuznetsov Mihail\n" +
 					  "Shadrin Sergey\n" +
 					  "Sivulskiy Sergey\n\n\n" +
 					  "Kirill Real-K\n\n\n" +

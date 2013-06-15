@@ -1,18 +1,15 @@
 package com.example.forestgame;
 
 import java.io.IOException;
-
+import java.util.LinkedList;
 import javax.microedition.khronos.opengles.GL10;
-
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
-
 import android.util.Log;
-
 import com.example.forestgame.element.Element;
 import com.example.forestgame.element.TableOfElements;
 import com.example.forestgame.gameinterface.Prison;
@@ -41,12 +38,12 @@ public class GameScene extends Scene {
     private static final float CAGE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 313 / 2000;
     
     private static final float PAUSE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 516 / 625;
-    private static final float PAUSE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 17 / 2000;
+    private static final float PAUSE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 22 / 2000;
     private static final float PAUSE_WIDTH = MainActivity.TEXTURE_WIDTH * 30 / 250;
     private static final float PAUSE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 18 / 250;
     
     private static final float SCORES_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 4 / 60;
-    private static final float SCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT *3 / 200;
+    private static final float SCORES_POSITION_UP = MainActivity.TEXTURE_HEIGHT *6 / 200;
     
     private static final int CAGE_Z_INDEX = 9999;
     private static final int PAUSE_SCENE_Z_INDEX = 10000;
@@ -73,17 +70,25 @@ public class GameScene extends Scene {
     private Sprite helpPart3;
     private Sprite helpPart4;
     private boolean helpIsShown;
+    private boolean onMagicStickFlag;
     private String helpTextureName1;
     private String helpTextureName2;
     private String helpTextureName3;
     private String helpTextureName4;
     
-    private static String helpTextureX3 = "gfx_hint_arrow_X3.png";
-    private static String helpTextureShadow = "gfx_shadow.png";
-    private static String helpTextureQuestionWithCrown = "gfx_questionCrown.png";
-    private static String helpTextureQuestion = "gfx_question.png";
-    private static String helpTextureTwoQuestions = "gfx_2_questions.png";
-    private static String helpTextureArrow = "gfx_hint_arrow.png";
+    public static String helpTextureX3 = "gfx_hint_arrow_X3.png";
+    public static String helpTextureShadow = "gfx_shadow.png";
+    public static String helpTextureQuestionWithCrown = "gfx_questionCrown.png";
+    public static String helpTextureQuestion = "gfx_question.png";
+    public static String helpTextureTwoQuestions = "gfx_2_questions.png";
+    public static String helpTextureArrow = "gfx_hint_arrow.png";
+    
+    
+    private int backlightRow;
+    private int backlightColumn;
+    private LinkedList<Slot> slotsForCombo = new LinkedList<Slot>();
+    private Element bestElementForDropAdd;
+    
     
     
     private Sprite background = new Sprite( 0
@@ -221,9 +226,11 @@ public class GameScene extends Scene {
 	if (!MainActivity.isMute) {
 	    MainActivity.mainActivity.muteSounds();
 	    muteOn.setVisible(false);
+	    MainActivity.mainActivity.saveSettings();
 	} else {
 	    MainActivity.mainActivity.unmuteSounds();
 	    muteOn.setVisible(true);
+	    MainActivity.mainActivity.saveSettings();
 	}
     }
     
@@ -246,6 +253,7 @@ public class GameScene extends Scene {
 	registerTouchArea(pauseIcon);
 	registerTouchArea(muteOff);
 	helpIsShown = false;
+	onMagicStickFlag = false;
 	
 	
 	slotMatrix = new SlotMatrix(this);
@@ -253,6 +261,8 @@ public class GameScene extends Scene {
 	respawn = new Respawn(this);
 
 	attachChild(pauseScene);
+	pauseScene.setZIndex(10000);
+	sortChildren();
 	attachChild(gameOverScene);
 	pauseScene.hide();
 	gameOverScene.hide();
@@ -318,22 +328,36 @@ public class GameScene extends Scene {
 	return movingElement;
     }
 
-    public void backLight(float touchPointX, float touchPointY, boolean elementIsMagicStick) {
+    public void backLight(float touchPointX, float touchPointY, String elementName) {
 
-	int backlightRow = (int) ((touchPointY - SlotMatrix.getSlotPositionUp(0)) / (SlotMatrix.getSlotHeight() + BORDER_HEIGHT));
-	int backlightColumn = (int) ((touchPointX - SlotMatrix.getSlotPositionLeft(0)) / (SlotMatrix.getSlotWidth() + BORDER_WIDTH));
-	if (elementIsMagicStick) {
-	    fullSlotBacklight(backlightRow, backlightColumn);
-	} else {
-	    emptySlotBacklight(backlightRow, backlightColumn);
+	
+	int newBacklightRow = (int) ((touchPointY - SlotMatrix.getSlotPositionUp(0)) / (SlotMatrix.getSlotHeight() + BORDER_HEIGHT));
+	int newBacklightColumn = (int) ((touchPointX - SlotMatrix.getSlotPositionLeft(0)) / (SlotMatrix.getSlotWidth() + BORDER_WIDTH));
+	if ((backlightRow != newBacklightRow) || (backlightColumn != newBacklightColumn)) {
+	    
+	    for (Slot slot : slotsForCombo) {
+		
+		slot.removeEntityModifier();
+	    }
+	    slotsForCombo.clear();
+	    detachChild(backlight);
+	    backlightRow = newBacklightRow;
+	    backlightColumn = newBacklightColumn;
+	    if (elementName.equals("MAGIC_STICK")) {
+		
+		fullSlotBacklight(backlightRow, backlightColumn);
+	    } else {
+		
+		emptySlotBacklight(backlightRow, backlightColumn, elementName);
+	    }
 	}
     }
     
-    public void emptySlotBacklight(int i, int j) {
+    
+    
+    private void emptySlotBacklight(int i, int j, String elementName) {
 	
-	detachChild(backlight);
-	
-	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && slotMatrix.isSlotEmpty(i, j)) {
+	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && i >= 0 && j >=0 && slotMatrix.isSlotEmpty(i, j)) {
 	    
 	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
                 	    	 , SlotMatrix.getSlotPositionUp(i)
@@ -345,14 +369,22 @@ public class GameScene extends Scene {
             backlight.setAlpha(BACKLIGHT_ALPHA);
 	    attachChild(backlight);
 	    backlight.getParent().sortChildren();
+	    if ((elementName.equals("FORESTER")) || (elementName.equals("FLYING_SQUIRREL"))) {
+		
+		return;
+	    } else if (!elementName.equals("DROP")) {
+		    
+		outlineNeighborsForCombo(i, j, elementName);
+	    } else {
+		    
+		outlineNeightborsForDropAdd(i, j);
+	    }
 	}
     }
 
-    public void fullSlotBacklight(int i, int j) {
+    private void fullSlotBacklight(int i, int j) {
 	
-	detachChild(backlight);
-	
-	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && !slotMatrix.isSlotEmpty(i, j)) {
+	if (i < SlotMatrix.getROWS() && j < SlotMatrix.getCOLUMNS() && i >= 0 && j >=0 && !slotMatrix.isSlotEmpty(i, j)) {
 	    
 	    Log.d("fores",slotMatrix.getElement(i, j));
 	    backlight = new Sprite(SlotMatrix.getSlotPositionLeft(j) - MainActivity.TEXTURE_WIDTH / 800
@@ -365,9 +397,165 @@ public class GameScene extends Scene {
 	    attachChild(backlight);
 	    backlight.setZIndex(700);
 	    backlight.getParent().sortChildren();
+	    
+	    if (slotMatrix.getElement(i, j).equals("FORESTER")) {
+		    
+		outlineNeighborsForCombo(i, j, "HUT");
+	    } else if (slotMatrix.getElement(i, j).equals("FLYING_SQUIRREL")) {
+		    
+		outlineNeighborsForCombo(i, j, "SQUIRREL");
+	    }
+	    slotsForCombo.add(slotMatrix.getSlot(i, j));
+	    slotMatrix.getSlot(i, j).addEntityModifier();
+	    
 	}
     }
     
+    private void outlineNeighborsForCombo(int row, int column, String elementName) {
+	
+	int forCombo = 0;
+	LinkedList<Slot> list = new LinkedList<Slot>();
+	if (row != 0) {
+	    if (!slotMatrix.isSlotEmpty(row-1, column)) {
+		Slot slot = slotMatrix.getSlot(row-1, column);
+		if (slot.getElement().getName().equals(elementName)) {
+		    forCombo++;
+		    if (slot.getHasSimilarNeighbor()) {
+			forCombo++;
+			tryToFindMoreNeighbors(list, row-2, column, elementName);
+			tryToFindMoreNeighbors(list, row-1, column-1, elementName);
+			tryToFindMoreNeighbors(list, row-1, column+1, elementName);
+		    }
+		    list.add(slot);
+		}
+	    }
+	}
+	if (row != SlotMatrix.getROWS()-1) {
+	    if (!slotMatrix.isSlotEmpty(row+1, column)) {
+		Slot slot = slotMatrix.getSlot(row+1, column);
+		if (slot.getElement().getName().equals(elementName)) {
+		    forCombo++;
+		    if (slot.getHasSimilarNeighbor()) {
+			forCombo++;
+			tryToFindMoreNeighbors(list, row+2, column, elementName);
+			tryToFindMoreNeighbors(list, row+1, column-1, elementName);
+			tryToFindMoreNeighbors(list, row+1, column+1, elementName);
+		    }
+		    list.add(slot);
+		}
+	    }
+	}
+	if (column != 0) {
+	    if (!slotMatrix.isSlotEmpty(row, column-1)) {
+		Slot slot = slotMatrix.getSlot(row, column-1);
+		if (slot.getElement().getName().equals(elementName)) {
+		    forCombo++;
+		    if (slot.getHasSimilarNeighbor()) {
+			forCombo++;
+			tryToFindMoreNeighbors(list, row, column-2, elementName);
+			tryToFindMoreNeighbors(list, row-1, column-1, elementName);
+			tryToFindMoreNeighbors(list, row+1, column-1, elementName);
+		    }
+		    list.add(slot);
+		}
+	    }
+	}
+	if (column != SlotMatrix.getCOLUMNS()-1) {
+	    if (!slotMatrix.isSlotEmpty(row, column+1)) {
+		Slot slot = slotMatrix.getSlot(row, column+1);
+		if (slot.getElement().getName().equals(elementName)) {
+		    forCombo++;
+		    if (slot.getHasSimilarNeighbor()) {
+			forCombo++;
+			tryToFindMoreNeighbors(list, row, column+2, elementName);
+			tryToFindMoreNeighbors(list, row-1, column+1, elementName);
+			tryToFindMoreNeighbors(list, row+1, column+1, elementName);
+		    }
+		    list.add(slot);
+		}
+	    }
+	}
+	if (forCombo >= 2) {
+	    
+	    for (Slot slot : list) {
+		
+		slot.addEntityModifier();
+		slotsForCombo.add(slot);
+	    }
+	    outlineNeighborsForCombo(row, column, TableOfElements.getNextLvl(new Element(elementName)));
+	    
+	}
+	
+    }
+    
+    private void tryToFindMoreNeighbors(LinkedList<Slot> list, int row, int col, String elementName) {
+	
+	if ((row >= 0) && (row < SlotMatrix.getROWS()) && (col >=0) && (col < SlotMatrix.getCOLUMNS())) {
+	    if (!slotMatrix.isSlotEmpty(row, col)) {
+		if (slotMatrix.getElement(row, col).equals(elementName)) {
+		    if (!list.contains(slotMatrix.getSlot(row, col))) {
+			list.add(slotMatrix.getSlot(row, col));
+		    }
+		}
+	    }
+	}
+    }
+    
+    private void outlineNeightborsForDropAdd(int row, int column) {
+	
+	LinkedList<Slot> slots = new LinkedList<Slot>();
+	if (row != 0) {
+	    if (!slotMatrix.isSlotEmpty(row-1, column)) {
+		if (!slotMatrix.getElement(row-1, column).equals("FORESTER")  
+		&& (!slotMatrix.getElement(row-1, column).equals("FLYING_SQUIRREL"))) {
+		    
+		    slots.add(slotMatrix.getSlot(row-1, column)); 
+		}
+	    }
+	}
+	if (row != SlotMatrix.getROWS()-1) {
+	    if (!slotMatrix.isSlotEmpty(row+1, column)) {
+		if (!slotMatrix.getElement(row+1, column).equals("FORESTER")  
+		&& (!slotMatrix.getElement(row+1, column).equals("FLYING_SQUIRREL"))) {
+			    
+		    slots.add(slotMatrix.getSlot(row+1, column)); 
+		}
+	    }
+	}
+	if (column != 0) {
+	    if (!slotMatrix.isSlotEmpty(row, column-1)) {
+		if (!slotMatrix.getElement(row, column-1).equals("FORESTER")  
+		&& (!slotMatrix.getElement(row, column-1).equals("FLYING_SQUIRREL"))) {
+			    
+		    slots.add(slotMatrix.getSlot(row, column-1)); 
+		}
+	    }
+	}
+	if (column != SlotMatrix.getCOLUMNS()-1) {
+	    if (!slotMatrix.isSlotEmpty(row, column+1)) {
+		if (!slotMatrix.getElement(row, column+1).equals("FORESTER")  
+		&& (!slotMatrix.getElement(row, column+1).equals("FLYING_SQUIRREL"))) {
+			    
+		    slots.add(slotMatrix.getSlot(row, column+1)); 
+		}
+	    }
+	}
+	slotMatrix.filterSlotsLinkedList(slots);
+	if ( !slots.isEmpty() ) {
+	    
+	    bestElementForDropAdd = slotMatrix.bestElementToAdd(slots.getFirst().getElement(), slots);
+	    outlineNeighborsForCombo(row, column, bestElementForDropAdd.getName());
+	} else {
+	    
+	    bestElementForDropAdd = new Element("POND");
+	    outlineNeighborsForCombo(row, column, "POND");
+	}
+    }
+    
+    public Element getBestElementForDropAdd() {
+	
+	return bestElementForDropAdd;
+    }
     
     public void moveElement(float touchPointX, float touchPointY) {
 
@@ -422,6 +610,8 @@ public void setScores(int scores) {
 			   , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
 	attachChild(scoresText);
+	scoresText.setZIndex(999);
+	sortChildren();
     }
 
     public Sprite getBacklight() {
@@ -490,22 +680,23 @@ public void setScores(int scores) {
 	    detachHelpForElement();
 	}
 	if (element.getName().equals("FORESTER")) {
-	    
+	    onMagicStickFlag = true;	    
 	    makeHelpForForester();
 	} else if (element.getName().equals("DROP")) {
-	    
+	    onMagicStickFlag = false;
 	    makeHelpForDrop();
 	} else if (element.getName().equals("FLYING_SQUIRREL")) {
-	    
+	    onMagicStickFlag = true;
 	    makeHelpForFlyingSquirrel();
 	} else if (element.getName().equals("MAGIC_STICK")) {
-	    
+	    onMagicStickFlag = true;
 	    makeHelpForMagicStick();
 	} else {   
-	    
+	    onMagicStickFlag = false;
 	    helpTextureName1 = TableOfElements.getTextureName(element);
 	    helpTextureName2 = helpTextureX3;
-	    helpTextureName3 = TableOfElements.getNextLevelTextureName(element);
+	    helpTextureName3 = helpTextureArrow;
+	    helpTextureName4 = TableOfElements.getNextLevelTextureName(element);
 	}    
 	attachHelpSprites();
 	
@@ -519,13 +710,11 @@ public void setScores(int scores) {
 	    detachChild(helpPart1);
 	    detachChild(helpPart2);
 	    detachChild(helpPart3);
-	    if (helpTextureName4 != null) {
-		
-		detachChild(helpPart4);
-	    }
+	    detachChild(helpPart4);
+	    
 	}
 	helpIsShown = false;
-	helpTextureName4 = null;
+	
     }
     
     private void makeHelpForDrop() {
@@ -561,41 +750,39 @@ public void setScores(int scores) {
     
     private void attachHelpSprites() {
 	
-	helpPart1 = new Sprite( MainActivity.TEXTURE_WIDTH*200/2000 
-		    , MainActivity.TEXTURE_HEIGHT*1770/2000
-		    , MainActivity.TEXTURE_WIDTH/8
+	helpPart1 = new Sprite( (onMagicStickFlag)?MainActivity.TEXTURE_WIDTH*450/2000:MainActivity.TEXTURE_WIDTH*200/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1780/2000
+		    , (onMagicStickFlag)?-MainActivity.TEXTURE_WIDTH/8:MainActivity.TEXTURE_WIDTH/8
 		    , MainActivity.TEXTURE_HEIGHT/13
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName1)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
-	helpPart2 = new Sprite( MainActivity.TEXTURE_WIDTH*500/2000 
-		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+	helpPart2 = new Sprite( MainActivity.TEXTURE_WIDTH*490/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1780/2000
 		    , MainActivity.TEXTURE_WIDTH/8
 		    , MainActivity.TEXTURE_HEIGHT/13
 		    , MainActivity.mainActivity.storage.getTexture(helpTextureName2)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
-	helpPart3 = new Sprite( MainActivity.TEXTURE_WIDTH*800/2000 
-		    , MainActivity.TEXTURE_HEIGHT*1770/2000
+	helpPart3 = new Sprite( MainActivity.TEXTURE_WIDTH*780/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1795/2000
+		    , MainActivity.TEXTURE_WIDTH/8
+		    , MainActivity.TEXTURE_HEIGHT*113/2000
+		    , MainActivity.mainActivity.storage.getTexture(helpTextureName3)
+		    , MainActivity.mainActivity.getVertexBufferObjectManager());
+
+	helpPart4 = new Sprite( MainActivity.TEXTURE_WIDTH*1080/2000 
+		    , MainActivity.TEXTURE_HEIGHT*1780/2000
 		    , MainActivity.TEXTURE_WIDTH/8
 		    , MainActivity.TEXTURE_HEIGHT/13
-		    , MainActivity.mainActivity.storage.getTexture(helpTextureName3)
+		    , MainActivity.mainActivity.storage.getTexture(helpTextureName4)
 		    , MainActivity.mainActivity.getVertexBufferObjectManager());
 	
 	attachChild(helpPart1);
 	attachChild(helpPart2);
 	attachChild(helpPart3);
+	attachChild(helpPart4);
 	
-	if (helpTextureName4 != null) {
-	    
-	    helpPart4 = new Sprite( MainActivity.TEXTURE_WIDTH*1100/2000 
-		    , MainActivity.TEXTURE_HEIGHT*1770/2000
-		    , MainActivity.TEXTURE_WIDTH/8
-		    , MainActivity.TEXTURE_HEIGHT/13
-		    , MainActivity.mainActivity.storage.getTexture(helpTextureName4)
-		    , MainActivity.mainActivity.getVertexBufferObjectManager());
-	    attachChild(helpPart4);
-	}
 	helpIsShown = true;
     }
 }

@@ -23,7 +23,6 @@ public class MainScene extends Scene {
 	attachChild(scoresScene);
 	attachChild(creditsScene);
 	attachChild(helpScene);
-	MainActivity.camera.setHUD(helpScene.hud);
 	showMainMenuScene();
     }
     
@@ -188,7 +187,7 @@ public class MainScene extends Scene {
 	    break;
 	    
 	case PAUSE:
-	    showMainMenuScene();
+	    showGameScene();
 	    break;
 	    
 	case GAME_OVER:

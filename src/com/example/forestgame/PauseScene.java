@@ -5,21 +5,28 @@ import javax.microedition.khronos.opengles.GL10;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 
 import android.util.Log;
 
 public class PauseScene extends Scene {
     
-    private static final float PAUSE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 35 / 120;
+    private static final float PAUSE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 31 / 120;
     private static final float PAUSE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 13 / 64;
+    private static final float PAUSE_WIDTH = MainActivity.TEXTURE_WIDTH * 190 / 400;
+    private static final float PAUSE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 11 / 128;
     private static final float RESUME_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 319 / 1024;
     private static final float RESUME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 24 / 64;
-    private static final float NEWGAME_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 260 / 1024;
+    private static final float RESUME_WIDTH = MainActivity.TEXTURE_WIDTH * 150 / 400;;
+    private static final float RESUME_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
+    private static final float NEWGAME_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 227 / 1024;
     private static final float NEWGAME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 31 / 64;
-    private static final float MAINMENU_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 235 / 1024;
-    private static final float MAINMENU_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 38 / 64;    
+    private static final float NEWGAME_WIDTH = MainActivity.TEXTURE_WIDTH * 225 / 400;
+    private static final float NEWGAME_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
+    private static final float MAINMENU_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 222 / 1024;
+    private static final float MAINMENU_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 38 / 64; 
+    private static final float MAINMENU_WIDTH = MainActivity.TEXTURE_WIDTH * 225 / 400;
+    private static final float MAINMENU_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
 
     private Sprite background = new Sprite( 0
             				   , 0
@@ -28,16 +35,18 @@ public class PauseScene extends Scene {
             				   , MainActivity.mainActivity.textureBackground
             				   , MainActivity.mainActivity.getVertexBufferObjectManager());
     
-    private Text pause = new Text( PAUSE_POSITION_LEFT
+    private Sprite pause = new Sprite( PAUSE_POSITION_LEFT
 				     , PAUSE_POSITION_UP
-				     , MainActivity.mainActivity.tPause
-				     , "PAUSE"
+				     , PAUSE_WIDTH
+				     , PAUSE_HEIGHT
+				     , MainActivity.mainActivity.texturePauseL
 				     , MainActivity.mainActivity.getVertexBufferObjectManager());
 
-    private Text resume = new Text( RESUME_POSITION_LEFT
+    private Sprite resume = new Sprite( RESUME_POSITION_LEFT
 				      , RESUME_POSITION_UP
-				      , MainActivity.mainActivity.tResume
-				      , "RESUME"
+				      , RESUME_WIDTH
+				      , RESUME_HEIGHT
+				      , MainActivity.mainActivity.textureResume
 				      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	
 	@Override
@@ -47,24 +56,44 @@ public class PauseScene extends Scene {
 	    
 	    if (pSceneTouchEvent.isActionDown()) {
 	    
-		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+		applyTouchEffects(resume);
 		
 	    } else if (pSceneTouchEvent.isActionUp()) {
+		
+		if (    (pTouchAreaLocalX > 0) 
+	                 && (pTouchAreaLocalX < RESUME_WIDTH)
+	                 && (pTouchAreaLocalY > 0)
+	                 && (pTouchAreaLocalY < RESUME_HEIGHT)) {
 
-		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		    applyUntouchEffects(resume);
 		MainActivity.mainActivity.mClick.play();
 		MainActivity.mainActivity.saveProgress();
-		MainScene.showGameScene();	
+		MainScene.showGameScene();
 		
-	    }
+		} else {
+			applyUntouchEffects(resume);
+		    }
+		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < RESUME_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < RESUME_HEIGHT))) {
+			applyUntouchEffects(resume);
+		    } else {
+			applyTouchEffects(resume);
+		    }
+		    
+		}
 	return true;
 	}
     };
 
-    private Text newgame = new Text(NEWGAME_POSITION_LEFT
+    private Sprite newgame = new Sprite(NEWGAME_POSITION_LEFT
 	    			    , NEWGAME_POSITION_UP
-	    			    , MainActivity.mainActivity.tNewGame
-	    			    , "NEW GAME"
+	    			    , NEWGAME_WIDTH
+	    			    , NEWGAME_HEIGHT
+	    			    , MainActivity.mainActivity.textureNewGame
 	    			    , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	
 	@Override
@@ -74,11 +103,16 @@ public class PauseScene extends Scene {
 	    
 	    if (pSceneTouchEvent.isActionDown()) {
 		
-		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+		applyTouchEffects(newgame);
 		
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
-		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		if (    (pTouchAreaLocalX > 0) 
+	                 && (pTouchAreaLocalX < NEWGAME_WIDTH)
+	                 && (pTouchAreaLocalY > 0)
+	                 && (pTouchAreaLocalY < NEWGAME_HEIGHT)) {
+		
+		    applyUntouchEffects(newgame);
 		if (MainScene.getGameScene().getSlotMatrix().getScore() != 0)
 		MainScene.getGameScene().getScoresTable().saveResult(MainScene.getGameScene().getSlotMatrix().getScore());
 		MainActivity.mainActivity.mClick.play();
@@ -89,15 +123,30 @@ public class PauseScene extends Scene {
 		MainActivity.mainActivity.mClick.play();
 		MainActivity.mainActivity.progressNotSaved();
 		MainScene.showGameScene();
+		
+		} else {
+			applyUntouchEffects(newgame);
+		    }
+		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < NEWGAME_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < NEWGAME_HEIGHT))) {
+			applyUntouchEffects(newgame);
+		    } else {
+			applyTouchEffects(newgame);
+		    }
 	    }
 	    return true;
 	}
     };
     
-    private Text mainMenu = new Text(	MAINMENU_POSITION_LEFT
+    private Sprite mainMenu = new Sprite(	MAINMENU_POSITION_LEFT
 	    			      , MAINMENU_POSITION_UP
-	    			      , MainActivity.mainActivity.tMainMenu
-	    			      , "MAIN MENU"
+	    			      , MAINMENU_WIDTH
+	    			      , MAINMENU_HEIGHT
+	    			      , MainActivity.mainActivity.textureMainMenu
 	    			      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 
 	@Override
@@ -107,15 +156,33 @@ public class PauseScene extends Scene {
 
 	    if (pSceneTouchEvent.isActionDown()) {
 
-		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+		applyTouchEffects(mainMenu);
 
 	    } else if (pSceneTouchEvent.isActionUp()) {
+		
+		if (    (pTouchAreaLocalX > 0) 
+	                 && (pTouchAreaLocalX < MAINMENU_WIDTH)
+	                 && (pTouchAreaLocalY > 0)
+	                 && (pTouchAreaLocalY < MAINMENU_HEIGHT)) {
 
-		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		applyUntouchEffects(mainMenu);
 		MainActivity.mainActivity.mClick.play();
 		MainActivity.mainActivity.saveProgress();
 		MainScene.showMainMenuScene();
-	    }
+		} else {
+			applyUntouchEffects(mainMenu);
+		    }
+		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < MAINMENU_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < MAINMENU_HEIGHT))) {
+			applyUntouchEffects(mainMenu);
+		    } else {
+			applyTouchEffects(mainMenu);
+		    }
+		}
 	    return true;
 	}
     };
@@ -136,8 +203,7 @@ public class PauseScene extends Scene {
 	    if (pSceneTouchEvent.isActionDown()) {
 
 		Log.d("MuteOff", "touch");
-		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
-		this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+		applyTouchEffects(muteOff);
 
 	    } else if (pSceneTouchEvent.isActionUp()) {
 
@@ -147,14 +213,12 @@ public class PauseScene extends Scene {
 			&& (pTouchAreaLocalY < MainMenuScene.MUTE_HEIGHT)) {
 
 		    Log.d("MuteOff", "no touch");
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyUntouchEffects(muteOff);
 		    muteIconCLick();
 
 		} else {
 		    Log.d("MuteOff", "no touch outside");
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyUntouchEffects(muteOff);
 		}
 
 	    } else if (pSceneTouchEvent.isActionMove()) {
@@ -162,11 +226,9 @@ public class PauseScene extends Scene {
 			&& (pTouchAreaLocalX < MainMenuScene.MUTE_WIDTH)
 			&& (pTouchAreaLocalY > 0)
 			&& (pTouchAreaLocalY < MainMenuScene.MUTE_HEIGHT))) {
-		    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyUntouchEffects(muteOff);
 		} else {
-		    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
-		    this.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+		    applyTouchEffects(muteOff);
 		}
 	    }
 	    return true;
@@ -185,9 +247,11 @@ public class PauseScene extends Scene {
 	if (!MainActivity.isMute) {
 	    MainActivity.mainActivity.muteSounds();
 	    muteOn.setVisible(false);
+	    MainActivity.mainActivity.saveSettings();
 	} else {
 	    MainActivity.mainActivity.unmuteSounds();
 	    muteOn.setVisible(true);
+	    MainActivity.mainActivity.saveSettings();
 	}
     }
     
@@ -211,6 +275,8 @@ public class PauseScene extends Scene {
 	registerTouchArea(resume);
 	registerTouchArea(mainMenu);
 	registerTouchArea(muteOff);
+	setTouchAreaBindingOnActionDownEnabled(true);
+	setTouchAreaBindingOnActionMoveEnabled(true);
 	
     }
     
@@ -231,5 +297,15 @@ public class PauseScene extends Scene {
    	setVisible(false);
    	setIgnoreUpdate(true);
    	background.setAlpha(0.8f);
+    }
+    
+    private void applyTouchEffects(Sprite button) {
+	button.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+	button.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+    }
+    
+    private void applyUntouchEffects(Sprite button) {
+	button.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+	button.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
     }
 }

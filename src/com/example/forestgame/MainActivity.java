@@ -4,9 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import javax.microedition.khronos.opengles.GL10;
-
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.Sound;
@@ -21,6 +19,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.util.FPSLogger;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.StrokeFont;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
@@ -31,13 +30,11 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
-
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
-
 import com.example.forestgame.altasstorage.AtlasStorage;
 
 public class MainActivity extends SimpleBaseGameActivity {
@@ -54,8 +51,8 @@ public class MainActivity extends SimpleBaseGameActivity {
     public static final Color BACKGROUND_COLOR = new Color(0.1f, 0.1f, 0.0f);
     public static final AlphaModifier SHOW_ALPHA_MODIFIER = new AlphaModifier(0.55f, 1.0f, 0.5f);
     public static final AlphaModifier HIDE_ALPHA_MODIFIER = new AlphaModifier(0.55f, 0.5f, 1.0f);
-    public static final AlphaModifier TOUCH_ALPHA_MODIFIER = new AlphaModifier(0.001f, 1.0f, 0.5f);
-    public static final AlphaModifier UNTOUCH_ALPHA_MODIFIER = new AlphaModifier(0.001f, 0.5f, 1.0f);
+    public static final AlphaModifier TOUCH_ALPHA_MODIFIER = new AlphaModifier(0.001f, 1.0f, 0.6f);
+    public static final AlphaModifier UNTOUCH_ALPHA_MODIFIER = new AlphaModifier(0.001f, 0.6f, 1.0f);
     public static final ScaleModifier TOUCH_SCALE_MODIFIER = new ScaleModifier(0.001f, 1.0f, 0.95f);
     public static final ScaleModifier UNTOUCH_SCALE_MODIFIER = new ScaleModifier(0.001f, 0.95f, 1.0f);
     public static final AlphaModifier PAUSE_ALPHA_MODIFIER = new AlphaModifier(0.55f, 0.8f, 0.5f);
@@ -79,6 +76,11 @@ public class MainActivity extends SimpleBaseGameActivity {
     public TextureRegion textureTitle;
     public TextureRegion texturePlay;
     public TextureRegion textureResume;
+    public TextureRegion texturePauseL;
+    public TextureRegion textureGameOverL;
+    public TextureRegion textureHighScoresL;
+    public TextureRegion textureNewGame;
+    public TextureRegion textureMainMenu;
     public TextureRegion textureScores;
     public TextureRegion textureCredits;
     public TextureRegion textureExit;
@@ -99,19 +101,10 @@ public class MainActivity extends SimpleBaseGameActivity {
     private static ITexture creditsCaps;
     private static ITexture creditsNames;
     private static ITexture scoresAtlas;
-    public StrokeFont tPause;
-    public StrokeFont tResume;
-    private static ITexture pauseLabel;
-    private static ITexture pauseResume;
-    public StrokeFont tGameOver;
-    public StrokeFont tMainMenu;
-    public StrokeFont tNewGame;
+    public static ITexture scoresToastAtlas;
     public StrokeFont tScores;
     private BitmapTextureAtlas scoresSceneCaps;
     private BitmapTextureAtlas scoresSceneScores;
-    private static ITexture GameOver;
-    private static ITexture MainMenu;
-    private static ITexture NewGame;
     
     private TextureRegion regionStatic;
     private Sprite spriteStatic;
@@ -196,8 +189,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
         	   , MainActivity.mainActivity
         	   , "main_menu/"
-        	   , "background.jpg");
-	textureBackground = storage.getTexture("background.jpg");
+        	   , "background.png");
+	textureBackground = storage.getTexture("background.png");
 	
 	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
      	   , MainActivity.mainActivity
@@ -272,7 +265,12 @@ public class MainActivity extends SimpleBaseGameActivity {
         			   , "arrow_left.png"
         			   , "arrow_right.png"
         			   , "arrow_up.png"
-        			   , "arrow_down.png");
+        			   , "arrow_down.png"
+        			   , "game_over_label.png"
+        			   , "pause_label.png"
+        			   , "pause_new_game.png"
+        			   , "pause_main_menu.png"
+        			   , "high_scores_label.png");
 		   
 
         	textureTitle = storage.getTexture("main_menu_title.png");
@@ -288,12 +286,17 @@ public class MainActivity extends SimpleBaseGameActivity {
         	textureArrowRight = storage.getTexture("arrow_right.png");
         	textureArrowUp = storage.getTexture("arrow_up.png");
         	textureArrowDown = storage.getTexture("arrow_down.png");
+        	texturePauseL = storage.getTexture("pause_label.png");
+        	textureGameOverL = storage.getTexture("game_over_label.png");
+        	textureHighScoresL = storage.getTexture("high_scores_label.png");
+        	textureMainMenu = storage.getTexture("pause_main_menu.png");
+        	textureNewGame = storage.getTexture("pause_new_game.png");
         	
         	/*storage.createAtlas( MainActivity.mainActivity.getTextureManager()
         	           	   , MainActivity.mainActivity
         	           	   , "main_menu/"
-        	           	   , "background.jpg");
-        	textureBackground = storage.getTexture("background.jpg");*/
+        	           	   , "background.png");
+        	textureBackground = storage.getTexture("background.png");*/
         	
         	storage.createAtlas( MainActivity.mainActivity.getTextureManager()
         		 	   , MainActivity.mainActivity
@@ -363,8 +366,14 @@ public class MainActivity extends SimpleBaseGameActivity {
                 } catch (final IOException e) {
             		Debug.e("Error", e);
                 }	
+                
+                loadSettings();
+                if(isMute) {
+                    muteSounds();
+                }
         	
-        	creditsCaps = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
+                FontFactory.setAssetBasePath("font/");
+                creditsCaps = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
         						, 2048
         						, 1024
         						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -385,18 +394,24 @@ public class MainActivity extends SimpleBaseGameActivity {
         						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         	
         	scoresAtlas = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
-        						, 2048
         						, 1024
+        						, 256
         						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         	
-        	tCaptions = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				   , creditsCaps
-        				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				   , 100
-        				   , true
-        				   , new Color(1.0f, 0.6f, 0.0f)
-        				   , 2
-        				   , new Color(1.0f, 0.2f, 0.0f));
+        	scoresToastAtlas = new BitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
+			, 256
+			, 256
+			, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        	
+        	tCaptions = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
+        		,creditsCaps 
+        		, MainActivity.mainActivity.getAssets()
+        		, "showg.ttf"
+        		, (float)90
+        		, true
+        		, Color.YELLOW_ARGB_PACKED_INT
+        		, 2
+        		, Color.BLACK_ARGB_PACKED_INT);
         	
         	tScoresSceneCaptions = new StrokeFont	(MainActivity.mainActivity.getFontManager()
         						, scoresSceneCaps
@@ -407,113 +422,43 @@ public class MainActivity extends SimpleBaseGameActivity {
         						, 2
         						, new Color(1.0f, 0.2f, 0.0f));
         	
-        	tScoresSceneScores = new StrokeFont(	MainActivity.mainActivity.getFontManager()
+        	tScoresSceneScores = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
         						, scoresSceneScores
-        						, Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        						, MainActivity.mainActivity.getAssets()
+        						, "showg.ttf"
         						, 120
         						, true
-        						, new Color(1.0f, 1.0f, 1.0f)
+        						, Color.WHITE_ARGB_PACKED_INT
         						, 2
-        						, new Color(1.0f, 0.2f, 0.0f));
+        						, Color.RED_ARGB_PACKED_INT);
 
-        	tScores = new StrokeFont(MainActivity.mainActivity.getFontManager()
-                        		 , scoresAtlas
-                        		 , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                        		 , 100
-                        		 , true
-                        		 , new Color(1.0f, 1.0f, 1.0f)
-                        		 , 2
-                        		 , new Color(1.0f, 0.2f, 0.0f));
+        	tScores = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
+        		,scoresAtlas 
+        		, MainActivity.mainActivity.getAssets()
+        		, "showg.ttf"
+        		, (float)100
+        		, true
+        		, Color.YELLOW_ARGB_PACKED_INT
+        		, 2
+        		, Color.BLACK_ARGB_PACKED_INT);
         	
-        	tDevNames = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				   , creditsNames
-        				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				   , 100
-        				   , true
-        				   , new Color(1.0f, 1.0f, 1.0f)
-        				   , 2
-        				   , new Color(1.0f, 0.2f, 0.0f));
+        	tDevNames = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
+			, creditsNames
+			, MainActivity.mainActivity.getAssets()
+			, "showg.ttf"
+			, 90
+			, true
+			, Color.WHITE_ARGB_PACKED_INT
+			, 2
+			, Color.RED_ARGB_PACKED_INT);
         	
-        	pauseLabel = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
-        						, 2048
-        						, 256
-        						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        	
-        	pauseResume = new BitmapTextureAtlas(	MainActivity.mainActivity.getTextureManager()
-        						, 512
-        						, 256
-        						, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        	
-        	tPause = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				   , pauseLabel
-        				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				   , 165
-        				   , true
-        				   , new Color(1.0f, 0.6f, 0.0f)
-        				   , 2
-        				   , new Color(1.0f, 0.2f, 0.0f));
-        	
-        	tResume = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				    , pauseResume
-        				    , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				    , 120
-        				    , true
-        				    , new Color(1.0f, 1.0f, 1.0f)
-        				    , 2
-        				    , new Color(1.0f, 0.2f, 0.0f));
-        	
-        	GameOver = new BitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
-        					  , 2048
-        					  , 256
-        					  , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        	
-        	MainMenu = new BitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
-        					  , 1024
-        					  , 256
-        					  , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        	
-        	NewGame = new BitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
-        					 , 1024
-        					 , 256
-        					 , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        	
-        	tGameOver = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				   , GameOver
-        				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				   , 165
-        				   , true
-        				   , new Color(1.0f, 0.6f, 0.0f)
-        				   , 2
-        				   , new Color(1.0f, 0.2f, 0.0f));
-        	
-        	tMainMenu = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				   , MainMenu
-        				   , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				   , 120
-        				   , true
-        				   , new Color(1.0f, 1.0f, 1.0f)
-        				   , 2
-        				   , new Color(1.0f, 0.2f, 0.0f));
-        	
-        	tNewGame = new StrokeFont(MainActivity.mainActivity.getFontManager()
-        				  , NewGame
-        				  , Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        				  , 120
-        				  , true
-        				  , new Color(1.0f, 1.0f, 1.0f)
-        				  , 2
-        				  , new Color(1.0f, 0.2f, 0.0f));
+      
         	
         	tScoresSceneCaptions.load();
         	tScoresSceneScores.load();
         	tDevNames.load();
         	tCaptions.load();
-        	tPause.load();
-        	tResume.load();
-        	tGameOver.load();
         	tScores.load();
-        	tMainMenu.load();
-        	tNewGame.load();
  
             }
  
@@ -547,7 +492,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	//������� �������� ����������
 	//MainActivity.mainActivity.getTextureManager().unloadTexture();
 	
-	mainScene.showMainMenuScene();
+	MainScene.showMainMenuScene();
 	
     }
     
@@ -609,11 +554,16 @@ public class MainActivity extends SimpleBaseGameActivity {
 		
 		return true;
 	    }
-	  
+	    
 	    if (mainScene != null && gameLoaded) {
 	      
 		mainScene.keyPressed(keyCode, event);
 		MainActivity.mainActivity.mClick.play();
+		return true;
+	    }
+	    if (mainScene!=null && MainScene.gameState==MainScene.GameState.SHOW_HINTS)
+	    {
+		mainScene.helpScene.unloadHelpSprite();
 		return true;
 	    }
 	return true;
@@ -632,7 +582,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	MainActivity.mainActivity.mStep.setVolume(0);
 	MainActivity.mainActivity.mDrop.setVolume(0);
 	MainActivity.mainActivity.mMagic.setVolume(0);
-	MainActivity.isMute = !MainActivity.isMute;
+	MainActivity.isMute = true;
     }
     
     public void unmuteSounds() {
@@ -647,7 +597,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	MainActivity.mainActivity.mStep.setVolume(1);
 	MainActivity.mainActivity.mDrop.setVolume(1);
 	MainActivity.mainActivity.mMagic.setVolume(1);
-	MainActivity.isMute = !MainActivity.isMute;
+	MainActivity.isMute = false;
     }
     
     @Override
@@ -701,6 +651,25 @@ public void saveProgress() {
 	}
     }
 
+public void saveSettings() {
+    
+    try {
+	ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("soundsets", 0));
+	oos.writeBoolean(isMute);
+	oos.flush();
+	oos.close();
+	Log.d("mute", "saved");
+    } catch(FileNotFoundException e) {
+
+	Log.d("mute", "FileNotFoundException");
+	e.printStackTrace();
+    } catch(IOException e) {
+
+	Log.d("mute", "IOException");
+	e.printStackTrace();
+    }
+}
+
 public void progressNotSaved() {
     
     gameSaved = false;
@@ -719,4 +688,16 @@ public Object[] load() throws IOException {
 	
 	return obj;
     }
+
+public void loadSettings() {
+    try {
+
+	ObjectInputStream ois = new ObjectInputStream(openFileInput("soundsets"));
+	isMute = (boolean)ois.readBoolean();
+	Log.d("mute", "OK");
+    } catch(IOException e) {
+	Log.d("mute", "IOException");
+	isMute = false;
+    }
+}
 }

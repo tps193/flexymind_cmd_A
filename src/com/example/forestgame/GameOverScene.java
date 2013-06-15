@@ -5,17 +5,22 @@ import javax.microedition.khronos.opengles.GL10;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 
 public class GameOverScene extends Scene {
     
     private static final float GAMEOVER_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 17 / 120;
     private static final float GAMEOVER_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 15 / 64;
-    private static final float MAINMENU_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 235 / 1024;
+    private static final float GAMEOVER_WIDTH = MainActivity.TEXTURE_WIDTH * 286 / 400;
+    private static final float GAMEOVER_HEIGHT = MainActivity.TEXTURE_HEIGHT * 12 / 128;
+    private static final float MAINMENU_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 222 / 1024;
     private static final float MAINMENU_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 26 / 64;
-    private static final float NEWGAME_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 260 / 1024;
+    private static final float MAINMENU_WIDTH = MainActivity.TEXTURE_WIDTH * 225 / 400;
+    private static final float MAINMENU_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
+    private static final float NEWGAME_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 227 / 1024;
     private static final float NEWGAME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 33 / 64;
+    private static final float NEWGAME_WIDTH = MainActivity.TEXTURE_WIDTH * 225 / 400;
+    private static final float NEWGAME_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
     
     private Sprite background = new Sprite( 0
             				, 0
@@ -24,17 +29,19 @@ public class GameOverScene extends Scene {
             				, MainActivity.mainActivity.textureBackground
             				, MainActivity.mainActivity.getVertexBufferObjectManager());
     
-    private Text gameover = new Text(	GAMEOVER_POSITION_LEFT
-					, GAMEOVER_POSITION_UP
-					, MainActivity.mainActivity.tGameOver
-					, "GAME OVER"
-					, MainActivity.mainActivity.getVertexBufferObjectManager());
+    private Sprite gameover = new Sprite( GAMEOVER_POSITION_LEFT
+	     , GAMEOVER_POSITION_UP
+	     , GAMEOVER_WIDTH
+	     , GAMEOVER_HEIGHT
+	     , MainActivity.mainActivity.textureGameOverL
+	     , MainActivity.mainActivity.getVertexBufferObjectManager());
 
-    private Text mainmenu = new Text(	MAINMENU_POSITION_LEFT
-					, MAINMENU_POSITION_UP
-					, MainActivity.mainActivity.tMainMenu
-					, "MAIN MENU"
-					, MainActivity.mainActivity.getVertexBufferObjectManager()) {
+    private Sprite mainmenu = new Sprite(	MAINMENU_POSITION_LEFT
+		      , MAINMENU_POSITION_UP
+		      , MAINMENU_WIDTH
+		      , MAINMENU_HEIGHT
+		      , MainActivity.mainActivity.textureMainMenu
+		      , MainActivity.mainActivity.getVertexBufferObjectManager()) {
     @Override
     public boolean onAreaTouched( TouchEvent pSceneTouchEvent
 	    			, float pTouchAreaLocalX
@@ -42,12 +49,31 @@ public class GameOverScene extends Scene {
 	
 	if (pSceneTouchEvent.isActionDown()) {
 	    
-	    this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+	    applyTouchEffects(mainmenu);
 	} else if (pSceneTouchEvent.isActionUp()) {
 	    
-	    this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+	    if (    (pTouchAreaLocalX > 0) 
+	                 && (pTouchAreaLocalX < MAINMENU_WIDTH)
+	                 && (pTouchAreaLocalY > 0)
+	                 && (pTouchAreaLocalY < MAINMENU_HEIGHT)) {
+	    
+	    applyUntouchEffects(mainmenu);
 	    MainActivity.mainActivity.mClick.play();
 	    mainMenuClick();
+	    
+	    } else {
+		applyUntouchEffects(mainmenu);
+	    }
+	    
+	} else if (pSceneTouchEvent.isActionMove()) {
+	    if (    !((pTouchAreaLocalX > 0) 
+	                 && (pTouchAreaLocalX < MAINMENU_WIDTH)
+	                 && (pTouchAreaLocalY > 0)
+	                 && (pTouchAreaLocalY < MAINMENU_HEIGHT))) {
+		applyUntouchEffects(mainmenu);
+	    } else {
+		applyTouchEffects(mainmenu);
+	    }
 	}
 	return true;
 	}
@@ -57,11 +83,12 @@ public class GameOverScene extends Scene {
 	MainScene.showMainMenuScene();
     }
 
-    private Text newgame = new Text(	NEWGAME_POSITION_LEFT
-	    				, NEWGAME_POSITION_UP
-	    				, MainActivity.mainActivity.tNewGame
-	    				, "NEW GAME"
-	    				, MainActivity.mainActivity.getVertexBufferObjectManager()) {
+    private Sprite newgame = new Sprite(NEWGAME_POSITION_LEFT
+		    , NEWGAME_POSITION_UP
+		    , NEWGAME_WIDTH
+		    , NEWGAME_HEIGHT
+		    , MainActivity.mainActivity.textureNewGame
+		    , MainActivity.mainActivity.getVertexBufferObjectManager()) {
 	@Override
 	public boolean onAreaTouched( TouchEvent pSceneTouchEvent
     			, float pTouchAreaLocalX
@@ -69,12 +96,31 @@ public class GameOverScene extends Scene {
 	    
 	    if (pSceneTouchEvent.isActionDown()) {
 		
-		this.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+		applyTouchEffects(newgame);
 	    } else if (pSceneTouchEvent.isActionUp()) {
 		
-		this.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+		if (    (pTouchAreaLocalX > 0) 
+	                 && (pTouchAreaLocalX < NEWGAME_WIDTH)
+	                 && (pTouchAreaLocalY > 0)
+	                 && (pTouchAreaLocalY < NEWGAME_HEIGHT)) {
+		
+		applyUntouchEffects(newgame);
 		MainActivity.mainActivity.mClick.play();
 		newGameClick();
+		
+		} else {
+			applyUntouchEffects(newgame);
+		    }
+		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < NEWGAME_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < NEWGAME_HEIGHT))) {
+			applyUntouchEffects(newgame);
+		    } else {
+			applyTouchEffects(newgame);
+		    }
 	    }
 	    return true;
 	}
@@ -101,8 +147,8 @@ public class GameOverScene extends Scene {
 	registerTouchArea(gameover);
 	registerTouchArea(mainmenu);
 	registerTouchArea(newgame);
-	//setTouchAreaBindingOnActionDownEnabled(true);
-	//setTouchAreaBindingOnActionMoveEnabled(true);
+	setTouchAreaBindingOnActionDownEnabled(true);
+	setTouchAreaBindingOnActionMoveEnabled(true);
 	
     }
     
@@ -119,5 +165,15 @@ public class GameOverScene extends Scene {
    	setVisible(false);
    	setIgnoreUpdate(true);
    	background.setAlpha(0.8f);
+    }
+    
+    private void applyTouchEffects(Sprite button) {
+	button.registerEntityModifier(MainActivity.TOUCH_SCALE_MODIFIER.deepCopy());
+	button.registerEntityModifier(MainActivity.TOUCH_ALPHA_MODIFIER.deepCopy());
+    }
+    
+    private void applyUntouchEffects(Sprite button) {
+	button.registerEntityModifier(MainActivity.UNTOUCH_SCALE_MODIFIER.deepCopy());
+	button.registerEntityModifier(MainActivity.UNTOUCH_ALPHA_MODIFIER.deepCopy());
     }
 }

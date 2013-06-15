@@ -19,9 +19,9 @@ public class MainMenuScene extends Scene {
     private static final float TITLE_HEIGHT = MainActivity.TEXTURE_HEIGHT / 4;
     
     private static final float BUTTON_PLAY_POSITION_LEFT = MainActivity.TEXTURE_WIDTH / 4;
-    private static final float BUTTON_PLAY_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 48 / 128;
+    private static final float BUTTON_PLAY_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 51 / 128;
     private static final float BUTTON_PLAY_WIDTH = MainActivity.TEXTURE_WIDTH * 2 / 4;
-    private static final float BUTTON_PLAY_HEIGHT = MainActivity.TEXTURE_HEIGHT * 12 / 128;
+    private static final float BUTTON_PLAY_HEIGHT = MainActivity.TEXTURE_HEIGHT * 17 / 256;
     
     private static final float BUTTON_RESUME_POSITION_LEFT =  MainActivity.TEXTURE_WIDTH * 125 / 400;
     private static final float BUTTON_RESUME_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 67 / 128;
@@ -44,17 +44,17 @@ public class MainMenuScene extends Scene {
     private static final float BUTTON_EXIT_HEIGHT = MainActivity.TEXTURE_HEIGHT * 9 / 128;
     
     public static final float MUTE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 500 / 625;
-    public static final float MUTE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1850 / 2000;
-    public static final float MUTE_WIDTH = MainActivity.TEXTURE_WIDTH * 36 / 250;
-    public static final float MUTE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 100 / 2000;
+    public static final float MUTE_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1796 / 2000;
+    public static final float MUTE_WIDTH = MainActivity.TEXTURE_WIDTH * 35 / 250;
+    public static final float MUTE_HEIGHT = MainActivity.TEXTURE_HEIGHT * 149 / 2000;
     
     public static final float MUTEON_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 548 / 625;
-    public static final float MUTEON_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1842 / 2000;
-    public static final float MUTEON_WIDTH = MainActivity.TEXTURE_WIDTH * 13 / 250;
-    public static final float MUTEON_HEIGHT = MainActivity.TEXTURE_HEIGHT * 116 / 2000;
+    public static final float MUTEON_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1800 / 2000;
+    public static final float MUTEON_WIDTH = MainActivity.TEXTURE_WIDTH * 15 / 250;
+    public static final float MUTEON_HEIGHT = MainActivity.TEXTURE_HEIGHT * 123 / 2000;
     
-    public static final float HELP_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 35 / 625;
-    public static final float HELP_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1798 / 2000;
+    public static final float HELP_POSITION_LEFT = MainActivity.TEXTURE_WIDTH* 40 / 625;
+    public static final float HELP_POSITION_UP = MainActivity.TEXTURE_HEIGHT * 1797 / 2000;
     public static final float HELP_WIDTH = MainActivity.TEXTURE_WIDTH * 30 / 250;
     public static final float HELP_HEIGHT = MainActivity.TEXTURE_HEIGHT * 160 / 2000;
 
@@ -169,6 +169,7 @@ public class MainMenuScene extends Scene {
 	private void helpIconCLick() {
 	
 	    MainActivity.mainActivity.mClick.play();
+	    MainScene.helpScene.loadHelpSprite();
 	    MainScene.showHelpScene();
 	      
 	}
@@ -363,6 +364,15 @@ public class MainMenuScene extends Scene {
 		    Log.d("ButtonExit", "touch");
 		    applyTouchEffects(buttonExit);
 		    
+		} else if (pSceneTouchEvent.isActionMove()) {
+		    if (    !((pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < BUTTON_EXIT_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < BUTTON_EXIT_HEIGHT))) {
+			applyUntouchEffects(buttonExit);
+		    } else {
+			applyTouchEffects(buttonExit);
+		    }
 		} else if (pSceneTouchEvent.isActionUp()) {
 		    
 		    if (    (pTouchAreaLocalX > 0) 
@@ -379,16 +389,7 @@ public class MainMenuScene extends Scene {
 			applyUntouchEffects(buttonExit);
 		    }
 		    
-		} else if (pSceneTouchEvent.isActionMove()) {
-		    if (    !((pTouchAreaLocalX > 0) 
-		                 && (pTouchAreaLocalX < BUTTON_EXIT_WIDTH)
-		                 && (pTouchAreaLocalY > 0)
-		                 && (pTouchAreaLocalY < BUTTON_EXIT_HEIGHT))) {
-			applyUntouchEffects(buttonExit);
-		    } else {
-			applyTouchEffects(buttonExit);
-		    }
-		}
+		} 
 		return true;
 	    }
 	};
@@ -420,22 +421,6 @@ public class MainMenuScene extends Scene {
 
 		    Log.d("MuteOff", "touch");
 		    applyTouchEffects(muteOff);
-
-		} else if (pSceneTouchEvent.isActionUp()) {
-		    
-		    if (    (pTouchAreaLocalX > 0) 
-		                 && (pTouchAreaLocalX < MUTE_WIDTH)
-		                 && (pTouchAreaLocalY > 0)
-		                 && (pTouchAreaLocalY < MUTE_HEIGHT)) {
-
-		    Log.d("MuteOff", "no touch");
-		    applyUntouchEffects(muteOff);
-		    muteIconCLick();
-		    
-		} else {
-			Log.d("MuteOff", "no touch outside");
-			applyUntouchEffects(muteOff);
-		    }
 		    
 		} else if (pSceneTouchEvent.isActionMove()) {
 		    if (    !((pTouchAreaLocalX > 0) 
@@ -445,7 +430,25 @@ public class MainMenuScene extends Scene {
 			applyUntouchEffects(muteOff);
 		    } else {
 			applyTouchEffects(muteOff);
+			
 		    }
+		    
+		} else if (pSceneTouchEvent.isActionUp()) {
+		    
+		    if (    (pTouchAreaLocalX > 0) 
+		                 && (pTouchAreaLocalX < MUTE_WIDTH)
+		                 && (pTouchAreaLocalY > 0)
+		                 && (pTouchAreaLocalY < MUTE_HEIGHT)) {
+
+		    Log.d("MuteOff", "no touch");
+		    applyUntouchEffects(muteOff);		    
+		    muteIconCLick();
+		    
+		} else {
+			Log.d("MuteOff", "no touch outside");
+			applyUntouchEffects(muteOff);
+		    }	
+
 		    
 		}
 		return true;
@@ -466,17 +469,26 @@ public class MainMenuScene extends Scene {
 		
 		MainActivity.mainActivity.muteSounds();
 		muteOn.setVisible(false);
-		
+		MainActivity.mainActivity.saveSettings();
 	    } else {
 		
 		MainActivity.mainActivity.unmuteSounds();
 		muteOn.setVisible(true);
+		MainActivity.mainActivity.saveSettings();
 	    }
 	}
 	
+	/*private void updateUntouchEffect(float tt, final Sprite sp) {
+
+	    registerUpdateHandler(new TimerHandler(tt, false, new ITimerCallback() {
+		    @Override
+		    public void onTimePassed(TimerHandler pTimerHandler) {
+			applyUntouchEffects(sp);		
+		    }}));
+	}*/
+	
     
     public MainMenuScene() {
-	
 	setBackgroundEnabled(true);
 	setBackground(new Background(MainActivity.BACKGROUND_COLOR));
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
@@ -500,7 +512,7 @@ public class MainMenuScene extends Scene {
 	registerTouchArea(muteOff);
 	registerTouchArea(helpIcon);
 	setTouchAreaBindingOnActionDownEnabled(true);
-	setTouchAreaBindingOnActionMoveEnabled(true);
+	setTouchAreaBindingOnActionMoveEnabled(true);	
 	
 	MainActivity.mainActivity.mMusic.play();
     }

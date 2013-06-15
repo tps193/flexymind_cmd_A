@@ -18,12 +18,20 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.FontFactory;
+<<<<<<< HEAD
+=======
+import org.andengine.opengl.font.StrokeFont;
+>>>>>>> dev_new_helpscene
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.modifier.ease.EaseLinear;
+import org.andengine.util.modifier.ease.EaseQuartIn;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
 import android.graphics.Color;
+<<<<<<< HEAD
 import android.graphics.Typeface;
+=======
+>>>>>>> dev_new_helpscene
 import android.util.Log;
 
 import com.example.forestgame.element.Element;
@@ -58,18 +66,34 @@ public class SlotMatrix {
     float animationDurationText = 0.8f;
     float fromAlpha = 1.0f;
     float toAlpha = 0.3f;
+    float toAlphaScores = 0.0f;
     IEaseFunction easeFunction = EaseLinear.getInstance();
+    IEaseFunction easeFunctionAlpha = EaseQuartIn.getInstance();
     TimerHandler spriteTimerHandler;
     float disappearAlpha = 0.0f;
     float appearAlpha = 1.0f;
     
     private int currentScore;
+<<<<<<< HEAD
     
     private static final Random randomGenerator = new Random();
+=======
+>>>>>>> dev_new_helpscene
     
+    private static final Random randomGenerator = new Random();
+    StrokeFont font = FontFactory.createStrokeFromAsset(MainActivity.mainActivity.getFontManager()
+		,MainActivity.scoresToastAtlas 
+		, MainActivity.mainActivity.getAssets()
+		, "showg.ttf"
+		, SLOT_WIDTH / 2
+		, true
+		, Color.rgb(255, 255, 0)
+		, 4
+		, Color.rgb(255, 143, 0));
+   
     
     public SlotMatrix(GameScene scene) {
-	
+	 font.load();
 	gameScene = scene;
 	matrix = new Slot[ROWS][COLUMNS];
 	init();
@@ -127,31 +151,19 @@ public class SlotMatrix {
 	currentScore = 0;
 	checkSimilarElements();
 	score = score + currentScore;
+<<<<<<< HEAD
 	showScoreToast(lastEditedSlotRow, lastEditedSlotColumn, currentScore);
 	moveForesters();
 	appearFlyingSquirrels();
 	
+=======
+>>>>>>> dev_new_helpscene
 	gameScene.setScores(getScore());
-	filledSlots = 0;
-	for (int i = 0; i < ROWS; i++) {
-	    
-	    for (int j = 0; j < COLUMNS; j++) {
-		
-		if (!isSlotEmpty(i, j)) {
-		    
-		    filledSlots++;
-		}
-	    }
-	}
-	if (filledSlots == ROWS*COLUMNS) {
-	    
-	    Log.d("GAME", "OVER");
-	    MainScene.showGameOverScene();
-	} else {
-	    
-	    TableOfElements.renewAvaliableRandomElements(score);
-	}
+	showScoreToast(lastEditedSlotRow, lastEditedSlotColumn, currentScore);
+	moveForesters();
+	appearFlyingSquirrels();
 	
+				
 	MainActivity.mainActivity.getEngine().registerUpdateHandler(new TimerHandler(animationDuration
 		, false
 		, new ITimerCallback() {
@@ -167,16 +179,40 @@ public class SlotMatrix {
 			    lastEditedSlotColumn = s.getColumn();
 			    currentScore = 0;
 			    checkSimilarElements();
+<<<<<<< HEAD
 			    score = score + currentScore;
 			    showScoreToast(lastEditedSlotRow, lastEditedSlotColumn, currentScore);
 			    
+=======
+			    
+			    score = score + currentScore;
+			    gameScene.setScores(getScore());
+			    showScoreToast(lastEditedSlotRow, lastEditedSlotColumn, currentScore);
+>>>>>>> dev_new_helpscene
 			}
-			
 			viewSlots();
+			filledSlots = 0;
+			    for (int i = 0; i < ROWS; i++) {
+				    
+				for (int j = 0; j < COLUMNS; j++) {
+					
+				    if (!isSlotEmpty(i, j)) {
+					    
+					filledSlots++;
+				    }
+				}
+			    }
+			    if (filledSlots == ROWS*COLUMNS) {
+				    
+				Log.d("GAME", "OVER");
+				MainScene.showGameOverScene();
+			    } else {
+				   
+				TableOfElements.renewAvaliableRandomElements(score);
+			    }
 			
 		    }
 		}));
-	
     }
     
     public void init() {
@@ -400,8 +436,10 @@ public class SlotMatrix {
     private void addMagicStickToSlot(int row, int column) {
 	
 	Element element = matrix[row][column].getElement();
-	score = score + TableOfElements.getScores(element);
-		
+	currentScore = TableOfElements.getScores(element);
+	score = score + currentScore;
+	gameScene.setScores(getScore());
+	showScoreToast(row, column, currentScore);
 	if (element.getName().equals("FORESTER")) {
 	    
 	    catchForester(row, column);
@@ -456,7 +494,11 @@ public class SlotMatrix {
 	if (row != 0) {
 	    if ( !matrix[row-1][column].isEmpty() ) {
 		if (!matrix[row-1][column].getElement().getName().equals("FORESTER")  
+<<<<<<< HEAD
 		|| (!matrix[row-1][column].getElement().getName().equals("FLYING_SQUIRREL"))) {
+=======
+		&& (!matrix[row-1][column].getElement().getName().equals("FLYING_SQUIRREL"))) {
+>>>>>>> dev_new_helpscene
 		    
 		    slots.add(matrix[row-1][column]); 
 		}
@@ -465,7 +507,11 @@ public class SlotMatrix {
 	if (row != ROWS-1) {
 	    if ( !matrix[row+1][column].isEmpty() ) {
 		if (!matrix[row+1][column].getElement().getName().equals("FORESTER")  
+<<<<<<< HEAD
 		|| (!matrix[row+1][column].getElement().getName().equals("FLYING_SQUIRREL"))) {
+=======
+		&& (!matrix[row+1][column].getElement().getName().equals("FLYING_SQUIRREL"))) {
+>>>>>>> dev_new_helpscene
 			    
 		    slots.add(matrix[row+1][column]); 
 		}
@@ -474,7 +520,11 @@ public class SlotMatrix {
 	if (column != 0) {
 	    if ( !matrix[row][column-1].isEmpty() ) {
 		if (!matrix[row][column-1].getElement().getName().equals("FORESTER")  
+<<<<<<< HEAD
 		|| (!matrix[row][column-1].getElement().getName().equals("FLYING_SQUIRREL"))) {
+=======
+		&& (!matrix[row][column-1].getElement().getName().equals("FLYING_SQUIRREL"))) {
+>>>>>>> dev_new_helpscene
 			    
 		    slots.add(matrix[row][column-1]); 
 		}
@@ -483,7 +533,11 @@ public class SlotMatrix {
 	if (column != COLUMNS-1) {
 	    if ( !matrix[row][column+1].isEmpty() ) {
 		if (!matrix[row][column+1].getElement().getName().equals("FORESTER")  
+<<<<<<< HEAD
 		|| (!matrix[row][column+1].getElement().getName().equals("FLYING_SQUIRREL"))) {
+=======
+		&& (!matrix[row][column+1].getElement().getName().equals("FLYING_SQUIRREL"))) {
+>>>>>>> dev_new_helpscene
 			    
 		    slots.add(matrix[row][column+1]); 
 		}
@@ -499,8 +553,13 @@ public class SlotMatrix {
 	} else {
 	    
 	    addToSlot( new Element("POND"), row, column);
+<<<<<<< HEAD
 	}*/
 	addToSlot(gameScene.getBestElementForDropAdd(), row, column);
+=======
+	}
+	//addToSlot(gameScene.getBestElementForDropAdd(), row, column);
+>>>>>>> dev_new_helpscene
     }
     
     public void filterSlotsLinkedList(LinkedList<Slot> slots) {
@@ -713,6 +772,10 @@ public class SlotMatrix {
 	    if (!slotWF.getHasAlreadyMoved()) {
 		
 		transformForesterIntoNextLevel(slotWF.getRow(), slotWF.getColumn());
+		currentScore = TableOfElements.getScores(new Element("FORESTER"));
+		score = score + currentScore;
+		gameScene.setScores(getScore());
+		showScoreToast(slotWF.getRow(), slotWF.getColumn(), currentScore);
 	    }
 	}	
 	
@@ -736,7 +799,6 @@ public class SlotMatrix {
 	graphicalMoving(row, column, row, column);
 	lastEditedSlots.add(new SlotPosition(row, column));
 	MainActivity.mainActivity.mSound.play();
-	
     }
     
     private boolean foresterTriesToMove(SlotWithForester slotWF) {
@@ -1107,19 +1169,34 @@ public class SlotMatrix {
 	if (showScore != 0){
 	    if (showScore < 100)
 		offset += SLOT_WIDTH/4;
+<<<<<<< HEAD
 	Font font = FontFactory.create( MainActivity.mainActivity.getFontManager(), 
+=======
+	/*Font font = FontFactory.create( MainActivity.mainActivity.getFontManager(), 
+>>>>>>> dev_new_helpscene
 					MainActivity.mainActivity.getTextureManager(), 
 					256, 
 					256, 
 					Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD), 
 					SLOT_WIDTH / 2,
 					true, 
+<<<<<<< HEAD
 					Color.rgb(102, 51, 0));
 	final Text text = new Text(0,0,font,Integer.toString(showScore), 10, MainActivity.mainActivity.getVertexBufferObjectManager());
 	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDuration
 		    , fromAlpha
 		    , toAlpha
 		    , easeFunction)
+=======
+					Color.rgb(255, 110, 0));*/
+	
+	
+	final Text text = new Text(0,0,font,Integer.toString(showScore), 10, MainActivity.mainActivity.getVertexBufferObjectManager());
+	entityModifier = new ParallelEntityModifier(new AlphaModifier(animationDurationText
+		    , fromAlpha
+		    , toAlphaScores
+		    , easeFunctionAlpha)
+>>>>>>> dev_new_helpscene
 
 			, new MoveModifier(animationDurationText
 	  	   , getSlotPositionLeft(col) + offset
@@ -1128,7 +1205,11 @@ public class SlotMatrix {
 	  	   , getSlotPositionUp(row-1) //- SLOT_HEIGHT/2
 	  	   , easeFunction));
 				
+<<<<<<< HEAD
 	font.load();
+=======
+	
+>>>>>>> dev_new_helpscene
 	text.setZIndex(1000);
 	text.sortChildren();
 	gameScene.attachChild(text);
