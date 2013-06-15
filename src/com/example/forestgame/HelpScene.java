@@ -1,6 +1,10 @@
 package com.example.forestgame;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
@@ -14,6 +18,9 @@ import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtla
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.bitmap.BitmapTextureFormat;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.util.modifier.ease.EaseLinear;
+import org.andengine.util.modifier.ease.IEaseFunction;
+
 
 
 
@@ -25,6 +32,10 @@ public class HelpScene extends Scene {
     private int currentPage;
     private float firstTouchPointX;
     private float touchPointX;
+    private final float ANIMATION_DURATION = 0.35f;
+    IEaseFunction easeFunction = EaseLinear.getInstance();
+    TimerHandler spriteTimerHandler;
+    private static int MIN_DELTA;
        
     
    
@@ -50,6 +61,11 @@ public class HelpScene extends Scene {
 	background.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER.deepCopy());
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
 	this.buildHelpSprite();
+	if (MainActivity.mainActivity.hasLargeScreen()) {
+	    MIN_DELTA = 100;
+	} else {
+	    MIN_DELTA = 200;
+	}
 	
     }
     
@@ -74,7 +90,7 @@ public class HelpScene extends Scene {
     }
     
     private void buildHelpSprite() {
-	currentPage = 0;
+	
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("help_scene/");
 	for(int i = 0; i < HELP_ATLAS_COUNT; i++) {
 	    
@@ -86,9 +102,9 @@ public class HelpScene extends Scene {
 		   							      , TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	    
 	    helpSpriteArray = BitmapTextureAtlasTextureRegionFactory
-			.createFromAsset( atlasArray[i]
-				, MainActivity.mainActivity
-				, "helpSprite" + i + ".png");
+				.createFromAsset( atlasArray[i]
+					, MainActivity.mainActivity
+					, "helpSprite" + i + ".png");
 	   
 	 
 	    helpSprite[i] = new Sprite( (i-currentPage)*HELP_SPRITE_WIDTH
@@ -135,7 +151,7 @@ public class HelpScene extends Scene {
     
     
    
-    protected void helpSpriteIsActionMove(TouchEvent pSceneTouchEvent) {
+    private void helpSpriteIsActionMove(TouchEvent pSceneTouchEvent) {
 	
 	touchPointX = pSceneTouchEvent.getX();
 	if (firstTouchPointX < 0) {
@@ -154,24 +170,31 @@ public class HelpScene extends Scene {
 	
     }
 
-    protected void helpSpriteIsActionUp() {
+    private void helpSpriteIsActionUp() {
 	
-	float deltaX = touchPointX - firstTouchPointX;
-	if ((deltaX < 0) && (currentPage != HELP_ATLAS_COUNT-1) 
-		|| ((deltaX > 0) && (currentPage != 0))) {
-	    
-	    	if (deltaX > 0) {
-		    
-		    currentPage--;
-		} else {
-		    
-		    currentPage++;
-		}
+	if (Math.abs(firstTouchPointX+1) < 0.0001) { 
+	    return;
 	}
+	float deltaX = touchPointX - firstTouchPointX;
+	if (Math.abs(deltaX) > MIN_DELTA) {
+	    
+	    if ((deltaX < 0) && (currentPage != HELP_ATLAS_COUNT-1) 
+			|| ((deltaX > 0) && (currentPage != 0))) {
+		    
+		    	if (deltaX > 0) {
+			    
+			    currentPage--;
+			} else {
+			    
+			    currentPage++;
+			}
+	    }
+	}
+	graphicalMoving();
 	showSpritesAt(0);
     }
 
-    protected void helpSpriteIsActionDown() {
+    private void helpSpriteIsActionDown() {
 	
 	firstTouchPointX = -1;
 	
@@ -198,7 +221,45 @@ public class HelpScene extends Scene {
 	for (int i = 0; i < helpSprite.length; i++) {
 	    
 	    Sprite sprite = helpSprite[i];
+	    registerTouchArea(sprite);
 	    sprite.setPosition((i-currentPage)*HELP_SPRITE_WIDTH + touchPX, 0);
+	}
+    }
+    
+    private float getAnimationDuration() {
+	
+	return ANIMATION_DURATION*(HELP_SPRITE_WIDTH - Math.abs(touchPointX - firstTouchPointX))/HELP_SPRITE_WIDTH;
+    }
+    
+    private void graphicalMoving() {
+	
+	for (int i = 0; i < helpSprite.length; i++) {
+	    
+	    Sprite sprite = helpSprite[i];
+	    unregisterTouchArea(sprite);
+	    MoveModifier moveModifier =  new MoveModifier(getAnimationDuration()
+	  	   					, sprite.getX()
+	  	   					, (i - currentPage)*HELP_SPRITE_WIDTH
+	  	   					, 0
+	  	   					, 0
+	  	   					, easeFunction);
+	    
+	    sprite.registerEntityModifier(moveModifier);
+
+	    MainActivity.mainActivity.getEngine().registerUpdateHandler(
+		    		spriteTimerHandler = new TimerHandler(ANIMATION_DURATION
+		    		, false
+		    		, new ITimerCallback() {
+
+		    		    @Override
+		    		    public void onTimePassed(TimerHandler pTimerHandler) {
+		    			// TODO Auto-generated method stub
+		    			showSpritesAt(0);
+		    			
+		    			
+		    		    }
+		    		}));
+	
 	}
     }
 }
