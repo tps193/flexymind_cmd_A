@@ -1,12 +1,6 @@
 package com.example.forestgame;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.microedition.khronos.opengles.GL10;
-
-import org.andengine.engine.camera.hud.HUD;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
@@ -21,108 +15,29 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.bitmap.BitmapTextureFormat;
 import org.andengine.opengl.texture.region.TextureRegion;
 
-import android.util.Log;
 
-import com.example.forestgame.element.Element;
-import com.example.forestgame.element.TableOfElements;
 
 public class HelpScene extends Scene {
     
     private static final int HELP_ATLAS_COUNT = 7;
-    private static final float ARROW_LEFT_POSITION_LEFT = MainActivity.DISPLAY_WIDTH * 10 / 2000;
-    private static final float ARROW_LEFT_POSITION_UP = MainActivity.DISPLAY_HEIGHT * 900 / 2000;
-    private static final float ARROW_LEFT_WIDTH = MainActivity.DISPLAY_WIDTH * 100 / 2000;
-    private static final float ARROW_LEFT_HEIGHT = MainActivity.DISPLAY_HEIGHT * 200 / 2000;
+    private static final float HELP_SPRITE_WIDTH = MainActivity.TEXTURE_WIDTH;
+    private static final float HELP_SPRITE_HEIGHT = MainActivity.TEXTURE_HEIGHT;
+    private int currentPage;
+    private float firstTouchPointX;
+    private float touchPointX;
+       
     
-    private static final float ARROW_RIGHT_POSITION_LEFT = MainActivity.DISPLAY_WIDTH * 1890 / 2000;
-    private static final float ARROW_RIGHT_POSITION_UP = MainActivity.DISPLAY_HEIGHT * 900 / 2000;
-    private static final float ARROW_RIGHT_WIDTH = MainActivity.DISPLAY_WIDTH * 100 / 2000;
-    private static final float ARROW_RIGHT_HEIGHT = MainActivity.DISPLAY_HEIGHT * 200 / 2000;
-    
-    private static final float ARROW_UP_POSITION_LEFT = MainActivity.DISPLAY_WIDTH * 900 / 2000;
-    private static final float ARROW_UP_POSITION_UP = MainActivity.DISPLAY_HEIGHT * 10 / 2000;
-    private static final float ARROW_UP_WIDTH = MainActivity.DISPLAY_WIDTH * 400 / 2000;
-    private static final float ARROW_UP_HEIGHT = MainActivity.DISPLAY_HEIGHT * 50 / 2000;
-    
-    private static final float ARROW_DOWN_POSITION_LEFT = MainActivity.DISPLAY_WIDTH * 900 / 2000;
-    private static final float ARROW_DOWN_POSITION_UP = MainActivity.DISPLAY_HEIGHT * 1940 / 2000;
-    private static final float ARROW_DOWN_WIDTH = MainActivity.DISPLAY_WIDTH * 400 / 2000;
-    private static final float ARROW_DOWN_HEIGHT = MainActivity.DISPLAY_HEIGHT * 50 / 2000;
-
-    private static final float RECTANGLE_POSITION_LEFT = MainActivity.TEXTURE_WIDTH * 200 / 2000;
-    private static final float RECTANGLE_POSITION_UP = MainActivity.TEXTURE_WIDTH * 200 / 2000;
-    private static final float RECTANGLE_WIDTH = MainActivity.TEXTURE_WIDTH * 1600 / 2000;
-    private static final float RECTANGLE_HEIGHT = MainActivity.TEXTURE_WIDTH * 500 / 2000;
-    
-    private static final float RECTANGLES_INTERVAL = RECTANGLE_HEIGHT + MainActivity.TEXTURE_WIDTH * 20 / 2000;
-    
-    private static final float ARROW_POSITION_LEFT = RECTANGLE_POSITION_LEFT + MainActivity.TEXTURE_HEIGHT * 526 /2000;
-    private static final float ARROW_POSITION_UP = RECTANGLE_POSITION_UP + MainActivity.TEXTURE_HEIGHT * 100 /2000;
-    private static final float ARROW_WIDTH = MainActivity.TEXTURE_WIDTH * 256 / 2000;
-    private static final float ARROW_HEIGHT = MainActivity.TEXTURE_HEIGHT * 100 / 2000;
-    
-    private static final float ELEMENT_MARGIN_LEFT = MainActivity.TEXTURE_WIDTH * 80 / 2000;
-    private static final float ELEMENT_MARGIN_TOP = MainActivity.TEXTURE_HEIGHT * 50 / 2000;
-    
-    private static final float ELEMENT_WIDTH = MainActivity.TEXTURE_WIDTH * 325 / 2000;
-    private static final float ELEMENT_HEIGHT = MainActivity.TEXTURE_HEIGHT * 200 / 2000;    
-    
-    private static final float SECOND_ELEMENT_DELTA_X = MainActivity.TEXTURE_WIDTH * 200 / 2000;
-    private static final float SECOND_ELEMENT_DELTA_Y = MainActivity.TEXTURE_WIDTH * 100 / 2000;
-    
-    private static final float THIRD_ELEMENT_DELTA_X = MainActivity.TEXTURE_WIDTH * 200 / 2000;
-    private static final float THIRD_ELEMENT_DELTA_Y = MainActivity.TEXTURE_WIDTH * (-200) / 2000;
-    
-    private static final float FIRST_ELEMENT_LEFT = RECTANGLE_POSITION_LEFT + ELEMENT_MARGIN_LEFT;
-    private static final float FIRST_ELEMENT_UP = RECTANGLE_POSITION_UP + ELEMENT_MARGIN_TOP;
-    
-    private static final float SECOND_ELEMENT_LEFT = FIRST_ELEMENT_LEFT + SECOND_ELEMENT_DELTA_X;
-    private static final float SECOND_ELEMENT_UP = FIRST_ELEMENT_UP + SECOND_ELEMENT_DELTA_Y;
-    
-    private static final float THIRD_ELEMENT_LEFT = SECOND_ELEMENT_LEFT + THIRD_ELEMENT_DELTA_X;
-    private static final float THIRD_ELEMENT_UP = SECOND_ELEMENT_UP + THIRD_ELEMENT_DELTA_Y;
-    
-    private static final float NEXT_ELEMENT_LEFT = RECTANGLE_POSITION_LEFT + MainActivity.TEXTURE_HEIGHT * 716 /2000;
-    private static final float NEXT_ELEMENT_UP = RECTANGLE_POSITION_UP + MainActivity.TEXTURE_HEIGHT * 50 /2000;
-    
-    
-    /////////////
-    private static final float ARROW_DELTA_LEFT = MainActivity.TEXTURE_HEIGHT * 526 /2000;
-    private static final float ARROW_DELTA_UP = MainActivity.TEXTURE_HEIGHT * 100 /2000;
-    
-    private static final float SECOND_DELTA_LEFT = ELEMENT_MARGIN_LEFT + SECOND_ELEMENT_DELTA_X;
-    private static final float SECOND_DELTA_UP = ELEMENT_MARGIN_TOP + SECOND_ELEMENT_DELTA_Y;
-    
-    private static final float THIRD_DELTA_LEFT = SECOND_DELTA_LEFT + THIRD_ELEMENT_DELTA_X;
-    private static final float THIRD_DELTA_UP = SECOND_DELTA_UP + THIRD_ELEMENT_DELTA_Y;
-    
-    private static final float NEXT_DELTA_LEFT = MainActivity.TEXTURE_HEIGHT * 716 /2000;
-    private static final float NEXT_DELTA_UP = MainActivity.TEXTURE_HEIGHT * 50 /2000;
-    ////////////
-    private static final int CARD_ON_LIST = 5;
-    private static final int LIST_COUNT[] = {1, 0, 0, 0};
-    private static final int ROOT_COUNT = 3;
-    private static final int SPECIAL_ROOT = 3;
-    private int listNumber = 0;
-    private int rootNumber = 0;
-    private Element el;
-    private static final String FIRST_ELEMENT_OF_ROOT[] = { "GRASS"
-    							  , "HUT"
-    							  , "POND"
-    };
-    
-    ////////////
-    
+   
     private Sprite helpSprite[]=new Sprite[HELP_ATLAS_COUNT];
     private BuildableBitmapTextureAtlas atlasArray[]=new BuildableBitmapTextureAtlas[HELP_ATLAS_COUNT];
 
-   private TextureRegion helpSpriteArray;
-   private int currentScreen;
+    private TextureRegion helpSpriteArray;
+    
    
     private Sprite background = new Sprite( 0
             				, 0
-            				, MainActivity.TEXTURE_WIDTH
-            				, MainActivity.TEXTURE_HEIGHT
+            				, HELP_SPRITE_WIDTH
+            				, HELP_SPRITE_HEIGHT
             				, MainActivity.mainActivity.textureBackground
             				, MainActivity.mainActivity.getVertexBufferObjectManager());
     
@@ -134,13 +49,14 @@ public class HelpScene extends Scene {
 	attachChild(background);
 	background.registerEntityModifier(MainActivity.SHOW_ALPHA_MODIFIER.deepCopy());
 	background.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_COLOR);
-//	currentScreen = 0;
 	this.buildHelpSprite();
 	
     }
     
     public void show() {
 	
+	currentPage = 0;
+	showSpritesAt(0);
 	setVisible(true);
 	setIgnoreUpdate(false);
 	setVisible(true);
@@ -158,11 +74,12 @@ public class HelpScene extends Scene {
     }
     
     private void buildHelpSprite() {
+	currentPage = 0;
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("help_scene/");
 	for(int i = 0; i < HELP_ATLAS_COUNT; i++) {
 	    
 	    
-	   atlasArray[i] = new BuildableBitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
+	    atlasArray[i] = new BuildableBitmapTextureAtlas(MainActivity.mainActivity.getTextureManager()
 		   							      , 512
 		   							      , 1024
 		   							      , BitmapTextureFormat.RGBA_8888
@@ -174,27 +91,92 @@ public class HelpScene extends Scene {
 				, "helpSprite" + i + ".png");
 	   
 	 
-	    helpSprite[i] = new Sprite( i*MainActivity.TEXTURE_WIDTH
-		     , 0
-		     , MainActivity.TEXTURE_WIDTH
-		     , MainActivity.TEXTURE_HEIGHT
-		     , helpSpriteArray
-		     , MainActivity.mainActivity.getVertexBufferObjectManager());
+	    helpSprite[i] = new Sprite( (i-currentPage)*HELP_SPRITE_WIDTH
+		     			, 0
+		     			, HELP_SPRITE_WIDTH
+		     			, HELP_SPRITE_HEIGHT
+		     			, helpSpriteArray
+		     			, MainActivity.mainActivity.getVertexBufferObjectManager()) {
+		
+		public boolean onAreaTouched(TouchEvent pSceneTouchEvent
+	    		     			, float pTouchAreaLocalX
+	    		     			, float pTouchAreaLocalY) {
+
+		    if (pSceneTouchEvent.isActionDown()) {
+	
+			helpSpriteIsActionDown();
+	    
+		    } else if (pSceneTouchEvent.isActionUp()) {
+	
+			helpSpriteIsActionUp();
+	
+		    } else if (pSceneTouchEvent.isActionMove()) {
+	    
+			helpSpriteIsActionMove(pSceneTouchEvent);
+	
+		    }
+		    return true;
+		}
+	    };
 	    try {
-	 		atlasArray[i].build( new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource
-	 			   , BitmapTextureAtlas>(0, 1, 1));
-	 	    } catch (TextureAtlasBuilderException e) {
-	 		// TODO Auto-generated catch block
-	 		e.printStackTrace();
-	 	    }
+	    	atlasArray[i].build( new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource
+	    				, BitmapTextureAtlas>(0, 1, 1));
+	 	} catch (TextureAtlasBuilderException e) {
+	 	    // TODO Auto-generated catch block
+	 	    e.printStackTrace();
+	 	}   			    	
+	    
 	    this.attachChild(helpSprite[i]);
+	    this.registerTouchArea(helpSprite[i]);
 	
    
-    }
+	}
     } 
     
     
    
+    protected void helpSpriteIsActionMove(TouchEvent pSceneTouchEvent) {
+	
+	touchPointX = pSceneTouchEvent.getX();
+	if (firstTouchPointX < 0) {
+	    
+	    firstTouchPointX = touchPointX;
+	}
+	
+	float deltaX = touchPointX - firstTouchPointX;
+	if ((deltaX < 0) && (currentPage != HELP_ATLAS_COUNT-1) 
+		|| ((deltaX > 0) && (currentPage != 0))) {
+	    
+		showSpritesAt(deltaX);
+
+	}
+	
+	
+    }
+
+    protected void helpSpriteIsActionUp() {
+	
+	float deltaX = touchPointX - firstTouchPointX;
+	if ((deltaX < 0) && (currentPage != HELP_ATLAS_COUNT-1) 
+		|| ((deltaX > 0) && (currentPage != 0))) {
+	    
+	    	if (deltaX > 0) {
+		    
+		    currentPage--;
+		} else {
+		    
+		    currentPage++;
+		}
+	}
+	showSpritesAt(0);
+    }
+
+    protected void helpSpriteIsActionDown() {
+	
+	firstTouchPointX = -1;
+	
+    }
+
     public void loadHelpSprite() {
 	
 	for(int i = 0; i < HELP_ATLAS_COUNT; i++) {
@@ -208,6 +190,15 @@ public class HelpScene extends Scene {
 	for(int i = 0; i < HELP_ATLAS_COUNT; i++) {
 	    
 	    atlasArray[i].unload();
+	}
+    }
+     
+    private void showSpritesAt(float touchPX) {
+	
+	for (int i = 0; i < helpSprite.length; i++) {
+	    
+	    Sprite sprite = helpSprite[i];
+	    sprite.setPosition((i-currentPage)*HELP_SPRITE_WIDTH + touchPX, 0);
 	}
     }
 }

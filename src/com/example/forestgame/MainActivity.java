@@ -4,9 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import javax.microedition.khronos.opengles.GL10;
-
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.Sound;
@@ -32,14 +30,11 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
-
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
-
-import com.example.forestgame.MainScene.GameState;
 import com.example.forestgame.altasstorage.AtlasStorage;
 
 public class MainActivity extends SimpleBaseGameActivity {
