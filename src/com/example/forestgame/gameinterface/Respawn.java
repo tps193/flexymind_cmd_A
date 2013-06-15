@@ -111,7 +111,7 @@ public class Respawn extends GameSlot {
 	Log.d("resp", Integer.toString(row));
 	Log.d("resp", Integer.toString(column));
         gameScene.detachChild(gameScene.getBacklight());
-	
+        
 	
 	if (column == SlotMatrix.getPrisonPlaceColumn() && row  == SlotMatrix.getPrisonPlaceRow() 
 		&& gameScene.getPrison().isEmpty()) {
@@ -139,6 +139,9 @@ public class Respawn extends GameSlot {
 	    Log.d("resp","nowhere");
 	    backToGameSlot(element);
 	}
+	touchPointX = RESPAWN_POSITION_LEFT+200;
+	touchPointY = RESPAWN_POSITION_UP+200;
+	
     }
     
     protected void gameSlotIsActionMove(TouchEvent pSceneTouchEvent) {

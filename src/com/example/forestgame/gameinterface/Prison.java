@@ -109,6 +109,8 @@ public class Prison extends GameSlot {
 	    Log.d("prison","nowhere");
 	    backToGameSlot(element);
 	}
+        touchPointX = PRISON_POSITION_LEFT-100;
+	touchPointY = PRISON_POSITION_UP+200;
     }
     
     protected void gameSlotIsActionMove(TouchEvent pSceneTouchEvent) {
